@@ -18,7 +18,7 @@ Examples:
 - Node.js
 - MySQL
 - Express.js
-- Passport.js
+<!-- - Passport.js -->
 - Octokit
 
 ## Steps

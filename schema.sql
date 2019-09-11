@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS gitTracker;
+CREATE DATABASE gitTracker;
