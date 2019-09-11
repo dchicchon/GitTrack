@@ -1,6 +1,17 @@
 # GitHub Activity Tracker
 ## Summary
-This is an app where the administrator of the app can invite instructors. Instructors can then create cohorts that can have many students. Instructors can see the GitHub activity of their students and the cohort as a whole.
+This is an app where the administrator of the app can invite instructors. Instructors can then create cohorts that can have many students. Instructors can see the GitHub activity of their students and the cohort as a whole. Students can see other students stats and the stats of the cohort. You should be able to see the average stats vs yours!
+
+At the beginning of the day, a Slackbot will post 3 coding challenges for the day
+
+At the end of the day, a SlackBot will post on the activity for each person and for the cohort as a whole. It will also check if a student has coded today. It will also post the solutions for the coding challenge activities.
+
+This should also be a forum, a message board that will have posts/messages on there to indicate whats going on.
+
+Examples: 
+- Azzi has been coding for 15 days straight!
+- Danny has not been coding for 2 days :(
+- Chris has made 15 commits today, wow!
 
 ## Technologies Used
 - React.js
@@ -8,6 +19,7 @@ This is an app where the administrator of the app can invite instructors. Instru
 - MySQL
 - Express.js
 - Passport.js
+- Octokit
 
 ## Steps
 ### Front End
