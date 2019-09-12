@@ -1,6 +1,8 @@
 # GitHub Activity Tracker
 ## Summary
-This is an app where the administrator of the app can invite instructors. Instructors can then create cohorts that can have many students. Instructors can see the GitHub activity of their students and the cohort as a whole. Students can see other students stats and the stats of the cohort. You should be able to see the average stats vs yours!
+This is an app where the administrator of the app can invite instructors. Instructors can then create cohorts that can have many students. Instructors can see the GitHub activity of their students and the cohort as a whole. Students can see other students stats and the stats of the cohort. You should be able to see the average stats vs yours! 
+
+You can also see your streak!
 
 At the beginning of the day, a Slackbot will post 3 coding challenges for the day
 
@@ -18,8 +20,14 @@ Examples:
 - Node.js
 - MySQL
 - Express.js
+
+#### Data Visualization Options
+- [Victory](https://formidable.com/open-source/victory/)
+- [D3.js](https://d3js.org/)
+- [Chart.js](https://www.chartjs.org/) - from what I read, it is easier to implement moment.js
+- [Three.js](https://threejs.org/)
 <!-- - Passport.js -->
-- Octokit
+<!-- - Octokit -->
 
 ## Steps
 ### Front End
@@ -39,3 +47,6 @@ Examples:
 - An Instructor can have many cohorts 
 - A cohort can have many students
 - A student can belong to many cohorts
+
+## Questions
+- Which Data Visualization Package should we use? First we should check the docs for all of them and try using them to figure that out.
