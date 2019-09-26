@@ -1,3 +1,7 @@
+// Allows us to place keys and sensitive info in hidden .env file
+require("dotenv").config();
+
+// Require Packages
 const express = require("express");
 const app = express();
 const db = require("./models");
@@ -9,7 +13,6 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static("client/build"))
 }
-
 app.use(routes)
 
 db.sequelize.sync({ force: false }).then(() => {
