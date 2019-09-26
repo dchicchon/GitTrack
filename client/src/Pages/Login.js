@@ -39,7 +39,7 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <h1>Login</h1>
+                <h1>Admin Login</h1>
                 <form>
                     <div className="form-group">
                         <label htmlFor="email">Email address</label>

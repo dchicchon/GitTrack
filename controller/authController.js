@@ -3,15 +3,19 @@ const db = require("../models");
 const passport = require("passport");
 module.exports = {
     login: (req, res) => {
-        console.log('Login')
-        console.log(req.body)
-        // res.json("hi")
+        // console.log('Login')
+        // console.log(req.body)
 
-        // Based on the req.body, we want to authenticate the user
         // passport.authenticate('local', { failureRedirect: '/login' }),
         //     function (req, res) {
+        //         console.log("After Authenticate")
+
         //         res.redirect('/')
         //     }
+
+
+        // Based on the req.body, we want to authenticate the user
+
 
         // res.json("Login")
 
