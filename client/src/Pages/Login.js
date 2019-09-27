@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom'
 
 // Utils
 
@@ -20,8 +21,6 @@ class Login extends Component {
 
     handleLogin = event => {
         event.preventDefault();
-        console.log(this.state.email);
-        console.log(this.state.password);
         if (this.state.email && this.state.password && this.state.password.length > 4) {
             let creds = {
                 email: this.state.email,
@@ -30,7 +29,9 @@ class Login extends Component {
             API.handleLogin(creds)
                 .then(res => {
                     console.log(res.data)
+                    window.location.href = '/'
                 })
+                .catch(err => console.log(err))
         } else {
             console.log("You must enter proper login info")
         }
@@ -39,7 +40,7 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <h1>Admin Login</h1>
+                <h1>Login</h1>
                 <form>
                     <div className="form-group">
                         <label htmlFor="email">Email address</label>
@@ -56,6 +57,7 @@ class Login extends Component {
                     </div>
                     <button onClick={this.handleLogin} type="submit" className="btn btn-primary">Submit</button>
                 </form>
+                <Link to='/signup'>Don't have an account? Signup here.</Link>
             </div>
         );
     }
