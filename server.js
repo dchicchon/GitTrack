@@ -8,6 +8,7 @@ const db = require("./models");
 const routes = require("./routes");
 const passport = require("passport");
 const session = require("express-session")
+const MySQLStore = require("express-mysql-session")(session);
 
 require("./config/passport")(passport)
 app.use(express.urlencoded({ extended: true }));
@@ -17,10 +18,25 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static("client/build"))
 }
 
+
+// Options for mysql session store
+let options = {
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: 'Lost4815162342',
+    database: 'tracker'
+}
+
+let sessionStore = new MySQLStore(options);
+
+// Pass in mysql session store
 app.use(session({
-    secret: 'surfing dogs',
-    resave: true,
-    saveUninitialized: true
+    key: 'surfing_dogs',
+    secret: 'surfing_dogs',
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false
 }))
 
 app.use(passport.initialize());

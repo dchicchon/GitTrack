@@ -83,7 +83,7 @@ class Login extends Component {
                     </div>
                     <div className="form-group">
                         <label htmlFor="password">Confirm Password</label>
-                        <input value={this.state.passwordConfirm} name='passwordConfirm' onChange={this.handleInputChange} type="password" className="form-control" id="password" placeholder="Password" autoComplete="true" />
+                        <input value={this.state.passwordConfirm} name='passwordConfirm' onChange={this.handleInputChange} type="password" className="form-control" id="passwordConfirm" placeholder="Password" autoComplete="true" />
                     </div>
                     <fieldset className="form-group types">
                         <div className="row">
