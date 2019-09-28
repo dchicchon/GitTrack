@@ -22,7 +22,7 @@ export default {
 
     createAccount: (creds) => {
         return axios.post("/auth/signup", creds)
-    },  
+    },
 
     // Admin Function
     userList: () => {

@@ -36,7 +36,6 @@ if (process.env.NODE_ENV === 'production') {
 
 // Options for mysql session store
 
-console.log(options)
 let sessionStore = new MySQLStore(options);
 
 // Pass in mysql session store

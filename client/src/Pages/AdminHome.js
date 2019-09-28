@@ -39,8 +39,12 @@ const AccountModal = (props) => {
                         <legend className="col-form-label col-sm-2 pt-0">Account Type</legend>
                         <div className="col-sm-10">
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="instructor" />
-                                <label className="form-check-label" htmlFor="gridRadios1">Instructor</label>
+                                <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="admin" />
+                                <label className="form-check-label" htmlFor="gridRadios1">Administrator</label>
+                            </div>
+                            <div className="form-check">
+                                <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="instructor" />
+                                <label className="form-check-label" htmlFor="gridRadios2">Instructor</label>
                             </div>
                             <div className="form-check">
                                 <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="student" />
@@ -55,13 +59,57 @@ const AccountModal = (props) => {
     )
 }
 
-const ActivityModal = () => {
+// const TableRow = ({ firstName, lastName, email, type }) => {
+//     return (
+//         <tr>
+//             <td>{firstName}</td>
+//             <td>{lastName}</td>
+//             <td>{email}</td>
+//             <td>{type}</td>
+//         </tr>
+//     )
+// }
+
+const ActivityModal = ({ list }) => {
     return (
         <div>
             <h1>Activity</h1>
+            <h3>Users</h3>
+            <hr />
+            <table>
+                <tbody>
+                    <tr>
+                        <th>User ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>User Type</th>
+                    </tr>
+                    {list.map((user, i) => (
+                        <tr key={i}>
+                            <td>{user.id}</td>
+                            <td>{user.firstName}</td>
+                            <td>{user.lastName}</td>
+                            <td>{user.email}</td>
+                            <td>{user.type}</td>
+
+                        </tr>
+                        // <TableRow
+                        //     key={i}
+                        //     firstName={user}
+                        //     lastName={user.lastName}
+                        //     email={user.email}
+                        //     type={user.type}
+                        // />
+                    )
+                    )}
+                </tbody>
+            </table>
         </div>
     )
 }
+
+
 
 class AdminHome extends Component {
     state = {
@@ -113,6 +161,7 @@ class AdminHome extends Component {
             .then(res => {
                 // This should be a list of users in the database
                 console.log(res)
+                console.log(res.data)
 
                 this.setState({
                     userList: res.data,
@@ -127,21 +176,43 @@ class AdminHome extends Component {
     // Account Creation
     accountCreate = event => {
         event.preventDefault();
-        let radioArr = document.getElementsByClassName("form-check-input")
-        let typeInput = '';
-        for (let i = 0; i < radioArr.length; i++) {
-            if (radioArr[i].checked === true) {
-                typeInput = radioArr[i].value
+
+        if (this.state.password === this.state.passwordConfirm && this.state.firstName && this.state.lastName && this.state.email) {
+
+            let radioArr = document.getElementsByClassName("form-check-input")
+            let typeInput = '';
+            for (let i = 0; i < radioArr.length; i++) {
+                if (radioArr[i].checked === true) {
+                    typeInput = radioArr[i].value
+                }
             }
+
+            let newUser = {
+                firstName: this.state.firstName,
+                lastName: this.state.lastName,
+                email: this.state.email,
+                password: this.state.password,
+                type: typeInput
+            }
+
+            API.createAccount(newUser)
+                .then(res => {
+                    console.log("Response")
+                    console.log(res)
+
+                    // Return should have info whether the submission went OK
+                    this.setState({
+                        firstName: '',
+                        lastName: '',
+                        email: '',
+                        password: '',
+                        passwordConfirm: '',
+                        // accountModal: ''
+                    })
+                })
+        } else {
+            console.log("Please Check all Fields")
         }
-
-
-        console.log(this.state.firstName)
-        console.log(this.state.lastName)
-        console.log(this.state.email)
-        console.log(this.state.password)
-        console.log(this.state.passwordConfirm)
-        console.log(typeInput)
     }
 
 
@@ -169,7 +240,7 @@ class AdminHome extends Component {
 
                 {this.state.activityModal ?
                     <ActivityModal
-
+                        list={this.state.userList}
                     /> : ''}
 
             </div>

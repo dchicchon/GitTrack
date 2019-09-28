@@ -2,7 +2,7 @@
 const router = require("express").Router();
 const passport = require("passport");
 const db = require("../../models");
-const authController = require("../../controller/authController");
+// const authController = require("../../controller/authController");
 
 router.get('/user', (req, res) => {
     // Req has a method that checks for authentication
@@ -70,15 +70,23 @@ router.post('/signup', (req, res, next) => {
             return res.json(message)
         }
 
-        // The user is now logged in
-        console.log("user logged in")
-        req.login(user, err => {
-            if (err) {
-                return next(err)
+        if (user) {
+            console.log("user created")
+            let message = {
+                error: false
             }
+            res.json(message)
+            // The user is now logged in
+            // req.login(user, err => {
+            //     if (err) {
+            //         return next(err)
+            //     }
 
-            return res.redirect("/")
-        })
+            //     return res.redirect("/")
+            // })
+        }
+
+
     })(req, res, next)
 })
 
