@@ -42,9 +42,12 @@ class InstructorHome extends Component {
         console.log("Getting Cohorts")
         API.getCohorts(this.props.user.id)
             .then(res => {
-                if (res.data.success) {
+                if (res.data.name) {
                     console.log("Cohorts Received")
-                    console.log(res)
+                    console.log(res.data)
+                    this.setState({
+                        cohortList: res.data
+                    })
                 } else {
                     console.log("No Cohorts!")
                 }
@@ -65,16 +68,19 @@ class InstructorHome extends Component {
         })
     }
 
-    submitCohort = () => {
+    submitCohort = event => {
+        event.preventDefault()
         if (this.state.cohortName) {
             console.log("Cohort Submission")
             let creds = {
                 name: this.state.cohortName,
+                numberStudents: 0,
                 instructorID: this.props.user.id
             }
             console.log(creds)
             API.cohortCreate(creds)
                 .then(res => {
+                    console.log("cohort created")
                     console.log(res.data)
                     this.setState({
                         createCohort: false

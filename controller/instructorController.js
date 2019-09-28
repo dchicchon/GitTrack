@@ -8,16 +8,17 @@ module.exports = {
                 instructorID: req.params.id
             }
         }).then(dbCohort => {
-            console.log(dbCohort)
+            console.log("\nCohorts Recieved")
             res.json(dbCohort)
         })
     },
 
     createCohort: (req, res) => {
         console.log(req.body)
-        // db.Cohort.create({
-
-        // })
+        db.Cohort.create(req.body).then(dbCohort => {
+            console.log("\nCohort Created")
+            res.json(dbCohort)
+        })
     },
 
     // Get the students from the cohort
