@@ -27,10 +27,12 @@ function Navbar(props) {
             {/* <li className="nav-item"> */}
             <div className='dropdown show'>
 
+                {/* having an issue with user prop  */}
+
                 <Link className="btn btn-secondary dropdown-toggle" to='#' id="dropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {props.user.firstName}
                 </Link>
-                <div className="dropdown-menu" aria-labelledby="dropdownMenuLink"> 
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     <Link className="dropdown-item" to='#'>Settings</Link>
                     {/* <a className="dropdown-item" href="#">Another action</a> */}
                     {/* A divider for styling */}

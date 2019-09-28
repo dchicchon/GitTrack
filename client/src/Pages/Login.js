@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 
-// Utils
+// Components
+import Message from '../Components/Message';
 
+// Utils
 import API from '../Utils/API';
 
 
 class Login extends Component {
     state = {
+
+        // Login Creds
         email: '',
-        password: ''
+        password: '',
+
+        // Message
+        message: '',
+        color: ''
     }
 
     handleInputChange = event => {
@@ -21,7 +29,7 @@ class Login extends Component {
 
     handleLogin = event => {
         event.preventDefault();
-        if (this.state.email && this.state.password && this.state.password.length > 4) {
+        if (this.state.email && this.state.password) {
             let creds = {
                 email: this.state.email,
                 password: this.state.password
@@ -29,11 +37,24 @@ class Login extends Component {
             API.handleLogin(creds)
                 .then(res => {
                     console.log(res.data)
-                    window.location.href = '/'
+                    if (res.data.color === 'red') {
+                        this.setState({
+                            message: res.data.message,
+                            color: res.data.color
+                        })
+                    } else {
+                        window.location.href = '/'
+                    }
                 })
                 .catch(err => console.log(err))
         } else {
-            console.log("You must enter proper login info")
+            this.setState({
+                message: 'Please fill out all fields',
+                color: 'red'
+            })
+            console.log(this.state.message)
+            console.log(this.state.color)
+
         }
     }
 
@@ -55,6 +76,10 @@ class Login extends Component {
                         <input type="checkbox" className="form-check-input" id="exampleCheck1" />
                         <label className="form-check-label" htmlFor="exampleCheck1">Remember Me</label>
                     </div>
+                    <Message
+                        message={this.state.message}
+                        color={this.state.color}
+                    />
                     <button onClick={this.handleLogin} type="submit" className="btn btn-primary">Submit</button>
                 </form>
                 <Link to='/signup'>Don't have an account? Signup here.</Link>

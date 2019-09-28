@@ -3,6 +3,7 @@ import axios from 'axios';
 export default {
 
     // Auth functions
+    // =================
     getUser: () => {
         return axios.get("/auth/user")
     },
@@ -24,20 +25,34 @@ export default {
         return axios.post("/auth/signup", creds)
     },
 
+    // ===========================
     // Admin Function
+    // =======================
     userList: () => {
         return axios.get("/api/admin/users")
     },
 
     deleteUser: (id) => {
-        return axios.delete("/api/admin/users/" +id)
+        return axios.delete("/api/admin/users/" + id)
     },
 
+    // ======================
     // Instructor Functions
-    studentList: () => {
-        return axios.get("/api/instructors/users")
+    // =======================
+    getCohorts: (id) => {
+        return axios.get("/api/instructors/" + id)
+    },
+
+    cohortStudentList: (id) => {
+        return axios.get("/api/instructors/cohorts/" + id)
+    },
+
+    cohortCreate: (creds) => {
+        return axios.post("/api/instructors/cohorts", creds)
     }
 
+    // =====================
     // Student Functions
+    // =====================
 
 }

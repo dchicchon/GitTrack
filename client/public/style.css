@@ -3,6 +3,19 @@
     box-sizing: border-box;
 }
 
+/* Admin */
 table {
     width: 100%;
+}
+
+/* Instructor */
+.hover {
+    /* width: 15%; */
+    transition: background-color 1s color 1s
+}
+
+.hover:hover {
+    cursor: pointer;
+    background-color:#007bff;
+    color: white
 }

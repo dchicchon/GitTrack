@@ -68,7 +68,7 @@ class App extends Component {
                   :
                   <div>
                     {this.state.userType === 'instructor' ?
-                      < Route path='/' exact component={InstructorHome} />
+                      < Route path='/' exact component={() => <InstructorHome user={this.state.user} />} />
                       :
                       <Route path='/' exact component={StudentHome} />}
 

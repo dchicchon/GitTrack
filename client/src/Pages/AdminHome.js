@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 
 // Components
+import Message from '../Components/Message';
 
 // Utils
 import API from '../Utils/API';
 
-const Message = ({ message, color }) => {
-    const divStyle = color === 'green' ? 'text-success' : 'text-danger'
-    return (
-        <div>
-            <p className={divStyle}> {message}</p>
-        </div>
-    )
-}
+// const Message = ({ message, color }) => {
+//     const divStyle = color === 'green' ? 'text-success' : 'text-danger'
+//     return (
+//         <div>
+//             <p className={divStyle}> {message}</p>
+//         </div>
+//     )
+// }
 
 // Modal to create users
 const AccountModal = (props) => {
@@ -20,6 +21,10 @@ const AccountModal = (props) => {
 
         <div className='container'>
             <h1>Create Account</h1>
+            <Message
+                message={props.message}
+                color={props.color}
+            />
             <form>
                 <div className="form-group">
                     <label htmlFor="firstName">First Name</label>
@@ -65,10 +70,7 @@ const AccountModal = (props) => {
                 </fieldset>
                 <button onClick={props.accountCreate} type="submit" className="btn btn-primary">Submit</button>
             </form>
-            <Message
-                message={props.message}
-                color={props.color}
-            />
+
         </div>
     )
 }
@@ -91,6 +93,10 @@ const ActivityModal = ({ color, message, list, handleDelete }) => {
             <h1>Activity</h1>
             <h3>Users</h3>
             <hr />
+            <Message
+                message={message}
+                color={color}
+            />
             <table>
                 <tbody>
                     <tr>
@@ -122,10 +128,7 @@ const ActivityModal = ({ color, message, list, handleDelete }) => {
                     )}
                 </tbody>
             </table>
-            <Message
-                message={message}
-                color={color}
-            />
+
         </div>
     )
 }
@@ -233,6 +236,8 @@ class AdminHome extends Component {
                 type: typeInput
             }
 
+            console.log(newUser)
+
             API.createAccount(newUser)
                 .then(res => {
                     console.log(res.data)
@@ -257,7 +262,6 @@ class AdminHome extends Component {
 
     // Admin can remove users from database
     handleDelete = id => {
-        console.log(id)
         API.deleteUser(id)
             .then(res => {
                 console.log(res.data)
@@ -306,7 +310,7 @@ class AdminHome extends Component {
                         handleDelete={this.handleDelete}
                         message={this.state.message}
                         color={this.state.color}
-                        
+
                     /> : ''}
 
             </div>

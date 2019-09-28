@@ -17,7 +17,7 @@ router.get('/user', (req, res) => {
         }).then(dbUser => {
             // dbUser is the found user information that matches the authenticated user
             console.log(dbUser)
-            var user = {
+            let user = {
                 loggedIn: true,
                 type: currentUser.type,
                 user: currentUser,
@@ -26,7 +26,7 @@ router.get('/user', (req, res) => {
             res.json(user);
         })
     } else {
-        var noUser = {
+        let noUser = {
             loggedIn: false,
             type: ''
         };
@@ -35,11 +35,24 @@ router.get('/user', (req, res) => {
 })
 
 router.post("/login", (req, res, next) => {
+    // Authenticate Login using strategy in passport.js file
     passport.authenticate("local-login", (err, user, info) => {
+
+        // We use the return DataObject to send messages to the front end in case of error logging in or on success
+
+        // Auth Error
         if (err) return next(err)
-        if (!user) res.send("Not a user in the database")
 
+        // No User
+        if (!user) {
+            let returnData = {
+                message: 'Not a user in the database',
+                color: 'red'
+            }
+            res.json(returnData)
+        }
 
+        // Successful Login
         req.login(user, (err) => {
             if (err) return next(err)
 

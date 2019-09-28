@@ -20,7 +20,9 @@
 #### General
 - Users can view the graph in different time filters (weekly, monthly, yearly)
 
-- Users can change their account settings
+- Users can change their account settings such as password and email to use
+
+- 
 
 
 ## Done
@@ -30,6 +32,8 @@
 
 - Admins can see a list of users that are in the database
 
+## Clone Instructions
+- On clone of this application, you must create an administrator so that they can create accounts for other admins, instructors, and students. To do this, I have created a Signup Page where you can create an admin in the app. Once you have created an admin, go ahead and either turn off routing for the signup page or delete it.
 
 
 ## Stretch Goals
