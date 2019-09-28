@@ -21,20 +21,25 @@ function Navbar(props) {
                     </li>
 
 
-                    {/* <li className="nav-item"> */}
-                    {/* <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> */}
-                    {/* Dropdown */}
-                    {/* </a> */}
-                    {/* <div className="dropdown-menu" aria-labelledby="navbarDropdown"> */}
-                    {/* <a className="dropdown-item" href="#">Action</a> */}
-                    {/* <a class="dropdown-item" href="#">Another action</a> */}
-                    {/* <div class="dropdown-divider"></div> */}
-                    {/* <a class="dropdown-item" href="#">Something else here</a> */}
-                    {/* </div> */}
-                    {/* </li> */}
                 </ul>
-                <Link to='/' onClick={props.logout}>Logout</Link>
             </div>
+
+            {/* <li className="nav-item"> */}
+            <div className='dropdown show'>
+
+                <Link className="btn btn-secondary dropdown-toggle" to='#' id="dropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {props.user.firstName}
+                </Link>
+                <div className="dropdown-menu" aria-labelledby="dropdownMenuLink"> 
+                    <Link className="dropdown-item" to='#'>Settings</Link>
+                    {/* <a className="dropdown-item" href="#">Another action</a> */}
+                    {/* A divider for styling */}
+                    {/* <div className="dropdown-divider"></div> */}
+                    {/* <a className="dropdown-item" href="#">Something else here</a> */}
+                    <Link className='dropdown-item' to='/' onClick={props.logout}>Logout</Link>
+                </div>
+            </div>
+            {/* </li> */}
         </nav>
 
     )

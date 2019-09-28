@@ -7,5 +7,22 @@ module.exports = {
                 console.log(dbUser)
                 res.json(dbUser)
             })
+    },
+
+    deleteUser: (req, res) => {
+        console.log("\nDeleting user")
+        console.log(req.params.id)
+        db.User.destroy({
+            where: {
+                id: req.params.id
+            }
+        }).then(dbUser => {
+            console.log("User Deleted")
+            let returnData = {
+                color: 'green',
+                message: "User Deleted"
+            }
+            res.json(returnData)
+        })
     }
 }

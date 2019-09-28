@@ -56,7 +56,10 @@ class App extends Component {
           {this.state.loggedIn ?
 
             <div>
-              <Navbar logout={this.logout} />
+              <Navbar
+                user={this.state.user}
+                logout={this.logout}
+              />
 
               <div className='container'>
                 {/* Render Pages based on userType */}

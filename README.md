@@ -2,7 +2,6 @@
 <br>
 
 ## Current Goals
-<hr>
 
 #### Admin
 - Admin can create cohorts and assign them to instructors and students
@@ -25,7 +24,6 @@
 
 
 ## Done
-<hr>
 
 #### Admin
 - Admins can create users with different types such as other admins, instructors and students
@@ -35,8 +33,9 @@
 
 
 ## Stretch Goals
-<hr>
 
 - On Page Load, the root route should redirect the user to the appropriate page. Currently, the root route directs the user to the login page on load.
 
 - Check out other API's that give information about user time coding. Currently the API that we are using can only track the number of commits per day whereas tracking coding time we believe is more crucial. E.g. Wakatime allows you to see your time spent coding and the languages used
+
+- On account creation, email the user their login credentials and a link to the site

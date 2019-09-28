@@ -23,7 +23,6 @@ router.get('/user', (req, res) => {
                 user: currentUser,
             };
 
-            console.log(user)
             res.json(user);
         })
     } else {
@@ -44,10 +43,11 @@ router.post("/login", (req, res, next) => {
         req.login(user, (err) => {
             if (err) return next(err)
 
-            let userI = {
+            let returnData = {
+                color: 'green',
                 message: 'Success!'
             }
-            return res.json(userI)
+            return res.json(returnData)
         })
     })(req, res, next)
 })
@@ -64,18 +64,24 @@ router.post('/signup', (req, res, next) => {
 
         if (!user) {
             console.log("User exists")
-            let message = {
-                error: true
+            let returnData = {
+                color: 'red',
+                // error: false
+                message: 'User Exists'
             }
-            return res.json(message)
+            return res.json(returnData)
         }
 
         if (user) {
             console.log("user created")
-            let message = {
-                error: false
+            let returnData = {
+                color: 'green',
+                // error: false,
+                message: 'User Created'
             }
-            res.json(message)
+            res.json(returnData)
+
+
             // The user is now logged in
             // req.login(user, err => {
             //     if (err) {

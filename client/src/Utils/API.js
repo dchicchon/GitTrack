@@ -29,6 +29,10 @@ export default {
         return axios.get("/api/admin/users")
     },
 
+    deleteUser: (id) => {
+        return axios.delete("/api/admin/users/" +id)
+    },
+
     // Instructor Functions
     studentList: () => {
         return axios.get("/api/instructors/users")

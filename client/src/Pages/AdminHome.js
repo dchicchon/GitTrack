@@ -5,6 +5,16 @@ import React, { Component } from 'react';
 // Utils
 import API from '../Utils/API';
 
+const Message = ({ message, color }) => {
+    const divStyle = color === 'green' ? 'text-success' : 'text-danger'
+    return (
+        <div>
+            <p className={divStyle}> {message}</p>
+        </div>
+    )
+}
+
+// Modal to create users
 const AccountModal = (props) => {
     return (
 
@@ -55,6 +65,10 @@ const AccountModal = (props) => {
                 </fieldset>
                 <button onClick={props.accountCreate} type="submit" className="btn btn-primary">Submit</button>
             </form>
+            <Message
+                message={props.message}
+                color={props.color}
+            />
         </div>
     )
 }
@@ -70,7 +84,8 @@ const AccountModal = (props) => {
 //     )
 // }
 
-const ActivityModal = ({ list }) => {
+// Modal to see user activity
+const ActivityModal = ({ color, message, list, handleDelete }) => {
     return (
         <div>
             <h1>Activity</h1>
@@ -84,6 +99,7 @@ const ActivityModal = ({ list }) => {
                         <th>Last Name</th>
                         <th>Email</th>
                         <th>User Type</th>
+                        <th>Delete</th>
                     </tr>
                     {list.map((user, i) => (
                         <tr key={i}>
@@ -92,6 +108,7 @@ const ActivityModal = ({ list }) => {
                             <td>{user.lastName}</td>
                             <td>{user.email}</td>
                             <td>{user.type}</td>
+                            <td><button type='button' className='btn btn-danger' onClick={() => handleDelete(user.id)}>x</button></td>
 
                         </tr>
                         // <TableRow
@@ -105,6 +122,10 @@ const ActivityModal = ({ list }) => {
                     )}
                 </tbody>
             </table>
+            <Message
+                message={message}
+                color={color}
+            />
         </div>
     )
 }
@@ -113,6 +134,10 @@ const ActivityModal = ({ list }) => {
 
 class AdminHome extends Component {
     state = {
+
+        // Return Message
+        message: '',
+        color: '',
 
         // Modal Control
         accountModal: false,
@@ -139,21 +164,32 @@ class AdminHome extends Component {
     }
 
 
-    // Modal Control
+    // Account Modal Control
     accountControl = () => {
         if (this.state.accountModal) {
-            return (this.setState({ accountModal: false }))
+            return (this.setState({
+                accountModal: false,
+                message: '',
+                color: ''
+            }))
         }
         this.setState({
             activityModal: false,
-            accountModal: true
+            accountModal: true,
+            message: '',
+            color: ''
         })
 
     }
 
+    // Activity Modal Control
     activityControl = () => {
         if (this.state.activityModal) {
-            return (this.setState({ activityModal: false }))
+            return (this.setState({
+                activityModal: false,
+                message: '',
+                color: ''
+            }))
         }
 
         // Get List of Users on call
@@ -166,7 +202,9 @@ class AdminHome extends Component {
                 this.setState({
                     userList: res.data,
                     accountModal: false,
-                    activityModal: true
+                    activityModal: true,
+                    message: '',
+                    color: ''
                 })
 
             })
@@ -197,11 +235,13 @@ class AdminHome extends Component {
 
             API.createAccount(newUser)
                 .then(res => {
-                    console.log("Response")
-                    console.log(res)
+                    console.log(res.data)
+                    console.log(res.data.color)
 
                     // Return should have info whether the submission went OK
                     this.setState({
+                        message: res.data.message,
+                        color: res.data.color,
                         firstName: '',
                         lastName: '',
                         email: '',
@@ -215,18 +255,37 @@ class AdminHome extends Component {
         }
     }
 
+    // Admin can remove users from database
+    handleDelete = id => {
+        console.log(id)
+        API.deleteUser(id)
+            .then(res => {
+                console.log(res.data)
+                this.setState({
+                    message: res.data.message,
+                    color: res.data.color
+                })
+                API.userList()
+                    .then(res => {
+                        this.setState({
+                            userList: res.data,
+                        })
+                    })
+            })
+    }
+
 
     render() {
         return (
             <div>
                 <h1>Welcome Admin</h1>
 
-                {/* Admin should have ability to create Instuctor and Student Accounts */}
-                {/* Admin should be able to check the activity on the site */}
                 <div>
                     <button type='button' className='btn btn-primary' onClick={this.accountControl}>Create Account</button>
                     <button type='button' className='btn btn-primary' onClick={this.activityControl}>Site Activity</button>
                 </div>
+
+                {/* Rendered if true */}
                 {this.state.accountModal ?
                     <AccountModal
                         firstName={this.state.firstName}
@@ -236,11 +295,18 @@ class AdminHome extends Component {
                         passwordConfirm={this.state.passwordConfirm}
                         handleInputChange={this.handleInputChange}
                         accountCreate={this.accountCreate}
+                        message={this.state.message}
+                        color={this.state.color}
                     /> : ''}
 
+                {/* Rendered if true */}
                 {this.state.activityModal ?
                     <ActivityModal
                         list={this.state.userList}
+                        handleDelete={this.handleDelete}
+                        message={this.state.message}
+                        color={this.state.color}
+                        
                     /> : ''}
 
             </div>
