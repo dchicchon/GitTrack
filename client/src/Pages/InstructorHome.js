@@ -7,7 +7,7 @@ import API from '../Utils/API';
 
 const StudentList = () => {
     return (
-        <div>
+        <div className='mt-3'>
             <h2>Students</h2>
             <table>
                 <tbody>
@@ -31,10 +31,19 @@ const StudentList = () => {
 
 class InstructorHome extends Component {
     state = {
+
         showList: false,
+
+        // Creating Cohort
         createCohort: false,
         cohortName: '',
 
+        // Adding Student
+        addStudent: false,
+        // studentEmail: '',
+        studentName: '',
+
+        // Geting Cohort List
         cohortList: ''
     }
 
@@ -42,12 +51,13 @@ class InstructorHome extends Component {
         console.log("Getting Cohorts")
         API.getCohorts(this.props.user.id)
             .then(res => {
-                if (res.data.name) {
+                if (res.data[0].name) {
                     console.log("Cohorts Received")
-                    console.log(res.data)
                     this.setState({
                         cohortList: res.data
                     })
+                    console.log(this.state.cohortList)
+
                 } else {
                     console.log("No Cohorts!")
                 }
@@ -61,6 +71,9 @@ class InstructorHome extends Component {
         });
     }
 
+    // ================================
+    // Creating and Submitting Cohorts
+    // =================================
     createCohort = () => {
         console.log("Creating Cohort")
         this.setState({
@@ -68,7 +81,7 @@ class InstructorHome extends Component {
         })
     }
 
-    submitCohort = event => {
+    submitCohort = (event) => {
         event.preventDefault()
         if (this.state.cohortName) {
             console.log("Cohort Submission")
@@ -81,10 +94,17 @@ class InstructorHome extends Component {
             API.cohortCreate(creds)
                 .then(res => {
                     console.log("cohort created")
-                    console.log(res.data)
+                    console.log(res)
                     this.setState({
                         createCohort: false
                     })
+                    API.getCohorts(this.props.user.id)
+                        .then(res => {
+                            console.log(res.data)
+                            this.setState({
+                                cohortList: res.data
+                            })
+                        })
                 })
 
         } else {
@@ -94,6 +114,8 @@ class InstructorHome extends Component {
         // API Call to server to enter cohort
 
     }
+
+    // =================================
 
     inspectCohort = () => {
         console.log("Inspect Cohort")
@@ -125,30 +147,68 @@ class InstructorHome extends Component {
 
     // Maybe for now we can have the instructors create the students entirely
     addStudent = () => {
-        console.log("Add student")
+        this.setState({
+            addStudent: true
+        })
     }
+
+    submitStudent = event => {
+        event.preventDefault();
+        console.log(this.state.studentName)
+        this.setState({
+            addStudent: false
+        })
+    }
+
 
     render() {
 
         return (
-            <div>
+            <div className='mt-3'>
                 <h2>Welcome Instructor</h2>
 
                 {/* List of cohorts*/}
-                <div className='container'>
+                <div className='container mt-3'>
                     <div className='row mb-2'>
                         <div className='col-2'>
-                            <h2>Cohorts</h2>
-                            <ul className="list-group">
-                                {/* Will have a map function here later */}
-                                <li className="list-group-item hover" onClick={this.inspectCohort}>Cohort 1</li>
-                                <li className="list-group-item hover" onClick={this.inspectCohort}>Cohort 2</li>
-                            </ul>
+                            <h3>Cohorts</h3>
+                            {this.state.cohortList ?
+                                <div>
+                                    <ul className="list-group">
+                                        {this.state.cohortList.map((cohort, i) => (
+                                            <li
+                                                key={i}
+                                                className='list-group-item hover'
+                                                onClick={this.inspectCohort}
+                                            >
+                                                {cohort.name}
+                                            </li>
+                                        ))}
+                                        {/* {this.state.cohortList.map((cohort, i) => {
+                                            <li
+                                                key={i}
+                                                className='list-group-item hover'
+                                            >
+                                                Cohort
+                                        </li>
+                                        })} */}
+                                    </ul>
+                                </div>
+                                : ''}
                         </div>
                         <div className='col-9'>
                             {this.state.showList ?
                                 <div>
-                                    <button type='button' className='btn btn-primary'>Invite Student</button>
+                                    <button type='button' className='btn btn-primary' onClick={this.addStudent}>Invite Student</button>
+                                    {this.state.addStudent ?
+                                        <div className='col-4 mt-3'>
+                                            <div className='form-group'>
+                                                <label htmlFor="cohortName">Student Name</label>
+                                                <input className='form-control' name='studentName' value={this.state.studentName} onChange={this.handleInputChange} />
+                                            </div>
+                                            <button type='button' className='btn btn-primary' onClick={this.submitStudent}>Submit</button>
+                                        </div>
+                                        : ''}
                                     <StudentList />
                                 </div>
                                 : ''}

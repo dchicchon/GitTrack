@@ -40,15 +40,15 @@ export default {
     // Instructor Functions
     // =======================
     getCohorts: (id) => {
-        return axios.get("/api/instructors/" + id)
+        return axios.get("/api/instructor/" + id)
     },
 
     cohortStudentList: (id) => {
-        return axios.get("/api/instructors/cohorts/" + id)
+        return axios.get("/api/instructor/cohorts/" + id)
     },
 
     cohortCreate: (creds) => {
-        return axios.post("/api/instructors/cohorts", creds)
+        return axios.post("/api/instructor/cohorts", creds)
     }
 
     // =====================
