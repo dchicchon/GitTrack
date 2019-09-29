@@ -76,6 +76,11 @@ class InstructorHome extends Component {
     // =================================
     createCohort = () => {
         console.log("Creating Cohort")
+        if (this.state.createCohort) {
+            return this.setState({
+                createCohort: false
+            })
+        }
         this.setState({
             createCohort: true
         })
@@ -117,8 +122,9 @@ class InstructorHome extends Component {
 
     // =================================
 
-    inspectCohort = () => {
+    inspectCohort = (id) => {
         console.log("Inspect Cohort")
+        console.log(`Cohort ID`, id)
         this.setState({
             showList: true
         })
@@ -147,11 +153,17 @@ class InstructorHome extends Component {
 
     // Maybe for now we can have the instructors create the students entirely
     addStudent = () => {
+        if (this.state.addStudent) {
+            return this.setState({
+                addStudent: false
+            })
+        }
         this.setState({
             addStudent: true
         })
     }
 
+    // Will add student to a specific cohort
     submitStudent = event => {
         event.preventDefault();
         console.log(this.state.studentName)
