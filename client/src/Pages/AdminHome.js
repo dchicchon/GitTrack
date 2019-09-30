@@ -154,6 +154,10 @@ class AdminHome extends Component {
         passwordConfirm: '',
 
         // Activity Data
+        adminList: [],
+        instructorList: [],
+        studentList: [],
+        
         userList: []
 
     }
@@ -275,6 +279,27 @@ class AdminHome extends Component {
                             userList: res.data,
                         })
                     })
+            })
+    }
+
+    handleAdminDelete = id => {
+        API.deleteAdmin(id)
+            .then(res => {
+
+            })
+    }
+
+    handleInstructorDelete = id => {
+        API.deleteInstructor(id)
+            .then(res => {
+
+            })
+    }
+
+    handleStudentDelete = id => {
+        API.deleteStudent(id)
+            .then(res => {
+
             })
     }
 

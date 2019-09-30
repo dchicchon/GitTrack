@@ -21,19 +21,38 @@ export default {
         return axios.post("/auth/signup", creds)
     },
 
-    createAccount: (creds) => {
-        return axios.post("/auth/signup", creds)
-    },
+
 
     // ===========================
     // Admin Function
     // =======================
-    userList: () => {
-        return axios.get("/api/admin/users")
+
+    createAccount: (creds) => {
+        return axios.post("/auth/signup", creds)
     },
 
-    deleteUser: (id) => {
-        return axios.delete("/api/admin/users/" + id)
+    adminList: () => {
+        return axios.get("/api/admin/")
+    },
+
+    instructorList: () => {
+        return axios.get("/api/admin/instructor")
+    },
+
+    studentList: () => {
+        return axios.get("/api/admin/student")
+    },
+
+    deleteAdmin: (id) => {
+        return axios.delete("/api/admin/" + id)
+    },
+
+    deleteInstructor: (id) => {
+        return axios.delete("/api/admin/instructor/" + id)
+    },
+
+    deleteStudent: (id) => {
+        return axios.delete("/api/admin/student/" + id)
     },
 
     // ======================

@@ -28,11 +28,19 @@ class App extends Component {
     API.getUser()
       .then(res => {
         console.log(res.data)
-        this.setState({
-          user: res.data.user,
-          loggedIn: res.data.loggedIn,
-          userType: res.data.type
-        })
+        if (res.data.loggedIn) {
+          this.setState({
+            user: res.data.user,
+            loggedIn: res.data.loggedIn,
+            userType: res.data.user.userType
+          })
+        } else {
+          this.setState({
+            user: res.data.user,
+            loggedIn: res.data.loggedIn,
+            // userType: res.data.user.userType
+          })
+        }
       })
 
   }
@@ -63,7 +71,7 @@ class App extends Component {
 
               <div className='container'>
                 {/* Render Pages based on userType */}
-                {this.state.userType === 'admin' || this.state.userType === 'administrator' ?
+                {this.state.userType === 'administrator' ?
                   <Route path='/' exact component={AdminHome} />
                   :
                   <div>

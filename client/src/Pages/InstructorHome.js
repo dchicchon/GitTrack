@@ -55,19 +55,19 @@ class InstructorHome extends Component {
 
     componentDidMount() {
         console.log("Getting Cohorts")
-        API.getCohorts(this.props.user.id)
-            .then(res => {
-                if (res.data[0].name) {
-                    console.log("Cohorts Received")
-                    this.setState({
-                        cohortList: res.data
-                    })
-                    console.log(this.state.cohortList)
+        // API.getCohorts(this.props.user.id)
+        //     .then(res => {
+        //         if (res.data[0].name) {
+        //             console.log("Cohorts Received")
+        //             this.setState({
+        //                 cohortList: res.data
+        //             })
+        //             console.log(this.state.cohortList)
 
-                } else {
-                    console.log("No Cohorts!")
-                }
-            })
+        //         } else {
+        //             console.log("No Cohorts!")
+        //         }
+        //     })
     }
 
     handleInputChange = event => {

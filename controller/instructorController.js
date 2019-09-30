@@ -5,7 +5,7 @@ module.exports = {
         console.log(req.params.id)
         db.Cohort.findAll({
             where: {
-                instructorID: req.params.id
+                UserId: req.params.id
             }
         }).then(dbCohort => {
             console.log("\nCohorts Recieved")
@@ -26,8 +26,7 @@ module.exports = {
     // Get the students from the cohort
     getStudents: (req, res) => {
         console.log(req.params.id)
-        // db.Cohort.findAll({})
-
+        
     },
 
     createStudent: (req, res) => {

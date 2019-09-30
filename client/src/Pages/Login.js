@@ -29,10 +29,18 @@ class Login extends Component {
 
     handleLogin = event => {
         event.preventDefault();
+        let radioArr = document.getElementsByClassName("form-check-input")
+        let typeInput = '';
+        for (let i = 0; i < radioArr.length; i++) {
+            if (radioArr[i].checked === true) {
+                typeInput = radioArr[i].value
+            }
+        }
         if (this.state.email && this.state.password) {
             let creds = {
                 email: this.state.email,
-                password: this.state.password
+                password: this.state.password,
+                type: typeInput
             }
             API.handleLogin(creds)
                 .then(res => {
@@ -89,11 +97,11 @@ class Login extends Component {
                                     <label className="form-check-label" htmlFor="gridRadios1">Administrator</label>
                                 </div>
                                 <div className="form-check">
-                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="instructor" />
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="instructor" />
                                     <label className="form-check-label" htmlFor="gridRadios1">Instructor</label>
                                 </div>
                                 <div className="form-check">
-                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="student" />
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="student" />
                                     <label className="form-check-label" htmlFor="gridRadios2">Student</label>
                                 </div>
                             </div>

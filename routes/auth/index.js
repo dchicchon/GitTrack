@@ -8,27 +8,85 @@ router.get('/user', (req, res) => {
     // Req has a method that checks for authentication
     if (req.isAuthenticated()) {
         var currentUser = req.session.passport.user;
-        console.log("REQ SESSION:")
+        console.log("\nREQ SESSION:")
         console.log(req.session);
-        db.User.findOne({
-            where: {
-                id: currentUser
-            }
-        }).then(dbUser => {
-            // dbUser is the found user information that matches the authenticated user
-            console.log(dbUser)
-            let user = {
-                loggedIn: true,
-                type: currentUser.type,
-                user: currentUser,
-            };
+        console.log("\nCurrent User");
+        console.log(currentUser)
 
-            res.json(user);
-        })
+        switch (currentUser.userType) {
+            case "administrator":
+                db.Administrator.findOne({
+                    where: {
+                        id: currentUser.id
+                    }
+                }).then(dbAdmin => {
+                    console.log("Admin")
+                    console.log(dbAdmin)
+                    let user = {
+                        loggedIn: true,
+                        type: currentUser.type,
+                        user: currentUser,
+                    };
+                    res.json(user);
+
+                })
+                break
+            case "instructor":
+                db.Instructor.findOne({
+                    where: {
+                        id: currentUser.id
+                    }
+                }).then(dbInstructor => {
+                    console.log("Instructor")
+                    console.log(dbInstructor)
+                    let user = {
+                        loggedIn: true,
+                        type: currentUser.type,
+                        user: currentUser,
+                    };
+                    res.json(user);
+
+                })
+                break
+            case "student":
+                db.Student.findOne({
+                    where: {
+                        id: currentUser.id
+                    }
+                }).then(dbStudent => {
+                    console.log(dbStudent)
+                    let user = {
+                        loggedIn: true,
+                        type: currentUser.type,
+                        user: currentUser,
+                    };
+                    res.json(user);
+
+                })
+                break
+        }
+        // db.User.findOne({
+        //     where: {
+        //         id: currentUser
+        //     }
+        // }).then(dbUser => {
+        //     // dbUser is the found user information that matches the authenticated user
+        //     console.log(dbUser)
+        //     let user = {
+        //         loggedIn: true,
+        //         type: currentUser.type,
+        //         user: currentUser,
+        //     };
+
+        //     res.json(user);
+        // })
     } else {
         let noUser = {
             loggedIn: false,
-            type: ''
+            user: {
+                userType: ''
+            }
+            // userType: ''
         };
         res.json(noUser);
     }
