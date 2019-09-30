@@ -34,7 +34,7 @@ class Login extends Component {
 
         console.log(this.state.email);
         console.log(this.state.password);
-        if (this.state.email && this.state.password && this.state.password.length > 4 && this.state.password === this.state.passwordConfirm) {
+        if (this.state.email && this.state.password && this.state.password === this.state.passwordConfirm) {
             let creds = {
                 firstName: this.state.firstName,
                 lastName: this.state.lastName,
@@ -89,6 +89,10 @@ class Login extends Component {
                         <div className="row">
                             <legend className="col-form-label col-sm-2 pt-0">Account Type</legend>
                             <div className="col-sm-10">
+                            <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="administrator" />
+                                    <label className="form-check-label" htmlFor="gridRadios1">Administrator</label>
+                                </div>
                                 <div className="form-check">
                                     <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="instructor" />
                                     <label className="form-check-label" htmlFor="gridRadios1">Instructor</label>

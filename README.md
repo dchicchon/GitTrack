@@ -22,15 +22,15 @@
 
 - Users can change their account settings such as password and email to use
 
-- 
-
-
 ## Done
 
 #### Admin
 - Admins can create users with different types such as other admins, instructors and students
 
 - Admins can see a list of users that are in the database
+
+#### Instructor
+- Instructors can create cohorts
 
 ## Clone Instructions
 - On clone of this application, you must create an administrator so that they can create accounts for other admins, instructors, and students. To do this, I have created a Signup Page where you can create an admin in the app. Once you have created an admin, go ahead and either turn off routing for the signup page or delete it.

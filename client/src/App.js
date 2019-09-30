@@ -63,7 +63,7 @@ class App extends Component {
 
               <div className='container'>
                 {/* Render Pages based on userType */}
-                {this.state.userType === 'admin' ?
+                {this.state.userType === 'admin' || this.state.userType === 'administrator' ?
                   <Route path='/' exact component={AdminHome} />
                   :
                   <div>

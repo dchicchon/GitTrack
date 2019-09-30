@@ -61,7 +61,8 @@ class Login extends Component {
     render() {
         return (
             <div>
-                <h1>Login</h1>
+                <h1 className="center">GitTrack</h1>
+                <h3>Login</h3>
                 <form>
                     <div className="form-group">
                         <label htmlFor="email">Email address</label>
@@ -72,10 +73,32 @@ class Login extends Component {
                         <label htmlFor="password">Password</label>
                         <input value={this.state.password} name='password' onChange={this.handleInputChange} type="password" className="form-control" id="password" placeholder="Password" autoComplete="true" />
                     </div>
-                    <div className="form-group form-check">
+                    {/* <div className="form-group form-check">
                         <input type="checkbox" className="form-check-input" id="exampleCheck1" />
                         <label className="form-check-label" htmlFor="exampleCheck1">Remember Me</label>
-                    </div>
+                    </div> */}
+                    <fieldset className="form-group types">
+                        <div className='row col-sm-10'>
+                            <p>I am a...</p>
+                        </div>
+                        <div className="row">
+                            {/* <legend className="col-form-label col-sm-2 pt-0">I am a...</legend> */}
+                            <div className="col-sm-10">
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="administrator" />
+                                    <label className="form-check-label" htmlFor="gridRadios1">Administrator</label>
+                                </div>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="instructor" />
+                                    <label className="form-check-label" htmlFor="gridRadios1">Instructor</label>
+                                </div>
+                                <div className="form-check">
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="student" />
+                                    <label className="form-check-label" htmlFor="gridRadios2">Student</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
                     <Message
                         message={this.state.message}
                         color={this.state.color}

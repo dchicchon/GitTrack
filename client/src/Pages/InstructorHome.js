@@ -5,9 +5,9 @@ import API from '../Utils/API';
 // Utils
 
 
-const StudentList = () => {
+const StudentList = (props) => {
     return (
-        <div className='mt-3'>
+        <div className='mt-3 text-light'>
             <h2>Students</h2>
             <table>
                 <tbody>
@@ -41,10 +41,16 @@ class InstructorHome extends Component {
         // Adding Student
         addStudent: false,
         // studentEmail: '',
-        studentName: '',
+        studentFirstName: '',
+        studentLastName: '',
+        studentEmail: '',
+        currentCohort: '',
 
         // Geting Cohort List
-        cohortList: ''
+        cohortList: '',
+
+        // Getting Student List
+        studentList: ''
     }
 
     componentDidMount() {
@@ -93,7 +99,7 @@ class InstructorHome extends Component {
             let creds = {
                 name: this.state.cohortName,
                 numberStudents: 0,
-                instructorID: this.props.user.id
+                UserId: this.props.user.id
             }
             console.log(creds)
             API.cohortCreate(creds)
@@ -125,8 +131,10 @@ class InstructorHome extends Component {
     inspectCohort = (id) => {
         console.log("Inspect Cohort")
         console.log(`Cohort ID`, id)
+
         this.setState({
-            showList: true
+            showList: true,
+            currentCohort: id
         })
 
         // Show list of students in that cohort
@@ -167,9 +175,21 @@ class InstructorHome extends Component {
     submitStudent = event => {
         event.preventDefault();
         console.log(this.state.studentName)
-        this.setState({
-            addStudent: false
-        })
+        let creds = {
+            firstName: this.state.studentFirstName,
+            lastName: this.state.studenLastName,
+            email: this.state.studentEmail,
+            cohortID: this.state.currentCohort
+        }
+
+        console.log(creds)
+        API.studentCreate(creds)
+            .then(
+                this.setState({
+                    addStudent: false
+                })
+            )
+
     }
 
 
@@ -191,7 +211,7 @@ class InstructorHome extends Component {
                                             <li
                                                 key={i}
                                                 className='list-group-item hover'
-                                                onClick={this.inspectCohort}
+                                                onClick={() => this.inspectCohort(cohort.id)}
                                             >
                                                 {cohort.name}
                                             </li>
@@ -211,15 +231,28 @@ class InstructorHome extends Component {
                         <div className='col-9'>
                             {this.state.showList ?
                                 <div>
-                                    <button type='button' className='btn btn-primary' onClick={this.addStudent}>Invite Student</button>
+                                    <button type='button' className='btn btn-primary' onClick={this.addStudent}>Add Student</button>
                                     {this.state.addStudent ?
-                                        <div className='col-4 mt-3'>
-                                            <div className='form-group'>
-                                                <label htmlFor="cohortName">Student Name</label>
-                                                <input className='form-control' name='studentName' value={this.state.studentName} onChange={this.handleInputChange} />
+                                        <form className='form-horizontal col-12 mt-3'>
+                                            <div className='row'>
+                                                <div className="form-group mr-2">
+                                                    <label htmlFor="firstName">First Name</label>
+                                                    <input value={this.state.studentFirstName} name='studentFirstName' onChange={this.handleInputChange} type="text" className="form-control" id="firstName" placeholder="First Name" />
+                                                    {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                                                </div>
+                                                <div className="form-group mr-2">
+                                                    <label htmlFor="lastName">Last Name</label>
+                                                    <input value={this.state.studentLastName} name='studentLastName' onChange={this.handleInputChange} type="text" className="form-control" id="lastName" placeholder="Last Name" />
+                                                    {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                                                </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="email">Email address</label>
+                                                    <input value={this.state.studentEmail} name='studentEmail' onChange={this.handleInputChange} type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
+                                                    {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                                                </div>
                                             </div>
                                             <button type='button' className='btn btn-primary' onClick={this.submitStudent}>Submit</button>
-                                        </div>
+                                        </form>
                                         : ''}
                                     <StudentList />
                                 </div>
@@ -237,7 +270,7 @@ class InstructorHome extends Component {
                                 <div>
                                     <div className='form-group'>
                                         <label htmlFor="cohortName">Cohort Name</label>
-                                        <input className='form-control' name='cohortName' value={this.state.cohortName} onChange={this.handleInputChange} />
+                                        <input className='form-control' name='cohortName' value={this.state.cohortName} onChange={this.handleInputChange} placeholder='Cohort Name' />
                                     </div>
                                     <button type='button' className='btn btn-primary' onClick={this.submitCohort}>Submit</button>
                                 </div>

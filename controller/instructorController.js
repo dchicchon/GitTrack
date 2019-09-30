@@ -16,7 +16,7 @@ module.exports = {
     createCohort: (req, res) => {
         console.log("\nCreate Cohort")
         console.log(req.body)
-        db.Cohort.create(req.body)  
+        db.Cohort.create(req.body)
             .then(dbCohort => {
                 console.log("\nCohort Created")
                 res.json(dbCohort)
@@ -29,5 +29,10 @@ module.exports = {
         // db.Cohort.findAll({})
 
     },
+
+    createStudent: (req, res) => {
+        console.log(req.body)
+        
+    }
 
 }

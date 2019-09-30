@@ -17,9 +17,9 @@ export default {
         return axios.get("/auth/logout")
     },
 
-    // handleSignup: (creds) => {
-    //     return axios.post("/auth/signup", creds)
-    // },
+    handleSignup: (creds) => {
+        return axios.post("/auth/signup", creds)
+    },
 
     createAccount: (creds) => {
         return axios.post("/auth/signup", creds)
@@ -49,6 +49,10 @@ export default {
 
     cohortCreate: (creds) => {
         return axios.post("/api/instructor/cohorts", creds)
+    },
+
+    studentCreate: (creds) => {
+        return axios.post("/api/instructor/students", creds)
     }
 
     // =====================
