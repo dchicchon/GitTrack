@@ -51,6 +51,7 @@ class Login extends Component {
                             color: res.data.color
                         })
                     } else {
+                        console.log("Success")
                         window.location.href = '/'
                     }
                 })

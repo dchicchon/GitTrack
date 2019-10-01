@@ -47,7 +47,7 @@ function promiseToCheck(user) {
                     break
             }
 
-        }, 2000)
+        }, 1000)
     })
 }
 

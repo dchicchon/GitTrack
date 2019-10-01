@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // Pages
 import Login from './Pages/Login';
@@ -55,49 +55,83 @@ class App extends Component {
 
   render() {
 
-    return (
-      <Router>
-        <div>
+    if (this.state.loggedIn === true) {
+      return (
+        <Router>
+          <Navbar user={this.state.user} logout={this.logout} />
+          {/* <Switch> */}
+            <div className='container'>
+              {this.state.userType === 'administrator' ?
+                <Route path='/' exact component={AdminHome} />
+                :
+                <div>
+                  {this.state.userType === 'instructor' ?
+                    < Route path='/' exact component={() => <InstructorHome user={this.state.user} />} />
+                    :
+                    <Route path='/' exact component={StudentHome} />}
 
+                </div>
 
-          {/* Render Pages based on Login State */}
-          {this.state.loggedIn ?
-
-            <div>
-              <Navbar
-                user={this.state.user}
-                logout={this.logout}
-              />
-
-              <div className='container'>
-                {/* Render Pages based on userType */}
-                {this.state.userType === 'administrator' ?
-                  <Route path='/' exact component={AdminHome} />
-                  :
-                  <div>
-                    {this.state.userType === 'instructor' ?
-                      < Route path='/' exact component={() => <InstructorHome user={this.state.user} />} />
-                      :
-                      <Route path='/' exact component={StudentHome} />}
-
-                  </div>
-
-                }
-
-              </div>
+              }
             </div>
-
-            :
+          {/* </Switch> */}
+        </Router>
+      )
+    } else {
+      return (
+        <Router>
+          {/* <Switch> */}
             <div className='container' style={{ marginTop: '3rem' }}>
               <Route path='/' exact component={Login} />
               <Route path='/signup' exact component={Signup} />
+            </div>
+          {/* </Switch> */}
+        </Router>
+      )
+    }
+    // return (
+    //   <Router>
+    //     <div>
 
-            </div>}
-        </div>
+
+    //       {/* Render Pages based on Login State */}
+    //       {this.state.loggedIn ?
+
+    //         <div>
+    //           <Navbar
+    //             user={this.state.user}
+    //             logout={this.logout}
+    //           />
+
+    //           <div className='container'>
+    //             {/* Render Pages based on userType */}
+    //             {this.state.userType === 'administrator' ?
+    //               <Route path='/' exact component={AdminHome} />
+    //               :
+    //               <div>
+    //                 {this.state.userType === 'instructor' ?
+    //                   < Route path='/' exact component={() => <InstructorHome user={this.state.user} />} />
+    //                   :
+    //                   <Route path='/' exact component={StudentHome} />}
+
+    //               </div>
+
+    //             }
+
+    //           </div>
+    //         </div>
+
+    //         :
+    //         <div className='container' style={{ marginTop: '3rem' }}>
+    //           <Route path='/' exact component={Login} />
+    //           <Route path='/signup' exact component={Signup} />
+
+    //         </div>}
+    //     </div>
 
 
-      </Router >
-    );
+    //   </Router >
+    // );
   }
 }
 

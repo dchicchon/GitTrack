@@ -1,139 +1,15 @@
 import React, { Component } from 'react';
 
 // Components
-import Message from '../Components/Message';
+// import Message from '../Components/Message';
+import AccountModal from '../Components/AccountModal';
+import ActivityModal from '../Components/ActivityModal';
+// import AdminList from '../Components/AdminList';
+// import InstructorList from '../Components/InstructorList';
+// import StudentList from '../Components/StudentList';
 
 // Utils
 import API from '../Utils/API';
-
-// const Message = ({ message, color }) => {
-//     const divStyle = color === 'green' ? 'text-success' : 'text-danger'
-//     return (
-//         <div>
-//             <p className={divStyle}> {message}</p>
-//         </div>
-//     )
-// }
-
-// Modal to create users
-const AccountModal = (props) => {
-    return (
-
-        <div className='container'>
-            <h1>Create Account</h1>
-            <Message
-                message={props.message}
-                color={props.color}
-            />
-            <form>
-                <div className="form-group">
-                    <label htmlFor="firstName">First Name</label>
-                    <input value={props.firstName} name='firstName' onChange={props.handleInputChange} type="text" className="form-control" id="firstName" placeholder="First Name" />
-                    {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                </div>
-                <div className="form-group">
-                    <label htmlFor="lastName">Last Name</label>
-                    <input value={props.lastName} name='lastName' onChange={props.handleInputChange} type="text" className="form-control" id="lastName" placeholder="Last Name" />
-                    {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email address</label>
-                    <input value={props.email} name='email' onChange={props.handleInputChange} type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
-                    {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input value={props.password} name='password' onChange={props.handleInputChange} type="password" className="form-control" id="password" placeholder="Password" autoComplete="true" />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Confirm Password</label>
-                    <input value={props.passwordConfirm} name='passwordConfirm' onChange={props.handleInputChange} type="password" className="form-control" id="passwordConfirm" placeholder="Password" autoComplete="true" />
-                </div>
-                <fieldset className="form-group types">
-                    <div className="row">
-                        <legend className="col-form-label col-sm-2 pt-0">Account Type</legend>
-                        <div className="col-sm-10">
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="admin" />
-                                <label className="form-check-label" htmlFor="gridRadios1">Administrator</label>
-                            </div>
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="instructor" />
-                                <label className="form-check-label" htmlFor="gridRadios2">Instructor</label>
-                            </div>
-                            <div className="form-check">
-                                <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="student" />
-                                <label className="form-check-label" htmlFor="gridRadios2">Student</label>
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-                <button onClick={props.accountCreate} type="submit" className="btn btn-primary">Submit</button>
-            </form>
-
-        </div>
-    )
-}
-
-// const TableRow = ({ firstName, lastName, email, type }) => {
-//     return (
-//         <tr>
-//             <td>{firstName}</td>
-//             <td>{lastName}</td>
-//             <td>{email}</td>
-//             <td>{type}</td>
-//         </tr>
-//     )
-// }
-
-// Modal to see user activity
-const ActivityModal = ({ color, message, list, handleDelete }) => {
-    return (
-        <div>
-            <h1>Activity</h1>
-            <h3>Users</h3>
-            <hr />
-            <Message
-                message={message}
-                color={color}
-            />
-            <table>
-                <tbody>
-                    <tr>
-                        <th>User ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>User Type</th>
-                        <th>Delete</th>
-                    </tr>
-                    {list.map((user, i) => (
-                        <tr key={i}>
-                            <td>{user.id}</td>
-                            <td>{user.firstName}</td>
-                            <td>{user.lastName}</td>
-                            <td>{user.email}</td>
-                            <td>{user.type}</td>
-                            <td><button type='button' className='btn btn-danger' onClick={() => handleDelete(user.id)}>x</button></td>
-
-                        </tr>
-                        // <TableRow
-                        //     key={i}
-                        //     firstName={user}
-                        //     lastName={user.lastName}
-                        //     email={user.email}
-                        //     type={user.type}
-                        // />
-                    )
-                    )}
-                </tbody>
-            </table>
-
-        </div>
-    )
-}
-
-
 
 class AdminHome extends Component {
     state = {
@@ -154,11 +30,12 @@ class AdminHome extends Component {
         passwordConfirm: '',
 
         // Activity Data
-        adminList: [],
-        instructorList: [],
-        studentList: [],
-        
-        userList: []
+        view: 'student',
+        adminList: '',
+        instructorList: '',
+        studentList: '',
+
+        // userList: []
 
     }
 
@@ -198,23 +75,115 @@ class AdminHome extends Component {
                 color: ''
             }))
         }
+        let value = 'instructor';
+        switch (value) {
+            case 'admin':
+                API.adminList()
+                    .then(res => {
+                        console.log("Return Data: Admins")
+                        console.log(res.data)
+                        this.setState({
+                            view: 'admin',
+                            adminList: res.data,
+                            accountModal: false,
+                            activityModal: true,
+                            message: '',
+                            color: ''
+                        })
+                    })
+                break
+            case 'instructor':
+                API.instructorList()
+                    .then(res => {
+                        console.log("Return Data: Instructors")
+                        console.log(res.data)
+                        this.setState({
+                            view: 'instructor',
+                            instructorList: res.data,
+                            accountModal: false,
+                            activityModal: true,
+                            message: '',
+                            color: ''
+                        })
+                    })
+                break
+            case 'student':
+                API.studentList()
+                    .then(res => {
+                        console.log("Return Data: Students")
+                        console.log(res.data)
+                        this.setState({
+                            view: 'student',
+                            studentList: res.data,
+                            accountModal: false,
+                            activityModal: true,
+                            message: '',
+                            color: ''
+                        })
+                    })
+                break
+        }
 
-        // Get List of Users on call
-        API.userList()
-            .then(res => {
-                // This should be a list of users in the database
-                console.log(res)
-                console.log(res.data)
+    }
 
-                this.setState({
-                    userList: res.data,
-                    accountModal: false,
-                    activityModal: true,
-                    message: '',
-                    color: ''
-                })
+    changeView = event => {
+        event.preventDefault();
+        let { value } = event.target
+        console.log(value)
+        // this.setState({
+        //     view: value
+        // })
+        // console.log(`New View: ${this.state.view}`)
+        // console.log(this.state.view)
 
-            })
+        switch (value) {
+            case 'admin':
+                API.adminList()
+                    .then(res => {
+                        console.log("Getting Data: Admin")
+                        console.log(res.data)
+                        this.setState({
+                            view: 'admin',
+                            adminList: res.data,
+                            accountModal: false,
+                            activityModal: true,
+                            message: '',
+                            color: ''
+                        })
+                        console.log(this.state.adminList)
+                    })
+                break
+            case 'instructor':
+                API.instructorList()
+                    .then(res => {
+                        console.log("Getting Data: Instructor")
+                        console.log(res.data)
+                        this.setState({
+                            view: 'instructor',
+                            instructorList: res.data,
+                            accountModal: false,
+                            activityModal: true,
+                            message: '',
+                            color: ''
+                        })
+                    })
+                break
+            case 'student':
+                API.studentList()
+                    .then(res => {
+                        console.log('Getting Data: Students')
+                        console.log(res.data)
+                        this.setState({
+                            view: 'student',
+                            studentList: res.data,
+                            accountModal: false,
+                            activityModal: true,
+                            message: '',
+                            color: ''
+                        })
+                    })
+                break
+        }
 
     }
 
@@ -265,52 +234,73 @@ class AdminHome extends Component {
     }
 
     // Admin can remove users from database
-    handleDelete = id => {
-        API.deleteUser(id)
+    // handleDelete = id => {
+    //     API.deleteUser(id)
+    //         .then(res => {
+    //             console.log(res.data)
+    //             this.setState({
+    //                 message: res.data.message,
+    //                 color: res.data.color
+    //             })
+    //             API.userList()
+    //                 .then(res => {
+    //                     this.setState({
+    //                         userList: res.data,
+    //                     })
+    //                 })
+    //         })
+    // }
+
+    handleAdminDelete = id => {
+        console.log("Deleting Admin")
+        API.deleteAdmin(id)
             .then(res => {
-                console.log(res.data)
-                this.setState({
-                    message: res.data.message,
-                    color: res.data.color
-                })
-                API.userList()
+                console.log(res)
+                API.adminList()
                     .then(res => {
                         this.setState({
-                            userList: res.data,
+                            adminList: res.data
+                        })
+                    }
+                    )
+            })
+    }
+
+    handleInstructorDelete = id => {
+        console.log("Deleting Instructor")
+        API.deleteInstructor(id)
+            .then(res => {
+                console.log(res)
+                API.instructorList()
+                    .then(res => {
+                        this.setState({
+                            instructorList: res.data
                         })
                     })
             })
     }
 
-    handleAdminDelete = id => {
-        API.deleteAdmin(id)
-            .then(res => {
-
-            })
-    }
-
-    handleInstructorDelete = id => {
-        API.deleteInstructor(id)
-            .then(res => {
-
-            })
-    }
-
     handleStudentDelete = id => {
+        console.log("Deleting Student")
         API.deleteStudent(id)
             .then(res => {
-
+                console.log(res)
+                API.studentList()
+                    .then(res => {
+                        this.setState({
+                            studentList: res.data
+                        })
+                    })
             })
     }
-
 
     render() {
         return (
             <div>
-                <h1>Welcome Admin</h1>
+                <h1 className='mt-3'>Welcome Admin</h1>
 
                 <div>
-                    <button type='button' className='btn btn-primary' onClick={this.accountControl}>Create Account</button>
+                    <button type='button' className='btn btn-primary mr-3' onClick={this.accountControl}>Create Account</button>
                     <button type='button' className='btn btn-primary' onClick={this.activityControl}>Site Activity</button>
                 </div>
 
@@ -330,13 +320,23 @@ class AdminHome extends Component {
 
                 {/* Rendered if true */}
                 {this.state.activityModal ?
-                    <ActivityModal
-                        list={this.state.userList}
-                        handleDelete={this.handleDelete}
-                        message={this.state.message}
-                        color={this.state.color}
 
-                    /> : ''}
+                    <div className='mt-3'>
+                        <ActivityModal
+                            view={this.state.view}
+                            changeView={this.changeView}
+                            adminList={this.state.adminList}
+                            instructorList={this.state.instructorList}
+                            studentList={this.state.studentList}
+                            handleAdminDelete={this.handleAdminDelete}
+                            handleInstructorDelete={this.handleInstructorDelete}
+                            handleStudentDelete={this.handleStudentDelete}
+                            message={this.state.message}
+                            color={this.state.color}
+                        />
+                    </div>
+
+                    : ''}
 
             </div>
         )

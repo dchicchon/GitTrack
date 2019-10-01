@@ -25,7 +25,7 @@ function Navbar(props) {
             </div>
 
             {/* <li className="nav-item"> */}
-            <div className='dropdown show'>
+            <div className='dropdown show mr-2'>
 
                 {/* having an issue with user prop  */}
 

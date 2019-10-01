@@ -3,6 +3,11 @@
     box-sizing: border-box;
 }
 
+/* Nav */
+.dropdown-menu {
+    left: -4rem !important;
+}
+
 /* Admin */
 table {
     width: 100%;
