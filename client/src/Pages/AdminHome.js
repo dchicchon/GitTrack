@@ -297,7 +297,7 @@ class AdminHome extends Component {
     render() {
         return (
             <div>
-                <h1 className='mt-3'>Welcome Admin</h1>
+                <h1>Welcome Admin</h1>
 
                 <div>
                     <button type='button' className='btn btn-primary mr-3' onClick={this.accountControl}>Create Account</button>
@@ -322,6 +322,9 @@ class AdminHome extends Component {
                 {this.state.activityModal ?
 
                     <div className='mt-3'>
+                        <button className='btn btn-primary mr-2' type='button' onClick={this.changeView} value='admin'>Administrator List</button>
+                        <button className='btn btn-primary mr-2' type='button' onClick={this.changeView} value='instructor'>Instructor List</button>
+                        <button className='btn btn-primary' type='button' onClick={this.changeView} value='student'>Student List</button>
                         <ActivityModal
                             view={this.state.view}
                             changeView={this.changeView}

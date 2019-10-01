@@ -7,7 +7,7 @@ import API from '../Utils/API';
 
 const StudentList = (props) => {
     return (
-        <div className='mt-3 text-light'>
+        <div className='text-light'>
             <h2>Students</h2>
             <table>
                 <tbody>

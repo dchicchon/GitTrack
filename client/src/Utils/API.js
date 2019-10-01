@@ -72,10 +72,14 @@ export default {
 
     studentCreate: (creds) => {
         return axios.post("/api/instructor/students", creds)
-    }
+    },
 
     // =====================
     // Student Functions
     // =====================
+
+    editGithubUsername: (creds) => {
+        return axios.put("/api/student/ghUsername", creds)
+    }
 
 }

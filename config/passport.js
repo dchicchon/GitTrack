@@ -19,9 +19,7 @@ function promiseToCheck(user) {
                         } else {
                             console.log("\nFound Admin")
                             console.log(admin)
-
                             resolve(admin)
-
                         }
                     })
                     break

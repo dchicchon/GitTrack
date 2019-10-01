@@ -43,3 +43,6 @@
 - Check out other API's that give information about user time coding. Currently the API that we are using can only track the number of commits per day whereas tracking coding time we believe is more crucial. E.g. Wakatime allows you to see your time spent coding and the languages used
 
 - On account creation, email the user their login credentials and a link to the site
+
+## Efficiency
+- Once MVPs are complete, make functions more efficient such as Components and SQL Queries

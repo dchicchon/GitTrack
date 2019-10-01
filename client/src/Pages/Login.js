@@ -42,6 +42,7 @@ class Login extends Component {
                 password: this.state.password,
                 type: typeInput
             }
+            console.log(creds);
             API.handleLogin(creds)
                 .then(res => {
                     console.log(res.data)

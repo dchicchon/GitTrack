@@ -98,6 +98,8 @@ router.post("/login", (req, res, next) => {
 
         // We use the return DataObject to send messages to the front end in case of error logging in or on success
 
+        console.log("\nRequest Body")
+        console.log(req.body)
         // Auth Error
         if (err) return next(err)
 

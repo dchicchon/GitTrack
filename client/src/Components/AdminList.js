@@ -2,14 +2,12 @@ import React from 'react';
 
 import Message from './Message'
 
-const AdminList = ({ changeView, color, message, adminList, handleAdminDelete }) => {
+const AdminList = ({ color, message, adminList, handleAdminDelete }) => {
     return (
         <div>
-            <h3>Admins</h3>
-            <div>
-                <button className='btn btn-primary mr-2' type='button' onClick={changeView} value='instructor'>Instructor List</button>
-                <button className='btn btn-primary' type='button' onClick={changeView} value='student'>Student List</button>
-            </div>
+            {/* <button className='btn btn-primary mr-2' type='button' onClick={changeView} value='instructor'>Instructor List</button> */}
+            {/* <button className='btn btn-primary' type='button' onClick={changeView} value='student'>Student List</button> */}
+            <h3 className='mt-3'>Admins</h3>
             <Message
                 message={message}
                 color={color}

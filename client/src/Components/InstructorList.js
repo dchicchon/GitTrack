@@ -2,13 +2,11 @@ import React from 'react';
 
 import Message from './Message';
 
-const InstructorList = ({ changeView, color, message, instructorList, handleInstructorDelete }) => {
+const InstructorList = ({ color, message, instructorList, handleInstructorDelete }) => {
     return (
 
         <div>
-            <h3>Instructors</h3>
-            <button className='btn btn-primary mr-2' type='button' onClick={changeView} value='admin'>Admin List</button>
-            <button className='btn btn-primary' type='button' onClick={changeView} value='student'>Student List</button>
+            <h3 className='mt-2'>Instructors</h3>
             <Message
                 message={message}
                 color={color}

@@ -60,20 +60,11 @@ class App extends Component {
         <Router>
           <Navbar user={this.state.user} logout={this.logout} />
           {/* <Switch> */}
-            <div className='container'>
-              {this.state.userType === 'administrator' ?
-                <Route path='/' exact component={AdminHome} />
-                :
-                <div>
-                  {this.state.userType === 'instructor' ?
-                    < Route path='/' exact component={() => <InstructorHome user={this.state.user} />} />
-                    :
-                    <Route path='/' exact component={StudentHome} />}
-
-                </div>
-
-              }
-            </div>
+          <div className='container mt-4'>
+            {this.state.userType === 'administrator' ? <Route path='/' exact component={() => <AdminHome user={this.state.user} />} /> : ''}
+            {this.state.userType === 'instructor' ? <Route path='/' exact component={() => <InstructorHome user={this.state.user} />} /> : ''}
+            {this.state.userType === 'student' ? <Route path='/' exact component={() => <StudentHome user={this.state.user} />} /> : ''}
+          </div>
           {/* </Switch> */}
         </Router>
       )
@@ -81,10 +72,10 @@ class App extends Component {
       return (
         <Router>
           {/* <Switch> */}
-            <div className='container' style={{ marginTop: '3rem' }}>
-              <Route path='/' exact component={Login} />
-              <Route path='/signup' exact component={Signup} />
-            </div>
+          <div className='container' style={{ marginTop: '3rem' }}>
+            <Route path='/' exact component={Login} />
+            <Route path='/signup' exact component={Signup} />
+          </div>
           {/* </Switch> */}
         </Router>
       )
