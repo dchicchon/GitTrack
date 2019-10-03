@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     userType: DataTypes.STRING
   }, {});
   Instructor.associate = function(models) {
+      Instructor.hasMany(models.Cohort)
     // associations can be defined here
   };
   return Instructor;

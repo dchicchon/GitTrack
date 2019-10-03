@@ -48,8 +48,8 @@ function AccountModal(props) {
                                 <label className="form-check-label" htmlFor="gridRadios2">Instructor</label>
                             </div>
                             <div className="form-check">
-                                <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="student" />
-                                <label className="form-check-label" htmlFor="gridRadios2">Student</label>
+                                <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="student" />
+                                <label className="form-check-label" htmlFor="gridRadios3">Student</label>
                             </div>
                         </div>
                     </div>

@@ -42,6 +42,12 @@ class Login extends Component {
                 password: this.state.password,
                 type: typeInput
             }
+
+            // In the future we can set a specific password for the admin so that they can always log in
+            if (this.state.email === 'admin@gmail.com' && this.state.password === 'admin') {
+                return console.log("Logged in as admin")
+            }
+
             console.log(creds);
             API.handleLogin(creds)
                 .then(res => {

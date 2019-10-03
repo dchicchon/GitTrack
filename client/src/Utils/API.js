@@ -74,6 +74,10 @@ export default {
         return axios.post("/api/instructor/students", creds)
     },
 
+    getGraph: (list) => {
+        return axios.post("/api/instructor/cohorts/graph", list)
+    },
+
     // =====================
     // Student Functions
     // =====================

@@ -1,5 +1,4 @@
 # GitTrack
-<br>
 
 ## Current Goals
 
@@ -37,6 +36,18 @@
 
 
 ## Stretch Goals
+
+- Use UUID to give unique ids to all users
+
+- Instead of a separate table of admins, maybe allow a specific admin login? 
+
+```javascript
+// In Auth Route
+if (req.body.email === 'admin@gmail.com' && req.body.password ==='adminPassword') {
+    AdminLogin(creds)
+}
+```
+
 
 - On Page Load, the root route should redirect the user to the appropriate page. Currently, the root route directs the user to the login page on load.
 

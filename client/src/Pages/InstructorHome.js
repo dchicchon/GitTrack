@@ -1,31 +1,43 @@
 import React, { Component } from 'react';
+
+// Components
+import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine } from 'victory'
+
+// Utils
 import API from '../Utils/API';
-// import { create } from 'domain';
 
 // Utils
 
 
-const StudentList = (props) => {
+const StudentList = ({ list, handleRemove }) => {
     return (
         <div className='text-light'>
             <h2>Students</h2>
-            <table>
-                <tbody>
-                    <tr>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Number of Commits</th>
-                    </tr>
-                    <tr>
-                        <td>Steve</td>
-                        <td>Johnson</td>
-                        <td>stevie@gmail.com</td>
-                        <td>20</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+            {list.length ?
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Name</th>
+                            {/* <th>Last Name</th> */}
+                            <th>Email</th>
+                            <th>Delete</th>
+                            {/* <th>Number of Commits</th> */}
+                        </tr>
+
+                        {list.map((student, i) => (
+                            <tr key={i}>
+                                <td>{student.firstName} {student.lastName}</td>
+                                <td>{student.email}</td>
+                                {/* This should be removing student from cohort, not deleting student */}
+                                <td><button className='btn' type='button' onClick={() => handleRemove(student.id)}>X</button></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                : 'No Students'
+            }
+
+        </div >
     )
 }
 
@@ -50,24 +62,29 @@ class InstructorHome extends Component {
         cohortList: '',
 
         // Getting Student List
-        studentList: ''
+        studentList: '',
+
+        // Graph
+        showGraph: false,
+        dataFormat: 'monthly',
+        studentData: []
     }
 
     componentDidMount() {
         console.log("Getting Cohorts")
-        // API.getCohorts(this.props.user.id)
-        //     .then(res => {
-        //         if (res.data[0].name) {
-        //             console.log("Cohorts Received")
-        //             this.setState({
-        //                 cohortList: res.data
-        //             })
-        //             console.log(this.state.cohortList)
-
-        //         } else {
-        //             console.log("No Cohorts!")
-        //         }
-        //     })
+        API.getCohorts(this.props.user.id)
+            .then(res => {
+                console.log(res.data)
+                // If we get data back
+                if (res.data) {
+                    console.log("Cohorts Received")
+                    this.setState({
+                        cohortList: res.data
+                    })
+                } else {
+                    console.log("No Cohorts!")
+                }
+            })
     }
 
     handleInputChange = event => {
@@ -99,7 +116,7 @@ class InstructorHome extends Component {
             let creds = {
                 name: this.state.cohortName,
                 numberStudents: 0,
-                UserId: this.props.user.id
+                InstructorId: this.props.user.id
             }
             console.log(creds)
             API.cohortCreate(creds)
@@ -132,14 +149,32 @@ class InstructorHome extends Component {
         console.log("Inspect Cohort")
         console.log(`Cohort ID`, id)
 
-        this.setState({
-            showList: true,
-            currentCohort: id
-        })
+        API.cohortStudentList(id)
+            .then(res => {
+                console.log(res.data)
+                this.setState({
+                    studentList: res.data,
+                    showList: true,
+                    currentCohort: id
+                })
 
-        // Show list of students in that cohort
-        // 1. API Call to get list of students in cohort
-        // 2. Map each student to a table to the right of the list of cohorts
+
+            })
+    }
+
+    cohortCommitGraph = event => {
+        event.preventDefault();
+        console.log("Get commit graph for cohort")
+        let list = {
+            students: this.state.studentList
+        }
+        API.getGraph(list)
+            .then(res => {
+                this.setState({
+                    showGraph: true,
+                    studentData: res.data.students
+                })
+            })
     }
 
     // Instructors should be able to add students to their cohort
@@ -174,22 +209,42 @@ class InstructorHome extends Component {
     // Will add student to a specific cohort
     submitStudent = event => {
         event.preventDefault();
-        console.log(this.state.studentName)
+        console.log(this.state.studentFirstName)
+        console.log(this.state.studentLastName)
+
         let creds = {
             firstName: this.state.studentFirstName,
-            lastName: this.state.studenLastName,
+            lastName: this.state.studentLastName,
             email: this.state.studentEmail,
             cohortID: this.state.currentCohort
         }
 
         console.log(creds)
         API.studentCreate(creds)
-            .then(
-                this.setState({
-                    addStudent: false
-                })
+            .then(res => {
+                console.log("Created Student")
+                console.log(res.data)
+
+                API.cohortStudentList(this.state.currentCohort)
+                    .then(res => {
+                        console.log("Updated Cohort Student List")
+                        console.log(res.data)
+                        this.setState({
+                            studentList: res.data,
+                            showList: true,
+                            currentCohort: this.state.currentCohort,
+                            addStudent: false
+                        })
+                    })
+            }
+
             )
 
+    }
+
+    handleRemoveStudent = id => {
+        console.log("Remove Student")
+        console.log(id)
     }
 
 
@@ -216,17 +271,14 @@ class InstructorHome extends Component {
                                                 {cohort.name}
                                             </li>
                                         ))}
-                                        {/* {this.state.cohortList.map((cohort, i) => {
-                                            <li
-                                                key={i}
-                                                className='list-group-item hover'
-                                            >
-                                                Cohort
-                                        </li>
-                                        })} */}
                                     </ul>
                                 </div>
                                 : ''}
+                            <div className='row mt-2'>
+                                <div className="col-12">
+                                    <button type='button' className='btn btn-primary' onClick={this.createCohort}>Create Cohort</button>
+                                </div>
+                            </div>
                         </div>
                         <div className='col-9'>
                             {this.state.showList ?
@@ -254,16 +306,83 @@ class InstructorHome extends Component {
                                             <button type='button' className='btn btn-primary' onClick={this.submitStudent}>Submit</button>
                                         </form>
                                         : ''}
-                                    <StudentList />
+                                    <StudentList
+                                        list={this.state.studentList}
+                                        handleRemove={this.handleRemoveStudent}
+                                    />
+                                    <button className='btn' type='button' onClick={this.cohortCommitGraph}>Get Commit Graph</button>
+                                    <div>
+                                        {this.state.showGraph ?
+                                            <div>
+                                                <h3>Class Progress</h3>
+                                                <VictoryChart
+                                                    domainPadding={{ y: 20 }}
+                                                    padding={50}
+                                                >
+                                                    <VictoryAxis
+                                                        axisLabelComponent={<VictoryLabel />}
+                                                        label={this.state.dataFormat}
+                                                        style={{
+                                                            axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                            grid: { stroke: 'lightgrey' },
+                                                            tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+                                                        }}
+                                                    />
+                                                    <VictoryAxis
+                                                        dependentAxis={true}
+                                                        axisLabelComponent={<VictoryLabel />}
+                                                        label={'Number of Commits'}
+                                                        style={{
+                                                            axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                            grid: { stroke: 'lightgrey' },
+                                                            tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+
+                                                        }}
+
+                                                    />
+                                                    {/* <VictoryLegend
+                                                        x={150}
+                                                        y={50}
+                                                        title='Legend'
+                                                        centerTitle
+                                                        orientation='horizontal'
+                                                        gutter={20}
+                                                        itemsPerRow={4}
+                                                        // borderPadding={0}
+                                                        style={{ border: { stroke: 'black' }, title: { fontSize: 7 }, labels: { fontSize: 5 }, names: { fontSize: 5 } }}
+                                                        data={this.state.userLegend}
+                                                        height={10}
+                                                    /> */}
+
+                                                    {this.state.studentData.map(
+                                                        (student, i) => (
+                                                            <VictoryLine
+                                                                interpolation='natural'
+                                                                name={student.author.firstName}
+                                                                key={i}
+                                                                // data={student.monthly}
+                                                                data={student.monthly}
+                                                                // data={this.state.dataFormat === 'monthly' ? user.monthly : '' || this.state.dataFormat === 'weekly' ? user.weekly : '' || this.state.dataFormat === 'yearly' ? user.yearly : ''}
+                                                                style={{
+                                                                    data: { stroke: student.color, strokeWidth: 0.8 }
+                                                                }}
+                                                                x='date'
+                                                                y='count'
+                                                            // data={user}
+                                                            />
+                                                        )
+                                                    )}
+
+                                                </VictoryChart>
+                                            </div>
+                                            : ""}
+
+                                    </div>
                                 </div>
                                 : ''}
                         </div>
                     </div>
-                    <div className='row mb-2'>
-                        <div className="col-3">
-                            <button type='button' className='btn btn-primary' onClick={this.createCohort}>Create Cohort</button>
-                        </div>
-                    </div>
+
                     <div className='row'>
                         <div className="col-3">
                             {this.state.createCohort ?

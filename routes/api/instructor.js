@@ -12,8 +12,10 @@ router.route("/students")
 router.route('/cohorts')
     .post(instructorController.createCohort)
 
+router.route("/cohorts/graph")
+    .post(instructorController.getGraph)
+
 router.route('/cohorts/:id')
     .get(instructorController.getStudents)
-
 
 module.exports = router
