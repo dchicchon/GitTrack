@@ -12,8 +12,7 @@ let currentMonth = moment(currentDate).month();
 let currentWeek = moment(currentDate).week();
 let currentDay = moment(currentDate).date();
 
-let colors = ['darkblue', 'darkred', 'darkgreen', 'grey', 'cyan', 'purple', 'teal', 'lightblue'];
-
+let colors = ['#61dafb', '#f04747', '#ece913']
 
 
 module.exports = {
@@ -112,83 +111,90 @@ module.exports = {
         let studentList = req.body.students
         let studentData = [];
         for (let i = 0; i < studentList.length; i++) {
-            axios.get(`https://github-contributions-api.now.sh/v1/${studentList[i].githubUsername}`)
-                .then(student => {
-                    // Format Data to day count
-                    let weeklyContributions = [];
-                    let monthlyContributions = [];
-                    let yearlyContributions = [];
-                    let thisMonth = currentDate.slice(0, 7);
+            if (studentList[i].githubUsername) {
 
-                    let monthNow = 0;
-                    let monthSum = 0;
-                    // let endOfMonth = moment(userDate)
-                    // Iterate through list of contributions
-                    for (let i = 0; i < student.data.contributions.length; i++) {
-                        let studentDate = student.data.contributions[i].date
-                        let monthDate = studentDate.slice(0, 7);
+                axios.get(`https://github-contributions-api.now.sh/v1/${studentList[i].githubUsername}`)
+                    .then(student => {
+                        // Format Data to day count
+                        let weeklyContributions = [];
+                        let monthlyContributions = [];
+                        let yearlyContributions = [];
+                        let thisMonth = currentDate.slice(0, 7);
 
-                        // WEEKLY FILTER
-                        // This will get all the days from this week
-                        if (moment(studentDate).week() === currentWeek && moment(studentDate).weekYear() === currentYear && moment(studentDate).month() === currentMonth) {
-                            let thisDate = {
-                                date: parseInt(moment(student.data.contributions[i].date).date()),
-                                count: parseInt(student.data.contributions[i].count)
+                        let monthNow = 0;
+                        let monthSum = 0;
+                        // let endOfMonth = moment(userDate)
+                        // Iterate through list of contributions
+                        for (let i = 0; i < student.data.contributions.length; i++) {
+                            let studentDate = student.data.contributions[i].date
+                            let monthDate = studentDate.slice(0, 7);
+
+                            // WEEKLY FILTER
+                            // This will get all the days from this week
+                            if (moment(studentDate).week() === currentWeek && moment(studentDate).weekYear() === currentYear && moment(studentDate).month() === currentMonth) {
+                                let thisDate = {
+                                    date: parseInt(moment(student.data.contributions[i].date).date()),
+                                    count: parseInt(student.data.contributions[i].count)
+                                }
+                                weeklyContributions.push(thisDate)
                             }
-                            weeklyContributions.push(thisDate)
-                        }
 
-                        // MONTHLY FILTER
-                        // If the month is equal to this month of this year
-                        if (monthDate == thisMonth) {
-                            let thisDate = {
-                                date: parseInt(moment(student.data.contributions[i].date).date()),
-                                count: parseInt(student.data.contributions[i].count)
+                            // MONTHLY FILTER
+                            // If the month is equal to this month of this year
+                            if (monthDate == thisMonth) {
+                                let thisDate = {
+                                    date: parseInt(moment(student.data.contributions[i].date).date()),
+                                    count: parseInt(student.data.contributions[i].count)
+                                }
+                                // console.log(thisDate)
+                                monthlyContributions.push(thisDate)
                             }
-                            // console.log(thisDate)
-                            monthlyContributions.push(thisDate)
-                        }
 
-                        // YEARLY FILTER
-                        // Lets have a for loop to count the number of commits per week
-                        if (moment(studentDate).weekYear() === currentYear) {
+                            // YEARLY FILTER
+                            // Lets have a for loop to count the number of commits per week
+                            if (moment(studentDate).weekYear() === currentYear) {
 
-                            monthSum += student.data.contributions[i].count
+                                monthSum += student.data.contributions[i].count
 
-                            let thisDate = {
-                                date: parseInt(moment(student.data.contributions[i].date).dayOfYear()),
-                                count: parseInt(student.data.contributions[i].count)
+                                let thisDate = {
+                                    date: parseInt(moment(student.data.contributions[i].date).dayOfYear()),
+                                    count: parseInt(student.data.contributions[i].count)
+                                }
+                                yearlyContributions.push(thisDate)
                             }
-                            yearlyContributions.push(thisDate)
-                        }
-                    }
-
-                    // This is our user, we want to push this formatted version of the data recieved to our userData array
-                    let newStudent = {
-                        author: studentList[i],
-                        color: colors[i],
-                        weekly: weeklyContributions,
-                        monthly: monthlyContributions,
-                        yearly: yearlyContributions
-                    }
-
-                    console.log(newStudent)
-
-                    // console.log("\n", newUser)
-
-                    studentData.push(newStudent)
-
-                    // At the end of the loop. Scaled to include more users
-                    if (studentData.length === studentList.length) {
-                        let returnData = {
-                            students: studentData
                         }
 
-                        console.log("\nReturn Data")
-                        res.json(returnData)
-                    }
-                })
+                        // This is our user, we want to push this formatted version of the data recieved to our userData array
+                        let newStudent = {
+                            author: studentList[i],
+                            color: colors[i],
+                            weekly: weeklyContributions,
+                            monthly: monthlyContributions,
+                            yearly: yearlyContributions
+                        }
 
+                        console.log("\nNew Student")
+                        console.log(newStudent)
+
+                        // console.log("\n", newUser)
+
+                        studentData.push(newStudent)
+
+                        // At the end of the loop. Scaled to include more users
+                        if (studentData.length === studentList.length) {
+                            let returnData = {
+                                students: studentData
+                            }
+
+                            console.log("\nReturn Data")
+                            res.json(returnData)
+                        }
+                    })
+
+            } else {
+                console.log("\nNo Github Username")
+                console.log(studentList[i])
+            }
         }
 
     }

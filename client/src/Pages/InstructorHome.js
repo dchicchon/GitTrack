@@ -2,44 +2,10 @@ import React, { Component } from 'react';
 
 // Components
 import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine } from 'victory'
+import CohortStudentList from '../Components/CohortStudentList';
 
 // Utils
 import API from '../Utils/API';
-
-// Utils
-
-
-const StudentList = ({ list, handleRemove }) => {
-    return (
-        <div className='text-light'>
-            <h2>Students</h2>
-            {list.length ?
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Name</th>
-                            {/* <th>Last Name</th> */}
-                            <th>Email</th>
-                            <th>Delete</th>
-                            {/* <th>Number of Commits</th> */}
-                        </tr>
-
-                        {list.map((student, i) => (
-                            <tr key={i}>
-                                <td>{student.firstName} {student.lastName}</td>
-                                <td>{student.email}</td>
-                                {/* This should be removing student from cohort, not deleting student */}
-                                <td><button className='btn' type='button' onClick={() => handleRemove(student.id)}>X</button></td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                : 'No Students'
-            }
-
-        </div >
-    )
-}
 
 class InstructorHome extends Component {
     state = {
@@ -66,7 +32,7 @@ class InstructorHome extends Component {
 
         // Graph
         showGraph: false,
-        dataFormat: 'monthly',
+        dataFormat: 'yearly',
         studentData: []
     }
 
@@ -170,6 +136,7 @@ class InstructorHome extends Component {
         }
         API.getGraph(list)
             .then(res => {
+                console.log(res.data.students)
                 this.setState({
                     showGraph: true,
                     studentData: res.data.students
@@ -279,11 +246,38 @@ class InstructorHome extends Component {
                                     <button type='button' className='btn btn-primary' onClick={this.createCohort}>Create Cohort</button>
                                 </div>
                             </div>
+                            <div className='row mt-2'>
+                                <div className="col-12">
+                                    {this.state.createCohort ?
+                                        <div>
+                                            <div className='form-group'>
+                                                <label htmlFor="cohortName">Cohort Name</label>
+                                                <input className='form-control' name='cohortName' value={this.state.cohortName} onChange={this.handleInputChange} placeholder='Cohort Name' />
+                                            </div>
+                                            <button type='button' className='btn btn-primary' onClick={this.submitCohort}>Submit</button>
+                                        </div>
+                                        : ""}
+                                </div>
+                            </div>
                         </div>
                         <div className='col-9'>
                             {this.state.showList ?
                                 <div>
-                                    <button type='button' className='btn btn-primary' onClick={this.addStudent}>Add Student</button>
+                                    <h2>Cohort Name</h2>
+
+
+                                    <CohortStudentList
+                                        list={this.state.studentList}
+                                        handleRemove={this.handleRemoveStudent}
+                                    />
+                                    {/* <StudentList
+                                        list={this.state.studentList}
+                                        handleRemove={this.handleRemoveStudent}
+                                    /> */}
+                                    <div className='row'>
+                                        <button type='button' className='btn btn-primary mr-3' onClick={this.addStudent}>Add Student</button>
+                                        <button className='btn' type='button' onClick={this.cohortCommitGraph}>Get Commit Graph</button>
+                                    </div>
                                     {this.state.addStudent ?
                                         <form className='form-horizontal col-12 mt-3'>
                                             <div className='row'>
@@ -306,12 +300,7 @@ class InstructorHome extends Component {
                                             <button type='button' className='btn btn-primary' onClick={this.submitStudent}>Submit</button>
                                         </form>
                                         : ''}
-                                    <StudentList
-                                        list={this.state.studentList}
-                                        handleRemove={this.handleRemoveStudent}
-                                    />
-                                    <button className='btn' type='button' onClick={this.cohortCommitGraph}>Get Commit Graph</button>
-                                    <div>
+                                    <div className='mt-3'>
                                         {this.state.showGraph ?
                                             <div>
                                                 <h3>Class Progress</h3>
@@ -361,7 +350,7 @@ class InstructorHome extends Component {
                                                                 name={student.author.firstName}
                                                                 key={i}
                                                                 // data={student.monthly}
-                                                                data={student.monthly}
+                                                                data={student[`${this.state.dataFormat}`]}
                                                                 // data={this.state.dataFormat === 'monthly' ? user.monthly : '' || this.state.dataFormat === 'weekly' ? user.weekly : '' || this.state.dataFormat === 'yearly' ? user.yearly : ''}
                                                                 style={{
                                                                     data: { stroke: student.color, strokeWidth: 0.8 }
@@ -383,19 +372,7 @@ class InstructorHome extends Component {
                         </div>
                     </div>
 
-                    <div className='row'>
-                        <div className="col-3">
-                            {this.state.createCohort ?
-                                <div>
-                                    <div className='form-group'>
-                                        <label htmlFor="cohortName">Cohort Name</label>
-                                        <input className='form-control' name='cohortName' value={this.state.cohortName} onChange={this.handleInputChange} placeholder='Cohort Name' />
-                                    </div>
-                                    <button type='button' className='btn btn-primary' onClick={this.submitCohort}>Submit</button>
-                                </div>
-                                : ""}
-                        </div>
-                    </div>
+
                 </div>
 
             </div >
