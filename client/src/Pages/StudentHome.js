@@ -1,15 +1,35 @@
 import React, { Component } from 'react';
 
+// Components
+import Message from '../Components/Message';
+import { VictoryChart, VictoryAxis, VictoryLine, VictoryLabel } from 'victory';
+
+// Utils
 import API from '../Utils/API';
 
-import Message from '../Components/Message';
 
 class StudentHome extends Component {
 
     state = {
+        editUsername: false,
         githubUsername: '',
         message: '',
-        color: ''
+        color: '',
+        studentData: '',
+        dataFormat: 'weekly',
+        showGraph: false
+    }
+
+    componentDidMount() {
+        // Get Student commits for this week
+        API.getMyData(this.props.user.githubUsername)
+            .then(res => {
+                console.log(res.data)
+                this.setState({
+                    studentData: res.data,
+                    showGraph: true
+                })
+            })
     }
 
     // State Change Functions
@@ -20,7 +40,20 @@ class StudentHome extends Component {
         })
     }
 
-    editGithubUsername = () => {
+    editUsername = () => {
+        if (this.state.editUsername) {
+            this.setState({
+                editUsername: false
+            })
+        } else {
+            this.setState({
+                editUsername: true
+            })
+        }
+
+    }
+
+    submitGithub = () => {
         console.log("Edit Github Username")
         console.log(this.props.user)
         let creds = {
@@ -32,6 +65,7 @@ class StudentHome extends Component {
                 console.log("Updated Github Username")
                 console.log(res.data)
                 this.setState({
+                    editUsername: false,
                     message: res.data.message,
                     color: res.data.color
                 })
@@ -41,7 +75,7 @@ class StudentHome extends Component {
     render() {
         return (
             <div>
-                <h1>Welcome Student</h1>
+                <h1>Welcome {this.props.user.firstName}</h1>
 
                 {this.state.message ?
                     <Message
@@ -49,11 +83,63 @@ class StudentHome extends Component {
                         color={this.state.color}
                     />
                     : ''}
-                <div className='form-group'>
-                    <label htmlFor='githubName'>Github Username</label>
-                    <input placeholder='Github Username' className='form-control' id='githubName' onChange={this.handleInputChange} value={this.state.githubUsername} name='githubUsername' />
-                </div>
-                <button type='button' className='btn btn-primary' onClick={this.editGithubUsername}>Edit Github Username</button>
+                {this.state.editUsername ?
+                    <div className='form-group'>
+                        <label htmlFor='githubName'>Github Username</label>
+                        {this.props.user.githubUsername ?
+                            <input placeholder={this.props.user.githubUsername} className='form-control' id='githubName' onChange={this.handleInputChange} value={this.state.githubUsername} name='githubUsername' />
+                            :
+                            <input placeholder='New Github Username' className='form-control' id='githubName' onChange={this.handleInputChange} value={this.state.githubUsername} name='githubUsername' />
+                        }
+                        <button type='button' className='btn mt-2 mr-2' onClick={this.submitGithub}>Submit Username</button>
+                        <button type='button' className='btn mt-2' onClick={this.editUsername}>Close</button>
+                    </div> :
+                    <button type='button' className='btn mr-2' onClick={this.editUsername}>Edit Github Username</button>
+                }
+                {this.state.showGraph ?
+                    <div>
+                        <h3>Your Contributions</h3>
+                        <VictoryChart
+                            domainPadding={{ y: 20 }}
+                            padding={50}
+                        >
+                            <VictoryAxis
+                                axisLabelComponent={<VictoryLabel />}
+                                label={this.state.dataFormat}
+                                style={{
+                                    axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                    grid: { stroke: 'lightgrey' },
+                                    tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+                                }}
+                            />
+                            <VictoryAxis
+                                dependentAxis={true}
+                                axisLabelComponent={<VictoryLabel />}
+                                label={'Number of Commits'}
+                                style={{
+                                    axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                    grid: { stroke: 'lightgrey' },
+                                    tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+
+                                }}
+                            />
+
+                            <VictoryLine
+                                interpolation='natural'
+                                data={this.state.studentData[`${this.state.dataFormat}`]}
+                                x='date'
+                                y='count'
+                                style={{
+                                    data: { stroke: this.state.studentData.color }
+                                }}
+                            />
+
+                        </VictoryChart>
+                    </div>
+                    : ""}
+
+
+
             </div >
         )
     }

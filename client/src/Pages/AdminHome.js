@@ -297,7 +297,7 @@ class AdminHome extends Component {
     render() {
         return (
             <div>
-                <h1>Welcome Admin</h1>
+                <h1>Welcome {this.props.user.firstName}</h1>
 
                 <div>
                     <button type='button' className='btn btn-primary mr-3' onClick={this.accountControl}>Create Account</button>

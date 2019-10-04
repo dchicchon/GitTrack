@@ -84,6 +84,10 @@ export default {
 
     editGithubUsername: (creds) => {
         return axios.put("/api/student/ghUsername", creds)
+    },
+
+    getMyData: (username) => {
+        return axios.get("/api/student/" + username)
     }
 
 }

@@ -23,6 +23,7 @@ class InstructorHome extends Component {
         studentLastName: '',
         studentEmail: '',
         currentCohort: '',
+        currentCohortName: '',
 
         // Geting Cohort List
         cohortList: '',
@@ -111,17 +112,17 @@ class InstructorHome extends Component {
 
     // =================================
 
-    inspectCohort = (id) => {
-        console.log("Inspect Cohort")
-        console.log(`Cohort ID`, id)
-
-        API.cohortStudentList(id)
+    inspectCohort = event => {
+        event.preventDefault();
+        let { id, value } = event.target
+        API.cohortStudentList(value)
             .then(res => {
                 console.log(res.data)
                 this.setState({
                     studentList: res.data,
                     showList: true,
-                    currentCohort: id
+                    currentCohort: value,
+                    currentCohortName: id
                 })
 
 
@@ -219,7 +220,7 @@ class InstructorHome extends Component {
 
         return (
             <div className='mt-3'>
-                <h2>Welcome Instructor</h2>
+                <h2>Welcome {this.props.user.firstName}</h2>
 
                 {/* List of cohorts*/}
                 <div className='container mt-3'>
@@ -232,8 +233,10 @@ class InstructorHome extends Component {
                                         {this.state.cohortList.map((cohort, i) => (
                                             <li
                                                 key={i}
+                                                value={cohort.id}
+                                                id={cohort.name}
                                                 className='list-group-item hover'
-                                                onClick={() => this.inspectCohort(cohort.id)}
+                                                onClick={this.inspectCohort}
                                             >
                                                 {cohort.name}
                                             </li>
@@ -263,7 +266,7 @@ class InstructorHome extends Component {
                         <div className='col-9'>
                             {this.state.showList ?
                                 <div>
-                                    <h2>Cohort Name</h2>
+                                    <h2>{this.state.currentCohortName}</h2>
 
 
                                     <CohortStudentList
