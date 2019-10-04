@@ -297,50 +297,52 @@ class AdminHome extends Component {
     render() {
         return (
             <div>
-                <h1>Welcome {this.props.user.firstName}</h1>
+                <div className='container'>
+                    <h1>Welcome {this.props.user.firstName}</h1>
 
-                <div>
-                    <button type='button' className='btn btn-primary mr-3' onClick={this.accountControl}>Create Account</button>
-                    <button type='button' className='btn btn-primary' onClick={this.activityControl}>Site Activity</button>
-                </div>
-
-                {/* Rendered if true */}
-                {this.state.accountModal ?
-                    <AccountModal
-                        firstName={this.state.firstName}
-                        lastName={this.state.lastName}
-                        email={this.state.email}
-                        password={this.state.password}
-                        passwordConfirm={this.state.passwordConfirm}
-                        handleInputChange={this.handleInputChange}
-                        accountCreate={this.accountCreate}
-                        message={this.state.message}
-                        color={this.state.color}
-                    /> : ''}
-
-                {/* Rendered if true */}
-                {this.state.activityModal ?
-
-                    <div className='mt-3'>
-                        <button className='btn btn-primary mr-2' type='button' onClick={this.changeView} value='admin'>Administrator List</button>
-                        <button className='btn btn-primary mr-2' type='button' onClick={this.changeView} value='instructor'>Instructor List</button>
-                        <button className='btn btn-primary' type='button' onClick={this.changeView} value='student'>Student List</button>
-                        <ActivityModal
-                            view={this.state.view}
-                            changeView={this.changeView}
-                            adminList={this.state.adminList}
-                            instructorList={this.state.instructorList}
-                            studentList={this.state.studentList}
-                            handleAdminDelete={this.handleAdminDelete}
-                            handleInstructorDelete={this.handleInstructorDelete}
-                            handleStudentDelete={this.handleStudentDelete}
-                            message={this.state.message}
-                            color={this.state.color}
-                        />
+                    <div>
+                        <button type='button' className='btn btn-primary mr-3' onClick={this.accountControl}>Create Account</button>
+                        <button type='button' className='btn btn-primary' onClick={this.activityControl}>Site Activity</button>
                     </div>
 
-                    : ''}
+                    {/* Rendered if true */}
+                    {this.state.accountModal ?
+                        <AccountModal
+                            firstName={this.state.firstName}
+                            lastName={this.state.lastName}
+                            email={this.state.email}
+                            password={this.state.password}
+                            passwordConfirm={this.state.passwordConfirm}
+                            handleInputChange={this.handleInputChange}
+                            accountCreate={this.accountCreate}
+                            message={this.state.message}
+                            color={this.state.color}
+                        /> : ''}
 
+                    {/* Rendered if true */}
+                    {this.state.activityModal ?
+
+                        <div className='mt-3'>
+                            <button className='btn btn-primary mr-2' type='button' onClick={this.changeView} value='admin'>Administrator List</button>
+                            <button className='btn btn-primary mr-2' type='button' onClick={this.changeView} value='instructor'>Instructor List</button>
+                            <button className='btn btn-primary' type='button' onClick={this.changeView} value='student'>Student List</button>
+                            <ActivityModal
+                                view={this.state.view}
+                                changeView={this.changeView}
+                                adminList={this.state.adminList}
+                                instructorList={this.state.instructorList}
+                                studentList={this.state.studentList}
+                                handleAdminDelete={this.handleAdminDelete}
+                                handleInstructorDelete={this.handleInstructorDelete}
+                                handleStudentDelete={this.handleStudentDelete}
+                                message={this.state.message}
+                                color={this.state.color}
+                            />
+                        </div>
+
+                        : ''}
+
+                </div>
             </div>
         )
     }
