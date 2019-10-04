@@ -15,20 +15,64 @@ class StudentHome extends Component {
         githubUsername: '',
         message: '',
         color: '',
+
+        // Graph
         studentData: '',
-        dataFormat: 'weekly',
-        showGraph: false
+        dataFormat: 'week',
+        showGraph: false,
+        weekData: '',
+        monthData: '',
+        yearData: ''
     }
 
     componentDidMount() {
         // Get Student commits for this week
         API.getMyData(this.props.user.githubUsername)
             .then(res => {
-                console.log(res.data)
-                this.setState({
-                    studentData: res.data,
-                    showGraph: true
-                })
+                if (res.data) {
+                    console.log(res.data)
+                    let student = res.data
+                    let weekSum = 0
+                    let monthSum = 0
+                    let yearSum = 0
+
+                    for (let j = 0; j < student.week.length; j++) {
+                        weekSum += student.week[j].count
+                        // weekSum += students[i].weekly[j].count
+                    }
+                    for (let k = 0; k < student.month.length; k++) {
+                        monthSum += student.month[k].count
+                    }
+                    for (let l = 0; l < student.year.length; l++) {
+                        yearSum += student.year[l].count
+                    }
+
+                    let weekData = {
+                        total: weekSum,
+                        average: weekSum / 7
+                    }
+
+                    let monthData = {
+                        total: monthSum,
+                        average: monthSum / 30
+                    }
+
+                    let yearData = {
+                        total: yearSum,
+                        average: yearSum / 12
+                    }
+
+                    this.setState({
+                        studentData: res.data,
+                        showGraph: true,
+                        weekData: weekData,
+                        monthData: monthData,
+                        yearData: yearData
+                    })
+                } else {
+                    console.log("No Data")
+                }
+
             })
     }
 
@@ -72,6 +116,14 @@ class StudentHome extends Component {
             })
     }
 
+    changeFormat = event => {
+        let { value } = event.target;
+        this.setState({
+            dataFormat: value
+        })
+
+    }
+
     render() {
         return (
             <div>
@@ -99,6 +151,15 @@ class StudentHome extends Component {
                 {this.state.showGraph ?
                     <div>
                         <h3>Your Contributions</h3>
+                        <h2>Total this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''}{this.state.dataFormat === 'month' ? this.state.monthData.total : ''}{this.state.dataFormat === 'week' ? this.state.weekData.total : ''} </h2>
+                        <h2>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''}{this.state.dataFormat === 'month' ? this.state.monthData.average : ''}{this.state.dataFormat === 'week' ? this.state.weekData.average : ''} </h2>
+
+                        <div className='row'>
+                            <button type='button' className='btn mr-2' onClick={this.changeFormat} value='week'>Weekly</button>
+                            <button type='button' className='btn mr-2' onClick={this.changeFormat} value='month'> Monthly</button>
+                            <button type='button' className='btn' onClick={this.changeFormat} value='year'>Yearly</button>
+
+                        </div>
                         <VictoryChart
                             domainPadding={{ y: 20 }}
                             padding={50}
@@ -136,7 +197,7 @@ class StudentHome extends Component {
 
                         </VictoryChart>
                     </div>
-                    : ""}
+                    : "No Github Username Yet :("}
 
 
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // Components
-import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine } from 'victory'
+import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine, VictoryLegend } from 'victory'
 import CohortStudentList from '../Components/CohortStudentList';
 
 // Utils
@@ -33,8 +33,12 @@ class InstructorHome extends Component {
 
         // Graph
         showGraph: false,
-        dataFormat: 'yearly',
-        studentData: []
+        dataFormat: 'year',
+        studentData: [],
+        studentLegend: '',
+        weekData: '',
+        monthData: '',
+        yearData: ''
     }
 
     componentDidMount() {
@@ -118,9 +122,11 @@ class InstructorHome extends Component {
         API.cohortStudentList(value)
             .then(res => {
                 console.log(res.data)
+
                 this.setState({
                     studentList: res.data,
                     showList: true,
+                    showGraph: false,
                     currentCohort: value,
                     currentCohortName: id
                 })
@@ -137,12 +143,76 @@ class InstructorHome extends Component {
         }
         API.getGraph(list)
             .then(res => {
-                console.log(res.data.students)
+                let students = res.data.students
+                let weekSum = 0;
+                let monthSum = 0;
+                let yearSum = 0;
+                let studentLegend = []
+
+                // Iterate through student list
+
+                for (let i = 0; i < students.length; i++) {
+                    console.log(students[i])
+                    console.log(students[i].week)
+
+                    let legendEntry = {
+                        name: (students[i].author.firstName + ' ' + students[i].author.lastName),
+                        symbol: { fill: students[i].color }
+                    }
+
+                    studentLegend.push(legendEntry)
+                    for (let j = 0; j < students[i].week.length; j++) {
+                        weekSum += students[i].week[j].count
+                        // weekSum += students[i].weekly[j].count
+                    }
+                    for (let k = 0; k < students[i].month.length; k++) {
+                        monthSum += students[i].month[k].count
+                    }
+                    for (let l = 0; l < students[i].year.length; l++) {
+                        yearSum += students[i].year[l].count
+                    }
+
+
+
+                }
+
+                let weekData = {
+                    total: weekSum,
+                    average: weekSum / 7
+                }
+
+                let monthData = {
+                    total: monthSum,
+                    average: monthSum / 30
+                }
+
+                let yearData = {
+                    total: yearSum,
+                    average: yearSum / 12
+                }
+
+
                 this.setState({
                     showGraph: true,
-                    studentData: res.data.students
+                    studentLegend: studentLegend,
+                    weekData: weekData,
+                    monthData: monthData,
+                    yearData: yearData,
+                    studentData: students
                 })
+
+                console.log(this.state.studentLegend)
             })
+    }
+
+    changeFormat = event => {
+        let { value } = event.target
+        this.setState({
+            dataFormat: value
+        })
+        // this.setState({
+        //     dataFormat: dateType
+        // })
     }
 
     // Instructors should be able to add students to their cohort
@@ -220,10 +290,12 @@ class InstructorHome extends Component {
 
         return (
             <div className='mt-3'>
-                <h2>Welcome {this.props.user.firstName}</h2>
 
                 {/* List of cohorts*/}
                 <div className='container mt-3'>
+                    <h2>Welcome {this.props.user.firstName}</h2>
+
+                    {/* This row should contain cohort list and respective students */}
                     <div className='row mb-2'>
                         <div className='col-2'>
                             <h3>Cohorts</h3>
@@ -303,82 +375,99 @@ class InstructorHome extends Component {
                                             <button type='button' className='btn btn-primary' onClick={this.submitStudent}>Submit</button>
                                         </form>
                                         : ''}
-                                    <div className='mt-3'>
-                                        {this.state.showGraph ?
-                                            <div>
-                                                <h3>Class Progress</h3>
-                                                <VictoryChart
-                                                    domainPadding={{ y: 20 }}
-                                                    padding={50}
-                                                >
-                                                    <VictoryAxis
-                                                        axisLabelComponent={<VictoryLabel />}
-                                                        label={this.state.dataFormat}
-                                                        style={{
-                                                            axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
-                                                            grid: { stroke: 'lightgrey' },
-                                                            tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
-                                                        }}
-                                                    />
-                                                    <VictoryAxis
-                                                        dependentAxis={true}
-                                                        axisLabelComponent={<VictoryLabel />}
-                                                        label={'Number of Commits'}
-                                                        style={{
-                                                            axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
-                                                            grid: { stroke: 'lightgrey' },
-                                                            tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
-
-                                                        }}
-
-                                                    />
-                                                    {/* <VictoryLegend
-                                                        x={150}
-                                                        y={50}
-                                                        title='Legend'
-                                                        centerTitle
-                                                        orientation='horizontal'
-                                                        gutter={20}
-                                                        itemsPerRow={4}
-                                                        // borderPadding={0}
-                                                        style={{ border: { stroke: 'black' }, title: { fontSize: 7 }, labels: { fontSize: 5 }, names: { fontSize: 5 } }}
-                                                        data={this.state.userLegend}
-                                                        height={10}
-                                                    /> */}
-
-                                                    {this.state.studentData.map(
-                                                        (student, i) => (
-                                                            <VictoryLine
-                                                                interpolation='natural'
-                                                                name={student.author.firstName}
-                                                                key={i}
-                                                                // data={student.monthly}
-                                                                data={student[`${this.state.dataFormat}`]}
-                                                                // data={this.state.dataFormat === 'monthly' ? user.monthly : '' || this.state.dataFormat === 'weekly' ? user.weekly : '' || this.state.dataFormat === 'yearly' ? user.yearly : ''}
-                                                                style={{
-                                                                    data: { stroke: student.color, strokeWidth: 0.8 }
-                                                                }}
-                                                                x='date'
-                                                                y='count'
-                                                            // data={user}
-                                                            />
-                                                        )
-                                                    )}
-
-                                                </VictoryChart>
-                                            </div>
-                                            : ""}
-
-                                    </div>
                                 </div>
                                 : ''}
                         </div>
                     </div>
+                    <div>
+                        <div>
+                            {/* End row here */}
 
+                            <div className='mt-3'>
+                                {this.state.showGraph ?
+                                    <div>
+                                        <h3>Class Progress</h3>
+                                        <h5>Commits this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''} {this.state.dataFormat === 'month' ? this.state.monthData.total : ''} {this.state.dataFormat === 'week' ? this.state.weekData.total : ''}</h5>
+                                        <h5>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''} {this.state.dataFormat === 'month' ? this.state.monthData.average : ''} {this.state.dataFormat === 'week' ? this.state.weekData.average : ''}</h5>
 
-                </div>
+                                        <h3>Change Format</h3>
+                                        <div className='row'>
+                                            <button type='button' className='btn mr-2' value='week' onClick={this.changeFormat}>Weekly</button>
+                                            <button type='button' className='btn mr-2' value='month' onClick={this.changeFormat}>Monthly</button>
+                                            <button type='button' className='btn' value='year' onClick={this.changeFormat}>Yearly</button>
+
+                                        </div>
+                                        <VictoryChart
+                                            domainPadding={{ y: 20 }}
+                                            padding={50}
+                                        >
+                                            <VictoryAxis
+                                                axisLabelComponent={<VictoryLabel />}
+                                                label={this.state.dataFormat}
+                                                style={{
+                                                    axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                    grid: { stroke: 'lightgrey' },
+                                                    tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+                                                }}
+                                            />
+                                            <VictoryAxis
+                                                dependentAxis={true}
+                                                axisLabelComponent={<VictoryLabel />}
+                                                label={'Number of Commits'}
+                                                style={{
+                                                    axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                    grid: { stroke: 'lightgrey' },
+                                                    tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+
+                                                }}
+
+                                            />
+                                            <VictoryLegend
+                                                x={150}
+                                                y={50}
+                                                title='Legend'
+                                                centerTitle
+                                                orientation='horizontal'
+                                                gutter={20}
+                                                itemsPerRow={4}
+                                                // borderPadding={0}
+                                                style={{ border: { stroke: '#61dafb' }, title: { fontSize: 12, stroke: 'white', letterSpacing: '1px' }, labels: { fontSize: 9, stroke: '#61dafb', letterSpacing: '1px' }, names: { fontSize: 9, strokeWidth: 2, stroke: 'white', letterSpacing: '1px' } }}
+                                                data={this.state.studentLegend}
+                                                height={10}
+                                            />
+
+                                            {this.state.studentData.map(
+                                                (student, i) => (
+                                                    <VictoryLine
+                                                        interpolation='natural'
+                                                        name={student.author.firstName}
+                                                        key={i}
+                                                        // data={student.monthly}
+                                                        data={student[`${this.state.dataFormat}`]}
+                                                        // data={this.state.dataFormat === 'monthly' ? user.monthly : '' || this.state.dataFormat === 'weekly' ? user.weekly : '' || this.state.dataFormat === 'yearly' ? user.yearly : ''}
+                                                        style={{
+                                                            data: { stroke: student.color, strokeWidth: 0.8 }
+                                                        }}
+                                                        x='date'
+                                                        y='count'
+                                                    // data={user}
+                                                    />
+                                                )
+                                            )}
+
+                                        </VictoryChart>
+                                    </div>
+                                    : ""}
+
+                            </div>
+                        </div>
+                        {/* : ''} */}
+                    </div>
+                </div >
+
 
             </div >
+
         )
     }
 }

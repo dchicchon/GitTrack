@@ -4,13 +4,6 @@ const Op = require('sequelize').Op;
 const moment = require("moment");
 const axios = require("axios")
 
-// Using moment we get our values for the current date
-let currentDate = moment().format('YYYY-MM-DD');
-// let currentYear = parseInt(currentDate.slice(0, 4));
-let currentYear = moment(currentDate).year();
-let currentMonth = moment(currentDate).month();
-let currentWeek = moment(currentDate).week();
-let currentDay = moment(currentDate).date();
 
 let colors = ['#61dafb', '#f04747', '#ece913']
 
@@ -113,28 +106,46 @@ module.exports = {
         for (let i = 0; i < studentList.length; i++) {
             if (studentList[i].githubUsername) {
 
+                // Get Contributions for each student
                 axios.get(`https://github-contributions-api.now.sh/v1/${studentList[i].githubUsername}`)
                     .then(student => {
+
+                        // Using moment we get our values for the current date
+                        let currentDate = moment().format('YYYY-MM-DD');
+                        // let currentYear = parseInt(currentDate.slice(0, 4));
+                        let currentYear = moment(currentDate).year();
+                        // let currentMonth = moment(currentDate).month();
+                        let currentWeek = moment(currentDate).week();
+                        // let currentDay = moment(currentDate).date();
+
+
                         // Format Data to day count
+                        let thisMonth = currentDate.slice(0, 7);
+
                         let weeklyContributions = [];
                         let monthlyContributions = [];
                         let yearlyContributions = [];
-                        let thisMonth = currentDate.slice(0, 7);
 
-                        let monthNow = 0;
                         let monthSum = 0;
-                        // let endOfMonth = moment(userDate)
+
+                        // This API always starts from the end of the year, so we will start there as well to get yearly contriubtions
+                        let studentMonth = 11;
+
                         // Iterate through list of contributions
-                        for (let i = 0; i < student.data.contributions.length; i++) {
-                            let studentDate = student.data.contributions[i].date
+                        for (let j = 0; j < student.data.contributions.length; j++) {
+
+                            let studentDate = student.data.contributions[j].date
                             let monthDate = studentDate.slice(0, 7);
 
                             // WEEKLY FILTER
                             // This will get all the days from this week
-                            if (moment(studentDate).week() === currentWeek && moment(studentDate).weekYear() === currentYear && moment(studentDate).month() === currentMonth) {
+                            if (moment(studentDate).week() === currentWeek && moment(studentDate).weekYear() === currentYear) {
+                                let contribution = student.data.contributions[j]
+                                console.log(contribution)
+
                                 let thisDate = {
-                                    date: parseInt(moment(student.data.contributions[i].date).date()),
-                                    count: parseInt(student.data.contributions[i].count)
+                                    date: parseInt(moment(student.data.contributions[j].date).date()),
+                                    count: parseInt(contribution.count)
                                 }
                                 weeklyContributions.push(thisDate)
                             }
@@ -143,8 +154,8 @@ module.exports = {
                             // If the month is equal to this month of this year
                             if (monthDate == thisMonth) {
                                 let thisDate = {
-                                    date: parseInt(moment(student.data.contributions[i].date).date()),
-                                    count: parseInt(student.data.contributions[i].count)
+                                    date: parseInt(moment(student.data.contributions[j].date).date()),
+                                    count: parseInt(student.data.contributions[j].count)
                                 }
                                 // console.log(thisDate)
                                 monthlyContributions.push(thisDate)
@@ -152,31 +163,41 @@ module.exports = {
 
                             // YEARLY FILTER
                             // Lets have a for loop to count the number of commits per week
-                            if (moment(studentDate).weekYear() === currentYear) {
 
-                                monthSum += student.data.contributions[i].count
+                            if (moment(studentDate).year() === currentYear) {
+                                let contribution = student.data.contributions[j]
+                                monthSum += contribution.count
 
-                                let thisDate = {
-                                    date: parseInt(moment(student.data.contributions[i].date).dayOfYear()),
-                                    count: parseInt(student.data.contributions[i].count)
+                                if (moment(contribution.date).month() !== studentMonth || j === 364) {
+                                    let thisMonth = {
+                                        date: studentMonth,
+                                        count: monthSum
+                                    }
+                                    monthSum = 0
+                                    yearlyContributions.push(thisMonth)
+                                    studentMonth--
                                 }
-                                yearlyContributions.push(thisDate)
+                                // monthSum += student.data.contributions[j].count
+
+                                // let thisDate = {
+                                //     date: parseInt(moment(student.data.contributions[j].date).dayOfYear()),
+                                //     count: parseInt(student.data.contributions[j].count)
+                                // }
+                                // yearlyContributions.push(thisDate)
                             }
+
+                            // This is our user, we want to push this formatted version of the data recieved to our userData array
                         }
 
-                        // This is our user, we want to push this formatted version of the data recieved to our userData array
                         let newStudent = {
                             author: studentList[i],
                             color: colors[i],
-                            weekly: weeklyContributions,
-                            monthly: monthlyContributions,
-                            yearly: yearlyContributions
+                            week: weeklyContributions,
+                            month: monthlyContributions,
+                            year: yearlyContributions
                         }
 
-                        console.log("\nNew Student")
                         console.log(newStudent)
-
-                        // console.log("\n", newUser)
 
                         studentData.push(newStudent)
 
@@ -186,11 +207,9 @@ module.exports = {
                                 students: studentData
                             }
 
-                            console.log("\nReturn Data")
                             res.json(returnData)
                         }
                     })
-
             } else {
                 console.log("\nNo Github Username")
                 console.log(studentList[i])
@@ -200,3 +219,4 @@ module.exports = {
     }
 
 }
+

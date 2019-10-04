@@ -60,7 +60,7 @@ class App extends Component {
         <Router>
           <Navbar user={this.state.user} logout={this.logout} />
           {/* <Switch> */}
-          <div className='container mt-4'>
+          <div className='mt-4'>
             {this.state.userType === 'administrator' ? <Route path='/' exact component={() => <AdminHome user={this.state.user} />} /> : ''}
             {this.state.userType === 'instructor' ? <Route path='/' exact component={() => <InstructorHome user={this.state.user} />} /> : ''}
             {this.state.userType === 'student' ? <Route path='/' exact component={() => <StudentHome user={this.state.user} />} /> : ''}
