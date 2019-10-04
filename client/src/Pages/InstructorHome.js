@@ -210,9 +210,6 @@ class InstructorHome extends Component {
         this.setState({
             dataFormat: value
         })
-        // this.setState({
-        //     dataFormat: dateType
-        // })
     }
 
     // Instructors should be able to add students to their cohort
@@ -345,13 +342,10 @@ class InstructorHome extends Component {
                                         list={this.state.studentList}
                                         handleRemove={this.handleRemoveStudent}
                                     />
-                                    {/* <StudentList
-                                        list={this.state.studentList}
-                                        handleRemove={this.handleRemoveStudent}
-                                    /> */}
+
                                     <div className='row'>
                                         <button type='button' className='btn btn-primary mr-3' onClick={this.addStudent}>Add Student</button>
-                                        <button className='btn' type='button' onClick={this.cohortCommitGraph}>Get Commit Graph</button>
+                                        <button className='btn' type='button' onClick={this.cohortCommitGraph}>Get Cohort Graph</button>
                                     </div>
                                     {this.state.addStudent ?
                                         <form className='form-horizontal col-12 mt-3'>

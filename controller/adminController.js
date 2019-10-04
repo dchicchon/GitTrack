@@ -4,21 +4,33 @@ module.exports = {
     getAdmins: (req, res) => {
         db.Administrator.findAll()
             .then(dbAdmin => {
-                res.json(dbAdmin)
+                if (dbAdmin) {
+                    res.json(dbAdmin)
+                } else {
+                    res.send("No Admins")
+                }
             })
     },
 
     getInstructors: (req, res) => {
         db.Instructor.findAll()
             .then(dbInstructor => {
-                res.json(dbInstructor)
+                if (dbInstructor) {
+                    res.json(dbInstructor)
+                } else {
+                    res.send("No Instructors")
+                }
             })
     },
 
     getStudents: (req, res) => {
         db.Student.findAll()
             .then(dbStudent => {
-                res.json(dbStudent)
+                if (dbStudent) {
+                    res.json(dbStudent)
+                } else {
+                    res.send("No Students")
+                }
             })
     },
 

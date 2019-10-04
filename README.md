@@ -8,10 +8,8 @@
 - Admin can reset passwords for users
 
 #### Instructors
-- Instructor can invite students to cohort
-- Instructor can create many cohorts that have many students assigned to them
-- Instructor can track the progress of individual students and compare them to each other on a graph
-- Instructors can send messages to their students via a forum. THis will be in the form of an additional page that will be a message board for students *or* on the same home page for students
+
+- Instructors can send messages to their students via a forum. This will be in the form of an additional page that will be a message board for students *or* on the same home page for students
 
 #### Students
 - Students can see their progress and check their percentile compared to the cohort as a whole.
@@ -29,6 +27,12 @@
 - Admins can see a list of users that are in the database
 
 #### Instructor
+- Instructor can invite students to cohort
+
+- Instructor can track the progress of individual students and compare them to each other on a graph
+
+- Instructor can create many cohorts that have many students assigned to them
+
 - Instructors can create cohorts
 
 ## Clone Instructions

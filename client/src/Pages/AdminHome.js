@@ -75,6 +75,8 @@ class AdminHome extends Component {
                 color: ''
             }))
         }
+
+        // Set initial value of instructor
         let value = 'instructor';
         switch (value) {
             case 'admin':
@@ -130,57 +132,65 @@ class AdminHome extends Component {
         event.preventDefault();
         let { value } = event.target
         console.log(value)
-        // this.setState({
-        //     view: value
-        // })
-        // console.log(`New View: ${this.state.view}`)
-        // console.log(this.state.view)
 
         switch (value) {
             case 'admin':
                 API.adminList()
                     .then(res => {
                         console.log("Getting Data: Admin")
-                        console.log(res.data)
-                        this.setState({
-                            view: 'admin',
-                            adminList: res.data,
-                            accountModal: false,
-                            activityModal: true,
-                            message: '',
-                            color: ''
-                        })
-                        console.log(this.state.adminList)
+                        if (typeof res.data !== 'string') {
+                            console.log(res.data)
+                            this.setState({
+                                view: 'admin',
+                                adminList: res.data,
+                                accountModal: false,
+                                activityModal: true,
+                                message: '',
+                                color: ''
+                            })
+                        } else {
+                            console.log("No Admins")
+                        }
                     })
                 break
             case 'instructor':
                 API.instructorList()
                     .then(res => {
                         console.log("Getting Data: Instructor")
-                        console.log(res.data)
-                        this.setState({
-                            view: 'instructor',
-                            instructorList: res.data,
-                            accountModal: false,
-                            activityModal: true,
-                            message: '',
-                            color: ''
-                        })
+                        if (typeof res.data !== 'string') {
+
+                            console.log(res.data)
+                            this.setState({
+                                view: 'instructor',
+                                instructorList: res.data,
+                                accountModal: false,
+                                activityModal: true,
+                                message: '',
+                                color: ''
+                            })
+                        } else {
+                            console.log("No Instructors")
+                        }
                     })
                 break
             case 'student':
                 API.studentList()
                     .then(res => {
                         console.log('Getting Data: Students')
-                        console.log(res.data)
-                        this.setState({
-                            view: 'student',
-                            studentList: res.data,
-                            accountModal: false,
-                            activityModal: true,
-                            message: '',
-                            color: ''
-                        })
+                        if (typeof res.data !== 'string') {
+
+                            console.log(res.data)
+                            this.setState({
+                                view: 'student',
+                                studentList: res.data,
+                                accountModal: false,
+                                activityModal: true,
+                                message: '',
+                                color: ''
+                            })
+                        } else {
+                            console.log("No Students")
+                        }
                     })
                 break
         }
