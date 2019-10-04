@@ -19,14 +19,17 @@ const InstructorList = ({ color, message, instructorList, handleInstructorDelete
                         <th>Email</th>
                         <th>Delete</th>
                     </tr>
-                    {instructorList.map((instructor, i) => (
-                        <tr key={i}>
-                            <td>{instructor.id}</td>
-                            <td>{instructor.firstName} {instructor.lastName}</td>
-                            <td>{instructor.email}</td>
-                            <td><button type='button' className='btn btn-danger' onClick={() => handleInstructorDelete(instructor.id)}>x</button></td>
-                        </tr>
-                    ))}
+                    {instructorList ?
+                        instructorList.map((instructor, i) => (
+                            <tr key={i}>
+                                <td>{instructor.id}</td>
+                                <td>{instructor.firstName} {instructor.lastName}</td>
+                                <td>{instructor.email}</td>
+                                <td><button type='button' className='btn btn-danger' onClick={() => handleInstructorDelete(instructor.id)}>x</button></td>
+                            </tr>
+                        ))
+                        : 'No Instructors'
+                    }
                 </tbody>
             </table>
         </div>

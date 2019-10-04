@@ -20,15 +20,20 @@ const StudentList = ({ color, message, studentList, handleStudentDelete }) => {
                         <th>Email</th>
                         <th>Delete</th>
                     </tr>
-                    {studentList.map((student, i) => (
-                        <tr key={i}>
-                            <td>{student.id}</td>
-                            <td>{student.firstName} {student.lastName}</td>
-                            <td>{student.githubUsername}</td>
-                            <td>{student.email}</td>
-                            <td><button type='button' className='btn btn-danger' onClick={() => handleStudentDelete(student.id)}>x</button></td>
-                        </tr>
-                    ))}
+                    {studentList ?
+
+                        studentList.map((student, i) => (
+                            <tr key={i}>
+                                <td>{student.id}</td>
+                                <td>{student.firstName} {student.lastName}</td>
+                                <td>{student.githubUsername}</td>
+                                <td>{student.email}</td>
+                                <td><button type='button' className='btn btn-danger' onClick={() => handleStudentDelete(student.id)}>x</button></td>
+                            </tr>
+                        ))
+                        : 'No Students'
+                    }
+
                 </tbody>
             </table>
         </div>

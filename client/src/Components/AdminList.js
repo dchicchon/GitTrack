@@ -20,14 +20,17 @@ const AdminList = ({ color, message, adminList, handleAdminDelete }) => {
                         <th>Email</th>
                         <th>Delete</th>
                     </tr>
-                    {adminList.map((admin, i) => (
-                        <tr key={i}>
-                            <td>{admin.id}</td>
-                            <td>{admin.firstName} {admin.lastName}</td>
-                            <td>{admin.email}</td>
-                            <td><button type='button' className='btn btn-danger' onClick={() => handleAdminDelete(admin.id)}>x</button></td>
-                        </tr>
-                    ))}
+
+                    {adminList ?
+                        adminList.map((admin, i) => (
+                            <tr key={i}>
+                                <td>{admin.id}</td>
+                                <td>{admin.firstName} {admin.lastName}</td>
+                                <td>{admin.email}</td>
+                                <td><button type='button' className='btn btn-danger' onClick={() => handleAdminDelete(admin.id)}>x</button></td>
+                            </tr>
+                        )) : 'No Admins'
+                    }
                 </tbody>
             </table>
         </div>
