@@ -290,7 +290,7 @@ class InstructorHome extends Component {
 
                 {/* List of cohorts*/}
                 <div className='container mt-3'>
-                    <h2>Welcome {this.props.user.firstName}</h2>
+                    {/* <h2>Welcome {this.props.user.firstName}</h2> */}
 
                     {/* This row should contain cohort list and respective students */}
                     <div className='row mb-2'>

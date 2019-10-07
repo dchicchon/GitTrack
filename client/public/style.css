@@ -68,6 +68,10 @@ li:hover {
     border: none !important;
 }
 
+.btn:hover {
+    background: #51b4cf !important;
+}
+
 /* .btn:active {
     outline: none !important;
     border:none !important;

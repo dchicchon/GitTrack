@@ -127,38 +127,47 @@ class StudentHome extends Component {
     render() {
         return (
             <div>
-                <h1>Welcome {this.props.user.firstName}</h1>
+                <div className='container'>
 
-                {this.state.message ?
-                    <Message
-                        message={this.state.message}
-                        color={this.state.color}
-                    />
-                    : ''}
-                {this.state.editUsername ?
-                    <div className='form-group'>
-                        <label htmlFor='githubName'>Github Username</label>
-                        {this.props.user.githubUsername ?
-                            <input placeholder={this.props.user.githubUsername} className='form-control' id='githubName' onChange={this.handleInputChange} value={this.state.githubUsername} name='githubUsername' />
-                            :
-                            <input placeholder='New Github Username' className='form-control' id='githubName' onChange={this.handleInputChange} value={this.state.githubUsername} name='githubUsername' />
-                        }
-                        <button type='button' className='btn mt-2 mr-2' onClick={this.submitGithub}>Submit Username</button>
-                        <button type='button' className='btn mt-2' onClick={this.editUsername}>Close</button>
-                    </div> :
-                    <button type='button' className='btn mr-2' onClick={this.editUsername}>Edit Github Username</button>
-                }
+                    {/* <h1>Welcome {this.props.user.firstName}</h1> */}
+
+                    {this.state.message ?
+                        <Message
+                            message={this.state.message}
+                            color={this.state.color}
+                        />
+                        : ''}
+
+                    {/* Edit Github Username is now in settings */}
+
+                    {/* {this.state.editUsername ?
+                        <div className='form-group'>
+                            <label htmlFor='githubName'>Github Username</label>
+                            {this.props.user.githubUsername ?
+                                <input placeholder={this.props.user.githubUsername} className='form-control' id='githubName' onChange={this.handleInputChange} value={this.state.githubUsername} name='githubUsername' />
+                                :
+                                <input placeholder='New Github Username' className='form-control' id='githubName' onChange={this.handleInputChange} value={this.state.githubUsername} name='githubUsername' />
+                            }
+                            <button type='button' className='btn mt-2 mr-2' onClick={this.submitGithub}>Submit Username</button>
+                            <button type='button' className='btn mt-2' onClick={this.editUsername}>Close</button>
+                        </div> :
+                        <button type='button' className='btn mr-2' onClick={this.editUsername}>Edit Github Username</button>
+                    } */}
+                </div>
                 {this.state.showGraph ?
                     <div>
-                        <h3>Your Contributions</h3>
-                        <h2>Total this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''}{this.state.dataFormat === 'month' ? this.state.monthData.total : ''}{this.state.dataFormat === 'week' ? this.state.weekData.total : ''} </h2>
-                        <h2>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''}{this.state.dataFormat === 'month' ? this.state.monthData.average : ''}{this.state.dataFormat === 'week' ? this.state.weekData.average : ''} </h2>
+                        <div className='container'>
 
-                        <div className='row'>
-                            <button type='button' className='btn mr-2' onClick={this.changeFormat} value='week'>Weekly</button>
-                            <button type='button' className='btn mr-2' onClick={this.changeFormat} value='month'> Monthly</button>
-                            <button type='button' className='btn' onClick={this.changeFormat} value='year'>Yearly</button>
+                            <h3>Your Contributions</h3>
+                            <h2>Total this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''}{this.state.dataFormat === 'month' ? this.state.monthData.total : ''}{this.state.dataFormat === 'week' ? this.state.weekData.total : ''} </h2>
+                            <h2>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''}{this.state.dataFormat === 'month' ? this.state.monthData.average : ''}{this.state.dataFormat === 'week' ? this.state.weekData.average : ''} </h2>
 
+                            <div className='row'>
+                                <button type='button' className='btn ml-2' onClick={this.changeFormat} value='week'>Weekly</button>
+                                <button type='button' className='btn ml-2' onClick={this.changeFormat} value='month'> Monthly</button>
+                                <button type='button' className='btn ml-2' onClick={this.changeFormat} value='year'>Yearly</button>
+
+                            </div>
                         </div>
                         <VictoryChart
                             domainPadding={{ y: 20 }}
@@ -197,7 +206,11 @@ class StudentHome extends Component {
 
                         </VictoryChart>
                     </div>
-                    : "No Github Username Yet :("}
+                    :
+                    <div className='container'>
+                        <h1>"Loading..."</h1>
+                    </div>
+                }
 
 
 

@@ -33,7 +33,7 @@ function Navbar(props) {
                     {props.user.firstName}
                 </Link>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <Link className="dropdown-item" to='#'>Settings</Link>
+                    <Link className="dropdown-item" to='/settings'>Settings</Link>
                     {/* <a className="dropdown-item" href="#">Another action</a> */}
                     {/* A divider for styling */}
                     {/* <div className="dropdown-divider"></div> */}

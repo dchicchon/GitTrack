@@ -7,6 +7,7 @@ import Signup from './Pages/Signup'
 import AdminHome from './Pages/AdminHome';
 import InstructorHome from './Pages/InstructorHome';
 import StudentHome from './Pages/StudentHome';
+import Settings from './Pages/Settings';
 
 // Components
 import Navbar from './Components/Navbar';
@@ -55,6 +56,7 @@ class App extends Component {
 
   render() {
 
+    // If the user state login is true, allow them to navigate these pages
     if (this.state.loggedIn === true) {
       return (
         <Router>
@@ -64,6 +66,7 @@ class App extends Component {
             {this.state.userType === 'administrator' ? <Route path='/' exact component={() => <AdminHome user={this.state.user} />} /> : ''}
             {this.state.userType === 'instructor' ? <Route path='/' exact component={() => <InstructorHome user={this.state.user} />} /> : ''}
             {this.state.userType === 'student' ? <Route path='/' exact component={() => <StudentHome user={this.state.user} />} /> : ''}
+            <Route path='/settings' exact component={() => <Settings user={this.state.user} />} />
           </div>
           {/* </Switch> */}
         </Router>

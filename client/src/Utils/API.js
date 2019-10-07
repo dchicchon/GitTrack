@@ -2,6 +2,12 @@ import axios from 'axios';
 
 export default {
 
+    // General
+    // ============
+    editAccount: (creds) => {
+        return axios.put("/api/settings", creds)
+    },
+
     // Auth functions
     // =================
     getUser: () => {
