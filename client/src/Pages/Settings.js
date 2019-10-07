@@ -27,7 +27,7 @@ class Settings extends Component {
                 editUser: {
                     firstName: this.state.editFirstName,
                     lastName: this.state.editLastName,
-                    githubUsername: this.state.githubUsername,
+                    githubUsername: this.state.editGithubUsername,
                     password: this.state.editPassword,
 
                 }
@@ -68,10 +68,10 @@ class Settings extends Component {
                     <label htmlFor='editLastName'>Last Name</label>
                     <input className='form-control' onChange={this.handleInputChange} id='editLastName' name='editLastName' value={this.state.editLastName} placeholder={this.props.user.lastName} />
                 </div>
-                {this.props.user.githubUsername ?
+                {this.props.user.userType === 'student' ?
                     <div className='form-group'>
-                        <label>GitHub Username</label>
-                        <input placeholder={this.props.user.githubUsername} className='form-control' name='editGithubUsername' onChange={this.handleInputChange} value={this.state.editGithubUsername} />
+                        <label htmlFor='editGithubUsername'>GitHub Username</label>
+                        <input placeholder={this.props.user.githubUsername} id='editGithubUsername' className='form-control' name='editGithubUsername' onChange={this.handleInputChange} value={this.state.editGithubUsername} />
                     </div>
                     : ''
                 }

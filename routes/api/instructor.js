@@ -9,6 +9,10 @@ router.route("/:id")
 router.route("/students")
     .post(instructorController.createStudent)
 
+router.route("/students/:id")
+    .delete(instructorController.removeStudent)
+
+
 router.route('/cohorts')
     .post(instructorController.createCohort)
 

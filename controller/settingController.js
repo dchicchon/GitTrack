@@ -29,9 +29,31 @@ module.exports = {
         console.log(query)
 
         switch (req.body.userType) {
-            case "admin":
+            case "administrator":
+                db.Administrator.update(
+                    query,
+                    {
+                        where: {
+                            id: req.body.id
+                        }
+                    }
+                ).then(dbAdmin => {
+                    console.log(dbAdmin)
+                    res.json(dbAdmin)
+                })
                 break;
             case "instructor":
+                db.Instructor.update(
+                    query,
+                    {
+                        where: {
+                            id: req.body.id
+                        }
+                    }
+                ).then(dbInstructor => {
+                    console.log(dbInstructor);
+                    res.json(dbInstructor)
+                })
                 break;
             case "student":
                 db.Student.update(

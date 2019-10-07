@@ -280,6 +280,23 @@ class InstructorHome extends Component {
     handleRemoveStudent = id => {
         console.log("Remove Student")
         console.log(id)
+        API.studentRemove(id)
+            .then(res => {
+                console.log("Student Removed")
+                console.log(res.data)
+                API.cohortStudentList(this.state.currentCohort)
+                    .then(res => {
+                        console.log(res.data)
+                        this.setState({
+                            studentList: res.data,
+                            // showList: true,  
+                            // showGraph: false,
+                            // currentCohort: value,
+                            // currentCohortName: id
+
+                        })
+                    })
+            })
     }
 
 

@@ -99,6 +99,20 @@ module.exports = {
 
     },
 
+    removeStudent: (req, res) => {
+        console.log("\nParams ID")
+        console.log(req.params.id)
+        db.CohortStudent.destroy({
+            where: {
+                studentID: req.params.id
+            }
+        }).then(dbCohortStudent => {
+            console.log("\nStudent Removed")
+            console.log(dbCohortStudent)
+            res.json(dbCohortStudent)
+        })
+    },
+
     getGraph: (req, res) => {
         console.log("\nGet Graph")
         let studentList = req.body.students

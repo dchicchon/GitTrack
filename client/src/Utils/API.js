@@ -64,23 +64,27 @@ export default {
     // ======================
     // Instructor Functions
     // =======================
-    getCohorts: (id) => {
+    getCohorts: id => {
         return axios.get("/api/instructor/" + id)
     },
 
-    cohortStudentList: (id) => {
+    cohortStudentList: id => {
         return axios.get("/api/instructor/cohorts/" + id)
     },
 
-    cohortCreate: (creds) => {
+    cohortCreate: creds => {
         return axios.post("/api/instructor/cohorts", creds)
     },
 
-    studentCreate: (creds) => {
+    studentCreate: creds => {
         return axios.post("/api/instructor/students", creds)
     },
 
-    getGraph: (list) => {
+    studentRemove: id => {
+        return axios.delete("/api/instructor/students/" + id)
+    },
+
+    getGraph: list => {
         return axios.post("/api/instructor/cohorts/graph", list)
     },
 

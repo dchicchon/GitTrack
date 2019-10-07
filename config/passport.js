@@ -3,6 +3,7 @@ const LocalStrategy = require("passport-local");
 const db = require("../models");
 const bcrypt = require("bcryptjs")
 
+// I created a promise because functions that are written after this function get executed too soon and require information from this
 function promiseToCheck(user) {
     return new Promise(resolve => {
         setTimeout(() => {
@@ -140,11 +141,20 @@ module.exports = () => {
                 console.log("\n After Promise")
                 console.log(user)
                 if (!user) return done(null, false)
-                if (!isValidPassword(user.dataValues.password, password)) return done(null, false)
-                let userInfo = user.get();
-                console.log(userInfo)
-                return done(null, userInfo)
 
+                // This is done because initally administrators are seeded initally with the deployment of the site
+                if (req.body.type === 'administrator') {
+                    if (user.dataValues.password === password) {
+                        let userInfo = user.get();
+                        console.log(userInfo);
+                        return done(null, userInfo)
+                    }
+                } else {
+                    if (!isValidPassword(user.dataValues.password, password)) return done(null, false)
+                    let userInfo = user.get();
+                    console.log(userInfo)
+                    return done(null, userInfo)
+                }
 
             }
             getUser();
