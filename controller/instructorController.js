@@ -5,7 +5,6 @@ const moment = require("moment");
 const axios = require("axios")
 
 
-let colors = ['#61dafb', '#f04747', '#ece913']
 
 
 module.exports = {
@@ -75,7 +74,8 @@ module.exports = {
     // When we create a student we also want to add their ID and the cohort ID to the Student-Cohort Table for the relation
     createStudent: (req, res) => {
         console.log(req.body)
-        let passwordHash = bcrypt.hashSync(req.body.firstName, bcrypt.genSaltSync(8));
+        let password = req.body.firstName.toLowerCase();
+        let passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 
         db.Student.create({
             firstName: req.body.firstName,
@@ -117,6 +117,8 @@ module.exports = {
         console.log("\nGet Graph")
         let studentList = req.body.students
         let studentData = [];
+        let colors = ['#61dafb', '#f04747', '#ece913', '#ff1493', '#ADFF2F', '00FA9A','#F5FFFA']
+
         for (let i = 0; i < studentList.length; i++) {
             if (studentList[i].githubUsername) {
 

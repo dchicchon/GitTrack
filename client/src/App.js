@@ -77,7 +77,7 @@ class App extends Component {
           {/* <Switch> */}
           <div className='container' style={{ marginTop: '3rem' }}>
             <Route path='/' exact component={Login} />
-            <Route path='/signup' exact component={Signup} />
+            {/* <Route path='/signup' exact component={Signup} /> */}
           </div>
           {/* </Switch> */}
         </Router>

@@ -265,6 +265,9 @@ class InstructorHome extends Component {
                         console.log("Updated Cohort Student List")
                         console.log(res.data)
                         this.setState({
+                            studentFirstName: '',
+                            studentLastName: '',
+                            studentEmail: '',
                             studentList: res.data,
                             showList: true,
                             currentCohort: this.state.currentCohort,

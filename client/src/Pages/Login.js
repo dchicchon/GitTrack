@@ -121,7 +121,8 @@ class Login extends Component {
                     />
                     <button onClick={this.handleLogin} type="submit" className="btn btn-primary">Submit</button>
                 </form>
-                <Link to='/signup'>Don't have an account? Signup here.</Link>
+                {/* In the future, I want to add a forgot username or password link */}
+                {/* <Link to='/signup'>Don't have an account? Signup here.</Link> */}
             </div>
         );
     }
