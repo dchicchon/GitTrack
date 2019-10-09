@@ -131,10 +131,7 @@ module.exports = () => {
                 return bcrypt.compareSync(password, userpass)
             }
 
-            // Here we should use an async await function
-            // let user = checkUser(req.body)
-
-
+            // Async function to wait for promiseToCheck function to return a value for user
             async function getUser() {
                 let user = await promiseToCheck(req.body);
                 console.log(user)

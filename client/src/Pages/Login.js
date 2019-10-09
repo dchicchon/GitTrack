@@ -48,7 +48,6 @@ class Login extends Component {
                 return console.log("Logged in as admin")
             }
 
-            console.log(creds);
             API.handleLogin(creds)
                 .then(res => {
                     console.log(res.data)
@@ -58,7 +57,6 @@ class Login extends Component {
                             color: res.data.color
                         })
                     } else {
-                        console.log("Success")
                         window.location.href = '/'
                     }
                 })
@@ -76,8 +74,8 @@ class Login extends Component {
 
     render() {
         return (
-            <div>
-                <h1 className="center">GitTrack</h1>
+            <div className='container' style={{ marginTop: '3rem' }}>
+                <h1 className="display-4 center">GitTrack</h1>
                 <h3>Login</h3>
                 <form>
                     <div className="form-group">
@@ -115,11 +113,17 @@ class Login extends Component {
                             </div>
                         </div>
                     </fieldset>
-                    <Message
-                        message={this.state.message}
-                        color={this.state.color}
-                    />
-                    <button onClick={this.handleLogin} type="submit" className="btn btn-primary">Submit</button>
+                    {this.state.message ?
+                        <Message
+                            message={this.state.message}
+                            color={this.state.color}
+                        />
+                        : ''
+                    }
+
+                    <button onClick={this.handleLogin} type="submit" className="btn btn-primary">Submit</button> <span><Link className='btn' to='/'>Return Home</Link></span>
+
+
                 </form>
                 {/* In the future, I want to add a forgot username or password link */}
                 {/* <Link to='/signup'>Don't have an account? Signup here.</Link> */}

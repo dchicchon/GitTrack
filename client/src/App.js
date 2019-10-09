@@ -2,12 +2,21 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // Pages
+// =================
+
+// Not Logged In
+import SplashPage from './Pages/SplashPage';
 import Login from './Pages/Login';
-import Signup from './Pages/Signup'
+// import Signup from './Pages/Signup'
+
+// Logged In 
 import AdminHome from './Pages/AdminHome';
 import InstructorHome from './Pages/InstructorHome';
 import StudentHome from './Pages/StudentHome';
 import Settings from './Pages/Settings';
+
+// No Page
+import NoPage from './Pages/NoPage';
 
 // Components
 import Navbar from './Components/Navbar';
@@ -49,7 +58,7 @@ class App extends Component {
   logout() {
     API.logout()
       .then(res => {
-        window.location = '/'
+        window.location = '/login'
       })
   }
 
@@ -61,25 +70,26 @@ class App extends Component {
       return (
         <Router>
           <Navbar user={this.state.user} logout={this.logout} />
-          {/* <Switch> */}
-          <div className='mt-4'>
+          <Switch>
             {this.state.userType === 'administrator' ? <Route path='/' exact component={() => <AdminHome user={this.state.user} />} /> : ''}
             {this.state.userType === 'instructor' ? <Route path='/' exact component={() => <InstructorHome user={this.state.user} />} /> : ''}
             {this.state.userType === 'student' ? <Route path='/' exact component={() => <StudentHome user={this.state.user} />} /> : ''}
             <Route path='/settings' exact component={() => <Settings user={this.state.user} />} />
-          </div>
-          {/* </Switch> */}
+            <Route component={NoPage} />
+          </Switch>
         </Router>
       )
     } else {
       return (
         <Router>
-          {/* <Switch> */}
-          <div className='container' style={{ marginTop: '3rem' }}>
-            <Route path='/' exact component={Login} />
+          <Switch>
+            <Route path='/' exact component={SplashPage} />
+            <Route path='/login' exact component={Login} />
+
             {/* <Route path='/signup' exact component={Signup} /> */}
-          </div>
-          {/* </Switch> */}
+            <Route component={NoPage} />
+
+          </Switch>
         </Router>
       )
     }

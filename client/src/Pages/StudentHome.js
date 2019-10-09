@@ -126,7 +126,7 @@ class StudentHome extends Component {
 
     render() {
         return (
-            <div>
+            <div className='mt-3'>
                 <div className='container'>
 
                     {/* <h1>Welcome {this.props.user.firstName}</h1> */}
@@ -208,7 +208,7 @@ class StudentHome extends Component {
                     </div>
                     :
                     <div className='container'>
-                        <h1>"Loading..."</h1>
+                        <h2>Loading...</h2>
                     </div>
                 }
 
