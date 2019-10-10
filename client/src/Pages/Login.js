@@ -125,6 +125,8 @@ class Login extends Component {
 
 
                 </form>
+                <h5 className='mt-3'>Login with...</h5>
+                <button type='button' className='mt-3 btn'>Github</button>
                 {/* In the future, I want to add a forgot username or password link */}
                 {/* <Link to='/signup'>Don't have an account? Signup here.</Link> */}
             </div>

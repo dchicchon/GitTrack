@@ -12,14 +12,42 @@ body {
     /* color: white; */
 }
 
-h2,h3,h5 {
+
+.home-container {
+    margin-right:auto;
+    margin-left:auto;
+}
+
+@media (min-width: 768px) {
+    .home-container {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .home-container {
+        width: 970px;
+        
+    }
+}
+
+@media (min-width: 1200px) {
+    .home-container {
+        width: 1300px;
+        
+    }
+}
+
+h1,h2,h3,h5 {
     font-weight: 300;
 }
 
 .new-Link {
     text-decoration: none;
-    color: black;
-    
+    font-size: 1.3rem;
+    font-weight: 300;
+    width: 10%;
+    margin: 0 1rem;
 }
 
 .new-Link:hover {
@@ -29,7 +57,7 @@ h2,h3,h5 {
 
 /* SplashPage */
 .jumbotron {
-    height: 20rem !important;
+    height: 25rem !important;
     background-color: inherit !important
 }
 
@@ -37,6 +65,24 @@ h2,h3,h5 {
     height: 20rem;
     color: black;
     background-color: white;
+}
+
+.container-text {
+    text-align: center;
+}
+
+.center {
+    /* width: 25%; */
+    font-size: 4rem;
+    text-align: center;
+    margin: 0 auto 1rem !important;
+}
+
+.center-small {
+    text-align: center;
+    font-size: 1.7rem;
+    /* width: 25%; */
+    margin:0 auto 1rem !important;
 }
 
 /* Nav */
@@ -47,6 +93,16 @@ h2,h3,h5 {
 .navbar {
     background:var(--navColor) !important;
     color: var(--bodyTextColor)  !important;
+}
+
+.nav-item {
+    margin: 0 0.8rem !important;
+    text-decoration: none !important;
+    color: white;
+    transition: 0.5s color;;
+}
+.nav-item:hover {
+    color: var(--bodyTextColor)
 }
 
 .brand-logo {
@@ -80,16 +136,9 @@ table {
 
 
 
-.center {
-    width: 25%;
-    font-size: 4rem;
-    margin: 0 auto 1rem !important;
-}
 
-.center-small {
-    width: 22%;
-    margin:0 auto 1rem !important;
-}
+
+
 
 li {
     background:#202329 !important;
@@ -108,6 +157,8 @@ li:hover {
     background: var(--bodyTextColor)  !important;
     color: black !important;
     border: none !important;
+    /* font-weight: 400 !important; */
+
 }
 
 .btn:hover {

@@ -24,7 +24,7 @@ export default {
     },
 
     handleSignup: (creds) => {
-        return axios.post("/auth/signup", creds)
+        return axios.post("/api/mail/signup", creds)
     },
 
 

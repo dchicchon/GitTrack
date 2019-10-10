@@ -7,7 +7,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // Not Logged In
 import SplashPage from './Pages/SplashPage';
 import Login from './Pages/Login';
-// import Signup from './Pages/Signup'
+import Signup from './Pages/Signup'
 
 // Logged In 
 import AdminHome from './Pages/AdminHome';
@@ -85,7 +85,7 @@ class App extends Component {
           <Switch>
             <Route path='/' exact component={SplashPage} />
             <Route path='/login' exact component={Login} />
-
+            <Route path='/signup' exact component={Signup} />
             {/* <Route path='/signup' exact component={Signup} /> */}
             <Route component={NoPage} />
 

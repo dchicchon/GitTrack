@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // Components
-import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine, VictoryLegend } from 'victory'
+import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine, VictoryLegend, VictoryVoronoiContainer, VictoryTooltip } from 'victory'
 import CohortStudentList from '../Components/CohortStudentList';
 
 // Utils
@@ -33,7 +33,7 @@ class InstructorHome extends Component {
 
         // Graph
         showGraph: false,
-        dataFormat: 'year',
+        dataFormat: 'week',
         studentData: [],
         studentLegend: '',
         weekData: '',
@@ -163,7 +163,6 @@ class InstructorHome extends Component {
                     studentLegend.push(legendEntry)
                     for (let j = 0; j < students[i].week.length; j++) {
                         weekSum += students[i].week[j].count
-                        // weekSum += students[i].weekly[j].count
                     }
                     for (let k = 0; k < students[i].month.length; k++) {
                         monthSum += students[i].month[k].count
@@ -178,17 +177,17 @@ class InstructorHome extends Component {
 
                 let weekData = {
                     total: weekSum,
-                    average: weekSum / 7
+                    average: (weekSum / 7).toFixed(2)
                 }
 
                 let monthData = {
                     total: monthSum,
-                    average: monthSum / 30
+                    average: (monthSum / 30).toFixed(2)
                 }
 
                 let yearData = {
                     total: yearSum,
-                    average: yearSum / 12
+                    average: (yearSum / 12).toFixed(2)
                 }
 
 
@@ -309,12 +308,12 @@ class InstructorHome extends Component {
             <div className='mt-3'>
 
                 {/* List of cohorts*/}
-                <div className='container mt-3'>
+                <div className='home-container mt-3'>
                     {/* <h2>Welcome {this.props.user.firstName}</h2> */}
 
                     {/* This row should contain cohort list and respective students */}
                     <div className='row mb-2'>
-                        <div className='col-2'>
+                        <div className='col-m-2 col-sm-4'>
                             <h3>Cohorts</h3>
                             {this.state.cohortList ?
                                 <div>
@@ -359,12 +358,14 @@ class InstructorHome extends Component {
 
 
                                     <CohortStudentList
-                                        list={this.state.studentList}
+                                        format={this.state.dataFormat}
                                         handleRemove={this.handleRemoveStudent}
+                                        list={this.state.studentList}
                                     />
 
+                                    {/* Invite Student will send an email to the student email provider to offer the option of joining the cohort */}
                                     <div className='row'>
-                                        <button type='button' className='btn btn-primary mr-3' onClick={this.addStudent}>Add Student</button>
+                                        <button type='button' className='btn btn-primary mr-3' onClick={this.addStudent}>Invite Student</button>
                                         <button className='btn' type='button' onClick={this.cohortCommitGraph}>Get Cohort Graph</button>
                                     </div>
                                     {this.state.addStudent ?
@@ -412,8 +413,13 @@ class InstructorHome extends Component {
 
                                         </div>
                                         <VictoryChart
-                                            domainPadding={{ y: 20 }}
-                                            padding={50}
+                                        // containerComponent={
+                                        // <VictoryVoronoiContainer
+                                        // labels={({ datum }) => `${datum.count}, ${datum.date} `}
+                                        // />}
+
+                                        // domainPadding={{ y: 20 }}
+                                        // padding={50}
                                         >
                                             <VictoryAxis
                                                 axisLabelComponent={<VictoryLabel />}
@@ -436,7 +442,7 @@ class InstructorHome extends Component {
                                                 }}
 
                                             />
-                                            <VictoryLegend
+                                            {/* <VictoryLegend
                                                 x={150}
                                                 y={50}
                                                 title='Legend'
@@ -448,7 +454,7 @@ class InstructorHome extends Component {
                                                 style={{ border: { stroke: '#61dafb' }, title: { fontSize: 12, stroke: 'white', letterSpacing: '1px' }, labels: { fontSize: 9, stroke: '#61dafb', letterSpacing: '1px' }, names: { fontSize: 9, strokeWidth: 2, stroke: 'white', letterSpacing: '1px' } }}
                                                 data={this.state.studentLegend}
                                                 height={10}
-                                            />
+                                            /> */}
 
                                             {this.state.studentData.map(
                                                 (student, i) => (
@@ -456,7 +462,10 @@ class InstructorHome extends Component {
                                                         interpolation='natural'
                                                         name={student.author.firstName}
                                                         key={i}
+                                                        labelComponent={<VictoryTooltip />}
+                                                        labels={() => `${student.author.firstName}`}
                                                         // data={student.monthly}
+                                                        // labels={({ datum }) => `${datum.count}, ${datum.date}`}
                                                         data={student[`${this.state.dataFormat}`]}
                                                         // data={this.state.dataFormat === 'monthly' ? user.monthly : '' || this.state.dataFormat === 'weekly' ? user.weekly : '' || this.state.dataFormat === 'yearly' ? user.yearly : ''}
                                                         style={{

@@ -1,6 +1,13 @@
 const passport = require("passport");
+
+// Strategies
 const LocalStrategy = require("passport-local");
+const GithubStrategy = require("passport-github");
+
+// Database
 const db = require("../models");
+
+// Bcrypt to hash passwords
 const bcrypt = require("bcryptjs")
 
 // I created a promise because functions that are written after this function get executed too soon and require information from this

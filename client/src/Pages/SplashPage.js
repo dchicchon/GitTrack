@@ -26,7 +26,10 @@ const SplashNav = function () {
                 </ul>
             </div>
             <div>
-                <Link className='btn' to='/login'>Login</Link>
+                <a className='nav-item' target="_blank" href='https://github.com/dchicchon/GitTrack'>GitHub</a>
+            </div>
+            <div>
+                <Link className='nav-item' to='/login'>Login</Link>
             </div>
 
         </nav>
@@ -43,18 +46,24 @@ class SplashPage extends Component {
             <div>
                 <SplashNav />
                 <div className="jumbotron jumbotron-fluid">
-                    <div className="container">
+                    <div className="container-text">
                         <h1 className="display-4 center">GitTrack</h1>
                         <p className="lead center-small">Keeping you coding</p>
-                        <button className='btn mx-auto'><Link className='new-Link' to='/login'>Signup</Link></button>
+                        {/* <div className='row mx-auto'> */}
+                        <Link className='btn new-Link' to='/signup'>Signup</Link>
+                        <Link className='btn new-Link' to='/docs'>Docs</Link>
+                        {/* </div> */}
                     </div>
                 </div>
                 <div>
 
-                    <div className='container'>
-                    </div>
                     <div className='section-card'>
-                        <h3>Timeline graphs for GitHub Contributions</h3>
+
+                        <div className='container p-5'>
+                            <h3>Timeline graphs for GitHub Contributions</h3>
+
+                        </div>
+
                     </div>
                 </div>
             </div>
