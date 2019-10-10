@@ -2,7 +2,7 @@ const passport = require("passport");
 
 // Strategies
 const LocalStrategy = require("passport-local");
-const GithubStrategy = require("passport-github");
+const GithubStrategy = require("passport-github").Strategy;
 
 // Database
 const db = require("../models");
@@ -167,6 +167,22 @@ module.exports = () => {
 
         }
     ))
+
+    // Github Authentication Strategy
+    // passport.use(new GithubStrategy({
+    //     clientID: process.env.GITHUB_CLIENT_ID,
+    //     clientSecret: GITHUB_CLIENT_SECRET,
+    //     callbackURL: "http://127.0.0.1:3000/auth/github/callback"
+    // },
+    //     function (accessToken, refreshToken, profile, cb) {
+    //         // Interact with db here
+    //         db.User.findOrCreate({ email: profile.email })
+    //             .then(dbUser => {
+    //                 return cb(err, dbUser)
+    //             })
+
+    //     }
+    // ))
 
     // This is a function that takes in the user and callback function
     passport.serializeUser(function (user, done) {

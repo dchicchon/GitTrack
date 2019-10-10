@@ -85,6 +85,11 @@ h1,h2,h3,h5 {
     margin:0 auto 1rem !important;
 }
 
+.center-signup {
+    text-align: center !important;
+    margin:0 auto !important;
+}
+
 /* Nav */
 .dropdown-menu {
     left: -6rem !important;

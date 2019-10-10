@@ -92,12 +92,22 @@ router.get('/user', (req, res) => {
     }
 })
 
+// Github User Authentication using OAuth2
+// router.get("/login/github",
+//     passport.authenticate('github'));
+
+// router.get("/auth/github/callback",
+//     passport.authenticate('github', { failureRedirect: '/login' }),
+//     function (req, res) {
+//         res.redirect('/')
+//     })
+
 router.post("/login", (req, res, next) => {
     // Authenticate Login using strategy in passport.js file
     passport.authenticate("local-login", (err, user, info) => {
 
         // We use the return DataObject to send messages to the front end in case of error logging in or on success
-        
+
 
         // Auth Error
         if (err) return next(err)
