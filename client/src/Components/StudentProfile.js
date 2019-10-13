@@ -6,7 +6,7 @@ import API from '../Utils/API';
 
 // Sum of contributions based on format
 // This will be called each time I click on the changeFormat button. Should that be happening?
-    
+
 function sumContributions(format, data) {
     let sum = 0;
 
@@ -20,12 +20,13 @@ function sumContributions(format, data) {
 
 class StudentProfile extends Component {
     state = {
+        loading: true,
         studentData: '',
         dataFormat: 'week'
     }
 
     changeFormat = event => {
-        event.preventDefault(); 
+        event.preventDefault();
         let { value } = event.target
         this.setState({
             dataFormat: value
@@ -38,6 +39,7 @@ class StudentProfile extends Component {
         API.inspectStudent(id)
             .then(res => {
                 this.setState({
+                    loading: false,
                     studentData: res.data
                 })
             })
@@ -49,6 +51,10 @@ class StudentProfile extends Component {
 
             <div className='home-container mt-5'>
                 {/* While getting student data, be sure to have a loading image */}
+                {this.state.loading ?
+                    <div className="spinner-border text-info" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </div> : ''}
                 {this.state.studentData ?
                     <div>
                         <Link className='btn mb-4' to='/'>Back to Cohort</Link>

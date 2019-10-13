@@ -257,7 +257,7 @@ module.exports = {
                         let currentDate = moment().format('YYYY-MM-DD');
                         // let currentYear = parseInt(currentDate.slice(0, 4));
                         let currentYear = moment(currentDate).year();
-                        // let currentMonth = moment(currentDate).month();
+                        let currentMonth = moment(currentDate).month();
                         let currentWeek = moment(currentDate).week();
                         // let currentDay = moment(currentDate).date();
 
@@ -269,6 +269,20 @@ module.exports = {
                         let monthlyContributions = [];
                         let yearlyContributions = [];
 
+                        // The past 7 days
+                        let pastSevenDays = [];
+                        // Current Day
+                        let dayOfMonth = moment(currentDate).date()
+                        console.log("\nDay of Month")
+                        console.log(dayOfMonth)
+
+                        for (let x = 0; x < 7; x++) {
+                            let dayEntry = dayOfMonth - x
+                            pastSevenDays.push(dayEntry)
+                        }
+                        console.log("\nList of past 7 dayas")
+                        console.log(pastSevenDays)
+
                         let monthSum = 0;
 
                         // This API always starts from the end of the year, so we will start there as well to get yearly contriubtions
@@ -277,17 +291,21 @@ module.exports = {
                         // Iterate through list of contributions
                         for (let j = 0; j < student.data.contributions.length; j++) {
 
+                            // In the future, refine these instantiations of variables
                             let studentDate = student.data.contributions[j].date
+                            let studentMonth = moment(studentDate).month();
+                            let studentYear = moment(studentDate).year();
                             let monthDate = studentDate.slice(0, 7);
+                            let contribution = student.data.contributions[j]
 
                             // WEEKLY FILTER
-                            // This will get all the days from this week
-                            if (moment(studentDate).week() === currentWeek && moment(studentDate).weekYear() === currentYear) {
-                                let contribution = student.data.contributions[j]
-                                console.log(contribution)
+                            // This will get information from the past 7 days
+                            // Leverage the current day of the month and gather the previous 7 days
+                            // There should be an array of dates of the past 7 days
 
+                            if (pastSevenDays.includes(moment(studentDate).date()) && studentMonth === currentMonth && studentYear === currentYear) {
                                 let thisDate = {
-                                    date: parseInt(moment(student.data.contributions[j].date).date()),
+                                    date: parseInt(moment(contribution.date).date()),
                                     count: parseInt(contribution.count)
                                 }
                                 weeklyContributions.push(thisDate)
