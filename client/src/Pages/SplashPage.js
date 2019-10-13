@@ -26,7 +26,7 @@ const SplashNav = function () {
                 </ul>
             </div>
             <div>
-                <a className='nav-item' target="_blank" href='https://github.com/dchicchon/GitTrack'>GitHub</a>
+                <a className='nav-item' rel='noopener noreferrer' target="_blank" href='https://github.com/dchicchon/GitTrack'>GitHub</a>
             </div>
             <div>
                 <Link className='nav-item' to='/login'>Login</Link>

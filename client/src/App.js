@@ -15,6 +15,8 @@ import InstructorHome from './Pages/InstructorHome';
 import StudentHome from './Pages/StudentHome';
 import Settings from './Pages/Settings';
 
+import StudentProfile from './Components/StudentProfile';
+
 // No Page
 import NoPage from './Pages/NoPage';
 
@@ -23,6 +25,22 @@ import Navbar from './Components/Navbar';
 
 // Utils
 import API from './Utils/API';
+
+// function ID() {
+//   let { id } = useParams();
+//   return (
+//     <div>
+//       <h3>ID: {id}</h3>
+//     </div>
+//   )
+// }
+
+
+
+// let profileID =() => {
+//   let { id } = useParams();
+//   return <div>Please work {id}</div>
+// }
 
 class App extends Component {
   state = {
@@ -55,6 +73,8 @@ class App extends Component {
 
   }
 
+
+
   logout() {
     API.logout()
       .then(res => {
@@ -73,6 +93,10 @@ class App extends Component {
           <Switch>
             {this.state.userType === 'administrator' ? <Route path='/' exact component={() => <AdminHome user={this.state.user} />} /> : ''}
             {this.state.userType === 'instructor' ? <Route path='/' exact component={() => <InstructorHome user={this.state.user} />} /> : ''}
+
+            {/* Path for student profile based on it */}
+            <Route path='/student/:id' component={StudentProfile} />
+
             {this.state.userType === 'student' ? <Route path='/' exact component={() => <StudentHome user={this.state.user} />} /> : ''}
             <Route path='/settings' exact component={() => <Settings user={this.state.user} />} />
             <Route component={NoPage} />

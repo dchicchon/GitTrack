@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 // Utils
 import API from '../Utils/API';
 
-class Login extends Component {
+
+class Signup extends Component {
     state = {
         firstName: '',
         lastName: '',
@@ -64,7 +65,7 @@ class Login extends Component {
             <div className='container mt-4 mb-5'>
                 <h1 className='center'>GitTrack</h1>
                 <div className='container col-6 mx-auto'>
-                    <h2>Sign Up</h2>
+                    <h2 className='col-6'>Sign Up</h2>
                     <form>
                         <div className='row'>
                             <div className="form-group col-6">
@@ -111,9 +112,11 @@ class Login extends Component {
                             </fieldset>
                         </div>
 
-                        <button onClick={this.handleSignup} type="submit" className="btn btn-primary">Submit</button>
+                        <div className='row col-6'>
+                            <button onClick={this.handleSignup} type="submit" className="btn col-6">Submit</button>
+                        </div>
                     </form>
-                    <Link to='/login'>Have an account? Login here</Link>
+                    <Link className='col-6' to='/login'>Have an account? Login here</Link>
 
                 </div>
 
@@ -122,4 +125,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default Signup;

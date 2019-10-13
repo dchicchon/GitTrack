@@ -36,6 +36,100 @@ module.exports = {
             })
     },
 
+    // Get individual student for inspection
+    getStudent: (req, res) => {
+        console.log(req.params.id)
+        db.Student.findAll({
+            where: {
+                id: req.params.id
+            }
+        }).then(dbStudent => {
+            console.log("\nStudent")
+            console.log("\nDataValues")
+            let userName = (dbStudent[0].dataValues.githubUsername)
+            axios.get(`https://github-contributions-api.now.sh/v1/${userName}?format=nested`)
+                .then(res2 => {
+                    let thisYear = (res2.data.contributions.contributions['2019'])
+
+                    let currentDate = moment().format('YYYY-MM-DD');
+
+                    // Moment gets month number from 0-11 so need to add by 1
+                    let currentMonth = moment(currentDate).month() + 1
+                    let currentWeek = moment(currentDate).week()
+
+                    let weeklyContributions = [];
+                    let monthlyContributions = [];
+                    let yearlyContributions = [];
+
+                    // Each Month
+                    for (let j in thisYear) {
+                        let thisMonth = thisYear[j]
+
+                        for (let k in thisMonth) {
+
+                            let contribution = thisMonth[k]
+
+                            // This Week Filter
+                            if (moment(contribution.date).week() === currentWeek) {
+                                let thisDay = {
+                                    date: moment(contribution.date).weekday() + 1,
+                                    count: contribution.count
+                                }
+                                weeklyContributions.push(thisDay)
+                            }
+
+                            // This Month Filter
+                            if (parseInt(j) === currentMonth) {
+                                let thisDay = {
+                                    date: moment(contribution.date).date(),
+                                    count: contribution.count
+                                }
+                                console.log(thisDay)
+                                monthlyContributions.push(thisDay)
+                            }
+
+                        }
+                    }
+
+                    // for (let i = 0; i < thisYear.length; i++) {
+
+                    //     console.log(thisYear[i])
+                    //     let thisDate = {
+                    //         date: thisYear[i].date,
+                    //         count: thisYear[i].count
+                    //     }
+                    //     console.log(thisDate)
+
+                    //     if (moment(thisDate.date)) {
+                    //         weeklyContributions.push(thisDate)
+                    //     }
+
+                    //     if (thisDate.date) {
+                    //         monthlyContributions.push(thisDate)
+                    //     }
+
+                    //     if (moment(thisDate.date)) {
+                    //         yearlyContributions.push(thisDate)
+                    //     }
+
+                    // }
+
+                    let studentData = {
+                        student: dbStudent[0].dataValues,
+                        contributions: {
+                            week: weeklyContributions,
+                            month: monthlyContributions,
+                            year: yearlyContributions
+                        }
+                    }
+
+                    console.log("\nStudent Data")
+                    console.log(studentData)
+                    res.json(studentData)
+                })
+        })
+    },
+
     // Get the students from the cohort
     getStudents: (req, res) => {
         console.log("\nGet Students")
@@ -117,7 +211,7 @@ module.exports = {
         console.log("\nGet Graph")
         let studentList = req.body.students
         let studentData = [];
-        let colors = ['#61dafb', '#f04747', '#ece913', '#ff1493', '#ADFF2F', '00FA9A','#F5FFFA']
+        let colors = ['#61dafb', '#f04747', '#ece913', '#ff1493', '#ADFF2F', '00FA9A', '#F5FFFA']
 
         for (let i = 0; i < studentList.length; i++) {
             if (studentList[i].githubUsername) {

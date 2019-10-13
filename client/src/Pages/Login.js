@@ -76,17 +76,17 @@ class Login extends Component {
         return (
             <div className='container col-m-6' style={{ marginTop: '3rem' }}>
                 <h1 className="display-4 center">GitTrack</h1>
-                
+
                 <div className='container col-6 mx-auto mt-5'>
 
-                    <h3>Login</h3>
+                    <h3 className='col-6'>Login</h3>
                     <form>
-                        <div className="form-group">
+                        <div className="form-group col-12">
                             <label htmlFor="email">Email address</label>
                             <input value={this.state.email} name='email' onChange={this.handleInputChange} type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
                             {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
                         </div>
-                        <div className="form-group">
+                        <div className="form-group col-12">
                             <label htmlFor="password">Password</label>
                             <input value={this.state.password} name='password' onChange={this.handleInputChange} type="password" className="form-control" id="password" placeholder="Password" autoComplete="true" />
                         </div>
@@ -94,27 +94,27 @@ class Login extends Component {
                         <input type="checkbox" className="form-check-input" id="exampleCheck1" />
                         <label className="form-check-label" htmlFor="exampleCheck1">Remember Me</label>
                     </div> */}
-                        <fieldset className="form-group types">
-                            <div className='row col-sm-10'>
+                        <fieldset className="form-group types col-8">
+                            <div className='row'>
                                 <p>I am a...</p>
                             </div>
-                            <div className="row">
-                                {/* <legend className="col-form-label col-sm-2 pt-0">I am a...</legend> */}
-                                <div className="col-sm-10">
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="administrator" />
-                                        <label className="form-check-label" htmlFor="gridRadios1">Administrator</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="instructor" />
-                                        <label className="form-check-label" htmlFor="gridRadios1">Instructor</label>
-                                    </div>
-                                    <div className="form-check form-check-inline">
-                                        <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="student" />
-                                        <label className="form-check-label" htmlFor="gridRadios2">Student</label>
-                                    </div>
+                            {/* <div className="row"> */}
+                            {/* <legend className="col-form-label col-sm-2 pt-0">I am a...</legend> */}
+                            <div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="administrator" />
+                                    <label className="form-check-label" htmlFor="gridRadios1">Administrator</label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="instructor" />
+                                    <label className="form-check-label" htmlFor="gridRadios1">Instructor</label>
+                                </div>
+                                <div className="form-check form-check-inline">
+                                    <input className="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="student" />
+                                    <label className="form-check-label" htmlFor="gridRadios2">Student</label>
                                 </div>
                             </div>
+                            {/* </div> */}
                         </fieldset>
                         {this.state.message ?
                             <Message
@@ -124,15 +124,17 @@ class Login extends Component {
                             : ''
                         }
 
-                        <button onClick={this.handleLogin} type="submit" className="btn btn-primary">Submit</button> <span><Link className='btn' to='/'>Return Home</Link></span>
+                        <div className='col-6'>
+                            <button onClick={this.handleLogin} type="submit" className="btn btn-primary">Submit</button> <span><Link className='btn' to='/'>Return Home</Link></span>
+                        </div>
 
 
                     </form>
+                    <Link className='col-6' to='/signup'>Don't have an account? Signup here.</Link>
                 </div>
                 {/* <h5 className='mt-3'>Login with...</h5>
                 <button type='button' className='mt-3 btn'>Github</button> */}
                 {/* In the future, I want to add a forgot username or password link */}
-                {/* <Link to='/signup'>Don't have an account? Signup here.</Link> */}
             </div>
         );
     }

@@ -79,6 +79,10 @@ export default {
     studentCreate: creds => {
         return axios.post("/api/instructor/students", creds)
     },
+    
+    inspectStudent: id => {
+        return axios.get("/api/instructor/students/" + id)
+    },
 
     studentRemove: id => {
         return axios.delete("/api/instructor/students/" + id)
@@ -87,6 +91,7 @@ export default {
     getGraph: list => {
         return axios.post("/api/instructor/cohorts/graph", list)
     },
+
 
     // =====================
     // Student Functions

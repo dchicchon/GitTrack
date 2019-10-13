@@ -7,6 +7,9 @@ import CohortStudentList from '../Components/CohortStudentList';
 // Utils
 import API from '../Utils/API';
 
+// Sum of contributions based on format
+
+
 class InstructorHome extends Component {
     state = {
 
@@ -33,7 +36,7 @@ class InstructorHome extends Component {
 
         // Graph
         showGraph: false,
-        dataFormat: 'week',
+        dataFormat: 'month',
         studentData: [],
         studentLegend: '',
         weekData: '',
@@ -45,7 +48,7 @@ class InstructorHome extends Component {
         console.log("Getting Cohorts")
         API.getCohorts(this.props.user.id)
             .then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 // If we get data back
                 if (res.data) {
                     console.log("Cohorts Received")
@@ -65,9 +68,8 @@ class InstructorHome extends Component {
         });
     }
 
-    // ================================
-    // Creating and Submitting Cohorts
-    // =================================
+    // Cohort Functions
+    // ==================================================================
     createCohort = () => {
         console.log("Creating Cohort")
         if (this.state.createCohort) {
@@ -110,99 +112,176 @@ class InstructorHome extends Component {
             console.log("Please fill out all fields")
         }
 
-        // API Call to server to enter cohort
 
     }
 
-    // =================================
 
+    // Get list of cohort students and their data to put on graph
     inspectCohort = event => {
         event.preventDefault();
         let { id, value } = event.target
         API.cohortStudentList(value)
             .then(res => {
-                console.log(res.data)
+                // console.log(res.data)
+                let list = {
+                    students: res.data
+                }
+                API.getGraph(list)
+                    .then(res2 => {
 
-                this.setState({
-                    studentList: res.data,
-                    showList: true,
-                    showGraph: false,
-                    currentCohort: value,
-                    currentCohortName: id
-                })
+                        // Here we modify data to get specific numbers
+                        let students = res2.data.students
+                        let weekSum = 0;
+                        let monthSum = 0;
+                        let yearSum = 0;
+                        let studentLegend = []
+                        for (let i = 0; i < students.length; i++) {
+                            // console.log(students[i])
+                            // console.log(students[i].week)
+
+                            let legendEntry = {
+                                name: (students[i].author.firstName + ' ' + students[i].author.lastName),
+                                symbol: { fill: students[i].color }
+                            }
+
+                            studentLegend.push(legendEntry)
+                            for (let j = 0; j < students[i].week.length; j++) {
+                                weekSum += students[i].week[j].count
+                            }
+                            for (let k = 0; k < students[i].month.length; k++) {
+                                monthSum += students[i].month[k].count
+                            }
+                            for (let l = 0; l < students[i].year.length; l++) {
+                                yearSum += students[i].year[l].count
+                            }
+
+                        }
+
+                        let weekData = {
+                            total: weekSum,
+                            average: (weekSum / 7).toFixed(2)
+                        }
+
+                        let monthData = {
+                            total: monthSum,
+                            average: (monthSum / 30).toFixed(2)
+                        }
+
+                        let yearData = {
+                            total: yearSum,
+                            average: (yearSum / 12).toFixed(2)
+                        }
 
 
+                        this.setState({
+
+                            // Show the list of students
+                            showList: true,
+
+                            // List of students
+                            studentList: res.data,
+
+                            // Legend for the VictoryLegend Component
+                            studentLegend: studentLegend,
+
+                            // Data for the week,month,year
+                            weekData: weekData,
+                            monthData: monthData,
+                            yearData: yearData,
+
+                            // List of students Contributions
+                            studentData: students,
+
+                            // Cohort ID
+                            currentCohort: value,
+
+                            // Cohort Name
+                            currentCohortName: id
+
+
+                        })
+
+                    })
             })
     }
-
-    cohortCommitGraph = event => {
-        event.preventDefault();
-        console.log("Get commit graph for cohort")
-        let list = {
-            students: this.state.studentList
-        }
-        API.getGraph(list)
-            .then(res => {
-                let students = res.data.students
-                let weekSum = 0;
-                let monthSum = 0;
-                let yearSum = 0;
-                let studentLegend = []
-
-                // Iterate through student list
-
-                for (let i = 0; i < students.length; i++) {
-                    console.log(students[i])
-                    console.log(students[i].week)
-
-                    let legendEntry = {
-                        name: (students[i].author.firstName + ' ' + students[i].author.lastName),
-                        symbol: { fill: students[i].color }
-                    }
-
-                    studentLegend.push(legendEntry)
-                    for (let j = 0; j < students[i].week.length; j++) {
-                        weekSum += students[i].week[j].count
-                    }
-                    for (let k = 0; k < students[i].month.length; k++) {
-                        monthSum += students[i].month[k].count
-                    }
-                    for (let l = 0; l < students[i].year.length; l++) {
-                        yearSum += students[i].year[l].count
-                    }
+    // ==================================================================
 
 
 
-                }
-
-                let weekData = {
-                    total: weekSum,
-                    average: (weekSum / 7).toFixed(2)
-                }
-
-                let monthData = {
-                    total: monthSum,
-                    average: (monthSum / 30).toFixed(2)
-                }
-
-                let yearData = {
-                    total: yearSum,
-                    average: (yearSum / 12).toFixed(2)
-                }
+    // GRAPH
+    // ==================================================================
 
 
-                this.setState({
-                    showGraph: true,
-                    studentLegend: studentLegend,
-                    weekData: weekData,
-                    monthData: monthData,
-                    yearData: yearData,
-                    studentData: students
-                })
+    // May be outdated now 
+    // cohortCommitGraph = () => {
+    //     // event.preventDefault();
+    //     console.log("Get commit graph for cohort")
+    //     let list = {
+    //         students: this.state.studentList
+    //     }
+    //     API.getGraph(list)
+    //         .then(res => {
+    //             let students = res.data.students
+    //             let weekSum = 0;
+    //             let monthSum = 0;
+    //             let yearSum = 0;
+    //             let studentLegend = []
 
-                console.log(this.state.studentLegend)
-            })
-    }
+    //             // Iterate through student list
+
+    //             for (let i = 0; i < students.length; i++) {
+    //                 console.log(students[i])
+    //                 console.log(students[i].week)
+
+    //                 let legendEntry = {
+    //                     name: (students[i].author.firstName + ' ' + students[i].author.lastName),
+    //                     symbol: { fill: students[i].color }
+    //                 }
+
+    //                 studentLegend.push(legendEntry)
+    //                 for (let j = 0; j < students[i].week.length; j++) {
+    //                     weekSum += students[i].week[j].count
+    //                 }
+    //                 for (let k = 0; k < students[i].month.length; k++) {
+    //                     monthSum += students[i].month[k].count
+    //                 }
+    //                 for (let l = 0; l < students[i].year.length; l++) {
+    //                     yearSum += students[i].year[l].count
+    //                 }
+
+
+
+    //             }
+
+    //             let weekData = {
+    //                 total: weekSum,
+    //                 average: (weekSum / 7).toFixed(2)
+    //             }
+
+    //             let monthData = {
+    //                 total: monthSum,
+    //                 average: (monthSum / 30).toFixed(2)
+    //             }
+
+    //             let yearData = {
+    //                 total: yearSum,
+    //                 average: (yearSum / 12).toFixed(2)
+    //             }
+
+
+    //             this.setState({
+    //                 showGraph: true,
+    //                 studentLegend: studentLegend,
+    //                 weekData: weekData,
+    //                 monthData: monthData,
+    //                 yearData: yearData,
+    //                 studentData: students
+    //             })
+
+    //             console.log(this.state.studentLegend)
+    //         })
+    // }
+    
 
     changeFormat = event => {
         let { value } = event.target
@@ -210,25 +289,14 @@ class InstructorHome extends Component {
             dataFormat: value
         })
     }
+    // ==================================================================
 
-    // Instructors should be able to add students to their cohort
-    // Options, should this be an email link that instructors send their students?
-    // OR Instructors can add all the info for the student.
 
-    // Maybe we can automatically generate a firstName, lastName, and password for students when an email is validated and sent out?
+    // STUDENT FUNCTIONS
+    // ==================================================================
 
-    // E.g.
-    // 
-    // Welcome student to {cohort name which will also be a link to the login page}!
-    // 
-    // Use your email and password to login
-    // Email: ike@gmail.com
-    // Password: ikeDog
-    // 
-    // See you real soon!
-    // GitTrack Team
-
-    // Maybe for now we can have the instructors create the students entirely
+    // Currently this affects the cohort student list when I click on the button
+    // This causes the cohort student list to re-render
     addStudent = () => {
         if (this.state.addStudent) {
             return this.setState({
@@ -300,6 +368,7 @@ class InstructorHome extends Component {
                     })
             })
     }
+    // ==================================================================
 
 
     render() {
@@ -313,10 +382,15 @@ class InstructorHome extends Component {
 
                     {/* This row should contain cohort list and respective students */}
                     <div className='row mb-2'>
-                        <div className='col-m-2 col-sm-4'>
+                        <div className='col-3'>
                             <h3>Cohorts</h3>
+
+                            <div className='row mt-2'>
+                                <button type='button' className='btn btn-primary' onClick={this.createCohort}>Create Cohort</button>
+                            </div>
+
                             {this.state.cohortList ?
-                                <div>
+                                <div className='mt-2'>
                                     <ul className="list-group">
                                         {this.state.cohortList.map((cohort, i) => (
                                             <li
@@ -332,11 +406,7 @@ class InstructorHome extends Component {
                                     </ul>
                                 </div>
                                 : ''}
-                            <div className='row mt-2'>
-                                <div className="col-12">
-                                    <button type='button' className='btn btn-primary' onClick={this.createCohort}>Create Cohort</button>
-                                </div>
-                            </div>
+
                             <div className='row mt-2'>
                                 <div className="col-12">
                                     {this.state.createCohort ?
@@ -350,99 +420,99 @@ class InstructorHome extends Component {
                                         : ""}
                                 </div>
                             </div>
+                            <div className='row'>
+
+                                {/* Render student List */}
+                                {this.state.showList ?
+                                    <div>
+                                        <CohortStudentList
+                                            format={this.state.dataFormat}
+                                            handleRemove={this.handleRemoveStudent}
+                                            list={this.state.studentList}
+                                            data={this.state.studentData}
+                                        />
+                                        <div className='row'>
+                                            <button type='button' className='btn btn-primary mr-3' onClick={this.addStudent}>Invite Student</button>
+                                            {/* <button className='btn' type='button' onClick={this.cohortCommitGraph}>Get Cohort Graph</button> */}
+                                        </div>
+                                    </div>
+                                    : ''
+                                }
+
+                            </div>
+
+                            {/* If I want to add student */}
+                            {this.state.addStudent ?
+                                <form className='form-horizontal col-12 mt-3'>
+                                    <div className='row'>
+                                        <div className="form-group mr-2">
+                                            <label htmlFor="firstName">First Name</label>
+                                            <input value={this.state.studentFirstName} name='studentFirstName' onChange={this.handleInputChange} type="text" className="form-control" id="firstName" placeholder="First Name" />
+                                            {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                                        </div>
+                                        <div className="form-group mr-2">
+                                            <label htmlFor="lastName">Last Name</label>
+                                            <input value={this.state.studentLastName} name='studentLastName' onChange={this.handleInputChange} type="text" className="form-control" id="lastName" placeholder="Last Name" />
+                                            {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                                        </div>
+                                        <div className="form-group">
+                                            <label htmlFor="email">Email address</label>
+                                            <input value={this.state.studentEmail} name='studentEmail' onChange={this.handleInputChange} type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
+                                            {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                                        </div>
+                                    </div>
+                                    <button type='button' className='btn btn-primary' onClick={this.submitStudent}>Submit</button>
+                                </form>
+                                : ''}
                         </div>
                         <div className='col-9'>
                             {this.state.showList ?
                                 <div>
                                     <h2>{this.state.currentCohortName}</h2>
+                                    <div className='mt-3'>
+                                        <div>
+                                            <h3>Class Progress</h3>
+                                            <h5>Commits this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''} {this.state.dataFormat === 'month' ? this.state.monthData.total : ''} {this.state.dataFormat === 'week' ? this.state.weekData.total : ''}</h5>
+                                            <h5>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''} {this.state.dataFormat === 'month' ? this.state.monthData.average : ''} {this.state.dataFormat === 'week' ? this.state.weekData.average : ''}</h5>
 
-
-                                    <CohortStudentList
-                                        format={this.state.dataFormat}
-                                        handleRemove={this.handleRemoveStudent}
-                                        list={this.state.studentList}
-                                    />
-
-                                    {/* Invite Student will send an email to the student email provider to offer the option of joining the cohort */}
-                                    <div className='row'>
-                                        <button type='button' className='btn btn-primary mr-3' onClick={this.addStudent}>Invite Student</button>
-                                        <button className='btn' type='button' onClick={this.cohortCommitGraph}>Get Cohort Graph</button>
-                                    </div>
-                                    {this.state.addStudent ?
-                                        <form className='form-horizontal col-12 mt-3'>
                                             <div className='row'>
-                                                <div className="form-group mr-2">
-                                                    <label htmlFor="firstName">First Name</label>
-                                                    <input value={this.state.studentFirstName} name='studentFirstName' onChange={this.handleInputChange} type="text" className="form-control" id="firstName" placeholder="First Name" />
-                                                    {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                                                </div>
-                                                <div className="form-group mr-2">
-                                                    <label htmlFor="lastName">Last Name</label>
-                                                    <input value={this.state.studentLastName} name='studentLastName' onChange={this.handleInputChange} type="text" className="form-control" id="lastName" placeholder="Last Name" />
-                                                    {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                                                </div>
-                                                <div className="form-group">
-                                                    <label htmlFor="email">Email address</label>
-                                                    <input value={this.state.studentEmail} name='studentEmail' onChange={this.handleInputChange} type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
-                                                    {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                                                </div>
+                                                <h5>Change Format</h5>
+                                                <button type='button' className='btn ml-2' value='week' onClick={this.changeFormat}>Weekly</button>
+                                                <button type='button' className='btn ml-2' value='month' onClick={this.changeFormat}>Monthly</button>
+                                                <button type='button' className='btn ml-2' value='year' onClick={this.changeFormat}>Yearly</button>
+
                                             </div>
-                                            <button type='button' className='btn btn-primary' onClick={this.submitStudent}>Submit</button>
-                                        </form>
-                                        : ''}
-                                </div>
-                                : ''}
-                        </div>
-                    </div>
-                    <div>
-                        <div>
-                            {/* End row here */}
+                                            <VictoryChart
+                                            // containerComponent={
+                                            // <VictoryVoronoiContainer
+                                            // labels={({ datum }) => `${datum.count}, ${datum.date} `}
+                                            // />}
 
-                            <div className='mt-3'>
-                                {this.state.showGraph ?
-                                    <div>
-                                        <h3>Class Progress</h3>
-                                        <h5>Commits this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''} {this.state.dataFormat === 'month' ? this.state.monthData.total : ''} {this.state.dataFormat === 'week' ? this.state.weekData.total : ''}</h5>
-                                        <h5>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''} {this.state.dataFormat === 'month' ? this.state.monthData.average : ''} {this.state.dataFormat === 'week' ? this.state.weekData.average : ''}</h5>
+                                            // domainPadding={{ y: 20 }}
+                                            // padding={50}
+                                            >
+                                                <VictoryAxis
+                                                    axisLabelComponent={<VictoryLabel />}
+                                                    label={this.state.dataFormat}
+                                                    style={{
+                                                        axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                        grid: { stroke: 'lightgrey' },
+                                                        tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+                                                    }}
+                                                />
+                                                <VictoryAxis
+                                                    dependentAxis={true}
+                                                    axisLabelComponent={<VictoryLabel />}
+                                                    label={'Number of Commits'}
+                                                    style={{
+                                                        axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                        grid: { stroke: 'lightgrey' },
+                                                        tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
 
-                                        <h3>Change Format</h3>
-                                        <div className='row'>
-                                            <button type='button' className='btn mr-2' value='week' onClick={this.changeFormat}>Weekly</button>
-                                            <button type='button' className='btn mr-2' value='month' onClick={this.changeFormat}>Monthly</button>
-                                            <button type='button' className='btn' value='year' onClick={this.changeFormat}>Yearly</button>
+                                                    }}
 
-                                        </div>
-                                        <VictoryChart
-                                        // containerComponent={
-                                        // <VictoryVoronoiContainer
-                                        // labels={({ datum }) => `${datum.count}, ${datum.date} `}
-                                        // />}
-
-                                        // domainPadding={{ y: 20 }}
-                                        // padding={50}
-                                        >
-                                            <VictoryAxis
-                                                axisLabelComponent={<VictoryLabel />}
-                                                label={this.state.dataFormat}
-                                                style={{
-                                                    axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
-                                                    grid: { stroke: 'lightgrey' },
-                                                    tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
-                                                }}
-                                            />
-                                            <VictoryAxis
-                                                dependentAxis={true}
-                                                axisLabelComponent={<VictoryLabel />}
-                                                label={'Number of Commits'}
-                                                style={{
-                                                    axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
-                                                    grid: { stroke: 'lightgrey' },
-                                                    tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
-
-                                                }}
-
-                                            />
-                                            {/* <VictoryLegend
+                                                />
+                                                {/* <VictoryLegend
                                                 x={150}
                                                 y={50}
                                                 title='Legend'
@@ -456,33 +526,47 @@ class InstructorHome extends Component {
                                                 height={10}
                                             /> */}
 
-                                            {this.state.studentData.map(
-                                                (student, i) => (
-                                                    <VictoryLine
-                                                        interpolation='natural'
-                                                        name={student.author.firstName}
-                                                        key={i}
-                                                        labelComponent={<VictoryTooltip />}
-                                                        labels={() => `${student.author.firstName}`}
-                                                        // data={student.monthly}
-                                                        // labels={({ datum }) => `${datum.count}, ${datum.date}`}
-                                                        data={student[`${this.state.dataFormat}`]}
-                                                        // data={this.state.dataFormat === 'monthly' ? user.monthly : '' || this.state.dataFormat === 'weekly' ? user.weekly : '' || this.state.dataFormat === 'yearly' ? user.yearly : ''}
-                                                        style={{
-                                                            data: { stroke: student.color, strokeWidth: 0.8 }
-                                                        }}
-                                                        x='date'
-                                                        y='count'
-                                                    // data={user}
-                                                    />
-                                                )
-                                            )}
+                                                {this.state.studentData.map(
+                                                    (student, i) => (
+                                                        <VictoryLine
+                                                            interpolation='natural'
+                                                            name={student.author.firstName}
+                                                            key={i}
+                                                            labelComponent={<VictoryTooltip />}
+                                                            labels={() => `${student.author.firstName}`}
+                                                            // data={student.monthly}
+                                                            // labels={({ datum }) => `${datum.count}, ${datum.date}`}
+                                                            data={student[`${this.state.dataFormat}`]}
+                                                            // data={this.state.dataFormat === 'monthly' ? user.monthly : '' || this.state.dataFormat === 'weekly' ? user.weekly : '' || this.state.dataFormat === 'yearly' ? user.yearly : ''}
+                                                            style={{
+                                                                data: { stroke: student.color, strokeWidth: 0.8 }
+                                                            }}
+                                                            x='date'
+                                                            y='count'
+                                                        // data={user}
+                                                        />
+                                                    )
+                                                )}
 
-                                        </VictoryChart>
+                                            </VictoryChart>
+                                        </div>
+
                                     </div>
-                                    : ""}
 
-                            </div>
+
+
+
+
+
+                                </div>
+                                : ''}
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            {/* End row here */}
+
+
                         </div>
                         {/* : ''} */}
                     </div>

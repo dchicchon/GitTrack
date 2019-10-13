@@ -12,6 +12,10 @@ body {
     /* color: white; */
 }
 
+.row {
+    margin: 0 !important;
+}
+
 
 .home-container {
     margin-right:auto;
@@ -38,7 +42,7 @@ body {
     }
 }
 
-h1,h2,h3,h5 {
+h1,h2,h3,h5,h6 {
     font-weight: 300;
 }
 
@@ -139,11 +143,16 @@ table {
     color: white
 }
 
+/* Student Links */
+.student-link {
+    text-decoration: none;
+    color: var(--bodyTextColor);
+}
 
-
-
-
-
+.student-link:hover {
+    text-decoration: none;
+    color: #51b4cf ;
+}
 
 li {
     background:#202329 !important;
@@ -153,10 +162,6 @@ li {
 li:hover {
     background: #3f4552 !important;
 }
-
-
-
-
 
 .btn {
     background: var(--bodyTextColor)  !important;
