@@ -7,13 +7,14 @@ import CohortStudentList from '../Components/CohortStudentList';
 // Utils
 import API from '../Utils/API';
 
-// Sum of contributions based on format
-
+// TO DO: why does the function SumContributions from the component CohortStudentList execute when I click on the Invite Student Button? 
+// This is important to find out because it is causing severe lag to Invite student input
 
 class InstructorHome extends Component {
     state = {
 
         showList: false,
+        loading: false,
 
         // Creating Cohort
         createCohort: false,
@@ -21,6 +22,7 @@ class InstructorHome extends Component {
 
         // Adding Student
         addStudent: false,
+
         // studentEmail: '',
         studentFirstName: '',
         studentLastName: '',
@@ -118,7 +120,11 @@ class InstructorHome extends Component {
 
     // Get list of cohort students and their data to put on graph
     inspectCohort = event => {
-        event.preventDefault();
+        // event.preventDefault();
+        this.setState({
+            loading: true
+        })
+
         let { id, value } = event.target
         API.cohortStudentList(value)
             .then(res => {
@@ -177,9 +183,10 @@ class InstructorHome extends Component {
 
                             // Show the list of students
                             showList: true,
+                            loading: false,
 
                             // List of students
-                            studentList: res.data,
+                            // studentList: res.data,
 
                             // Legend for the VictoryLegend Component
                             studentLegend: studentLegend,
@@ -281,7 +288,7 @@ class InstructorHome extends Component {
     //             console.log(this.state.studentLegend)
     //         })
     // }
-    
+
 
     changeFormat = event => {
         let { value } = event.target
@@ -297,6 +304,8 @@ class InstructorHome extends Component {
 
     // Currently this affects the cohort student list when I click on the button
     // This causes the cohort student list to re-render
+
+    // Clicking this affects the addStudent state Variable
     addStudent = () => {
         if (this.state.addStudent) {
             return this.setState({
@@ -308,42 +317,48 @@ class InstructorHome extends Component {
         })
     }
 
-    // Will add student to a specific cohort
+    // Will will an invite to the student with a particular email
+    // The invite should contain a link that will send the student to a form
+    // That they can fill out for a particular cohort
+
+    // SHOULD NOT CREATE STUDENT IN DATABASE
+    // ONLY STUDENT SIGNING UP FOR COHORT WILL CREATE STUDENT
+
     submitStudent = event => {
         event.preventDefault();
-        console.log(this.state.studentFirstName)
-        console.log(this.state.studentLastName)
+        // console.log(this.state.studentFirstName)
+        // console.log(this.state.studentLastName)
 
         let creds = {
-            firstName: this.state.studentFirstName,
-            lastName: this.state.studentLastName,
+            // firstName: this.state.studentFirstName,
+            // lastName: this.state.studentLastName,
             email: this.state.studentEmail,
             cohortID: this.state.currentCohort
         }
 
         console.log(creds)
-        API.studentCreate(creds)
-            .then(res => {
-                console.log("Created Student")
-                console.log(res.data)
+        // API.studentCreate(creds)
+        // .then(res => {
+        // console.log("Invited Student")
+        // console.log(res.data)
 
-                API.cohortStudentList(this.state.currentCohort)
-                    .then(res => {
-                        console.log("Updated Cohort Student List")
-                        console.log(res.data)
-                        this.setState({
-                            studentFirstName: '',
-                            studentLastName: '',
-                            studentEmail: '',
-                            studentList: res.data,
-                            showList: true,
-                            currentCohort: this.state.currentCohort,
-                            addStudent: false
-                        })
-                    })
-            }
+        // API.cohortStudentList(this.state.currentCohort)
+        // .then(res => {
+        // console.log("Updated Cohort Student List")
+        // console.log(res.data)
+        // this.setState({
+        // studentFirstName: '',
+        // studentLastName: '',
+        // studentEmail: '',
+        // studentList: res.data,
+        // showList: true,
+        // currentCohort: this.state.currentCohort,
+        // addStudent: false
+        // })
+        // })
+        // }
 
-            )
+        // )
 
     }
 
@@ -382,6 +397,7 @@ class InstructorHome extends Component {
 
                     {/* This row should contain cohort list and respective students */}
                     <div className='row mb-2'>
+
                         <div className='col-3'>
                             <h3>Cohorts</h3>
 
@@ -422,13 +438,13 @@ class InstructorHome extends Component {
                             </div>
                             <div className='row'>
 
-                                {/* Render student List */}
+                                {/* Render student List if cohort is inspected */}
                                 {this.state.showList ?
                                     <div>
                                         <CohortStudentList
                                             format={this.state.dataFormat}
                                             handleRemove={this.handleRemoveStudent}
-                                            list={this.state.studentList}
+                                            // list={this.state.studentList}
                                             data={this.state.studentData}
                                         />
                                         <div className='row'>
@@ -441,20 +457,20 @@ class InstructorHome extends Component {
 
                             </div>
 
-                            {/* If I want to add student */}
+                            {/* If I want to add student. Depends on addStudent State */}
                             {this.state.addStudent ?
-                                <form className='form-horizontal col-12 mt-3'>
+                                <div className='form-horizontal col-12 mt-3'>
                                     <div className='row'>
-                                        <div className="form-group mr-2">
-                                            <label htmlFor="firstName">First Name</label>
-                                            <input value={this.state.studentFirstName} name='studentFirstName' onChange={this.handleInputChange} type="text" className="form-control" id="firstName" placeholder="First Name" />
-                                            {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                                        </div>
-                                        <div className="form-group mr-2">
-                                            <label htmlFor="lastName">Last Name</label>
-                                            <input value={this.state.studentLastName} name='studentLastName' onChange={this.handleInputChange} type="text" className="form-control" id="lastName" placeholder="Last Name" />
-                                            {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                                        </div>
+                                        {/* <div className="form-group mr-2"> */}
+                                        {/* <label htmlFor="firstName">First Name</label> */}
+                                        {/* <input value={this.state.studentFirstName} name='studentFirstName' onChange={this.handleInputChange} type="text" className="form-control" id="firstName" placeholder="First Name" /> */}
+                                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                                        {/* </div> */}
+                                        {/* <div className="form-group mr-2"> */}
+                                        {/* <label htmlFor="lastName">Last Name</label> */}
+                                        {/* <input value={this.state.studentLastName} name='studentLastName' onChange={this.handleInputChange} type="text" className="form-control" id="lastName" placeholder="Last Name" /> */}
+                                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
+                                        {/* </div> */}
                                         <div className="form-group">
                                             <label htmlFor="email">Email address</label>
                                             <input value={this.state.studentEmail} name='studentEmail' onChange={this.handleInputChange} type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
@@ -462,10 +478,14 @@ class InstructorHome extends Component {
                                         </div>
                                     </div>
                                     <button type='button' className='btn btn-primary' onClick={this.submitStudent}>Submit</button>
-                                </form>
+                                </div>
                                 : ''}
                         </div>
                         <div className='col-9'>
+                            {this.state.loading ?
+                                <div className="spinner-border text-info" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div> : ''}
                             {this.state.showList ?
                                 <div>
                                     <h2>{this.state.currentCohortName}</h2>

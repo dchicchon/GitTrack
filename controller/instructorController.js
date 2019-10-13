@@ -37,6 +37,7 @@ module.exports = {
     },
 
     // Get individual student for inspection
+    // TO DO: Add filter for yearly
     getStudent: (req, res) => {
         console.log(req.params.id)
         db.Student.findAll({
@@ -47,6 +48,8 @@ module.exports = {
             console.log("\nStudent")
             console.log("\nDataValues")
             let userName = (dbStudent[0].dataValues.githubUsername)
+
+            // This uses the nested format which segments all dates into objects rather than contributions in an array
             axios.get(`https://github-contributions-api.now.sh/v1/${userName}?format=nested`)
                 .then(res2 => {
                     let thisYear = (res2.data.contributions.contributions['2019'])
@@ -63,11 +66,26 @@ module.exports = {
 
                     // Each Month
                     for (let j in thisYear) {
+
+                        // E.g. thisMonth = 'December || 12'
                         let thisMonth = thisYear[j]
+                        let monthSum = 0;
+
+                        console.log("End of month")
+                        let endOfMonthNoFormat = moment(thisMonth['1'].date).endOf("month")
+                        let endOfMonth = moment(endOfMonthNoFormat).date();
+
+                        // This is the specific number day
+                        console.log(endOfMonth)
 
                         for (let k in thisMonth) {
 
                             let contribution = thisMonth[k]
+
+                            // For the month, we must add to the monthSum
+                            monthSum += contribution.count
+                            let formatDate = moment(contribution.date);
+
 
                             // This Week Filter
                             if (moment(contribution.date).week() === currentWeek) {
@@ -86,6 +104,21 @@ module.exports = {
                                 }
                                 console.log(thisDay)
                                 monthlyContributions.push(thisDay)
+                            }
+
+                            // If the contribution date equals the end of the month
+                            if (formatDate.date() === endOfMonth) {
+                                console.log("\nSum Month Contributions")
+                                // let newMom = moment(contribution.date)
+                                // console.log(newMom)
+                                // console.log(contribution.date)
+                                let thisMonth = {
+                                    date: k,
+                                    count: monthSum
+                                }
+                                console.log(thisMonth)
+                                monthSum = 0
+                                yearlyContributions.push(thisMonth)
                             }
 
                         }
@@ -211,7 +244,7 @@ module.exports = {
         console.log("\nGet Graph")
         let studentList = req.body.students
         let studentData = [];
-        let colors = ['#61dafb', '#f04747', '#ece913', '#ff1493', '#ADFF2F', '00FA9A', '#F5FFFA']
+        let colors = ['#61dafb', '#f04747', '#ece913', '#ff1493', '#ADFF2F', '#00FA9A', '#F5FFFA']
 
         for (let i = 0; i < studentList.length; i++) {
             if (studentList[i].githubUsername) {

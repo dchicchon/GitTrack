@@ -5,8 +5,13 @@ import { Link } from 'react-router-dom';
 import API from '../Utils/API';
 
 // Sum of contributions based on format
+// This will be called each time I click on the changeFormat button. Should that be happening?
+    
 function sumContributions(format, data) {
     let sum = 0;
+
+    // console.log("\nData")
+    // console.log(data);
     for (let i = 0; i < data[format].length; i++) {
         sum += data[format][i].count
     }
@@ -20,6 +25,7 @@ class StudentProfile extends Component {
     }
 
     changeFormat = event => {
+        event.preventDefault(); 
         let { value } = event.target
         this.setState({
             dataFormat: value
@@ -31,7 +37,6 @@ class StudentProfile extends Component {
         const { id } = this.props.match.params
         API.inspectStudent(id)
             .then(res => {
-                console.log(res)
                 this.setState({
                     studentData: res.data
                 })
