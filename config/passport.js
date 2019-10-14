@@ -194,15 +194,6 @@ module.exports = () => {
     passport.deserializeUser(function (user, done) {
         console.log("Deserialize")
         console.log(user)
-        // Look in database for a user with same id
         done(null, user)
-        // db.User.findOne({
-        //     where: {
-        //         id: id
-        //     }
-        // }).then(user => {
-        //     // callback function to pass back user if a user with a matching id is found
-        //     cb(null, user)
-        // })
     })
 }

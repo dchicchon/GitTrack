@@ -129,9 +129,12 @@ class InstructorHome extends Component {
         API.cohortStudentList(value)
             .then(res => {
                 // console.log(res.data)
+
                 let list = {
-                    students: res.data
+                    students: res.data.filter(student => student.githubUsername !== '')
                 }
+
+                console.log(list)
                 API.getGraph(list)
                     .then(res2 => {
 
@@ -514,6 +517,7 @@ class InstructorHome extends Component {
                                                 <VictoryAxis
                                                     axisLabelComponent={<VictoryLabel />}
                                                     label={this.state.dataFormat}
+                                                    scale={{ x: "time" }}
                                                     style={{
                                                         axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
                                                         grid: { stroke: 'lightgrey' },

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 // format it will return a sum for the specific key of the element
 // of data
 function sumContributions(key, format, data) {
-    
+
     let sum = 0;
 
     console.log(`This is a bug from CohortStudentList component. This function 
@@ -69,7 +69,7 @@ function CohortStudentList({ data, format, handleRemove, }) {
                                 </td>
 
                                 {/* Get contributions for month */}
-                                <td>
+                                <td style={{ textAlign: 'center' }}>
                                     {sumContributions(i, format, data)}
                                 </td>
 
