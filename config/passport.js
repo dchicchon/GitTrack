@@ -1,6 +1,6 @@
 const passport = require("passport");
 const mailgun = require("mailgun-js");
-const axios = require("axios");
+// const axios = require("axios");
 const DOMAIN = "gittrack.ml";
 const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: DOMAIN });
 

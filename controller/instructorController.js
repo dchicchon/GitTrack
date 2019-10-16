@@ -200,29 +200,29 @@ module.exports = {
 
     // When we create a student we also want to add their ID and the cohort ID to the Student-Cohort Table for the relation
     createStudent: (req, res) => {
-        console.log(req.body)
-        let password = req.body.firstName.toLowerCase();
-        let passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(8));
+        // console.log(req.body)
+        // let password = req.body.firstName.toLowerCase();
+        // let passwordHash = bcrypt.hashSync(password, bcrypt.genSaltSync(8));
 
-        db.Student.create({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            password: passwordHash,
-            userType: 'student'
-        }).then(dbStudent => {
-            console.log("\nNew Student")
-            console.log(dbStudent)
+        // db.Student.create({
+        //     firstName: req.body.firstName,
+        //     lastName: req.body.lastName,
+        //     email: req.body.email,
+        //     password: passwordHash,
+        //     userType: 'student'
+        // }).then(dbStudent => {
+        //     console.log("\nNew Student")
+        //     console.log(dbStudent)
 
-            db.CohortStudent.create({
-                cohortID: req.body.cohortID,
-                studentID: dbStudent.dataValues.id
-            }).then(dbCS => {
-                console.log("\nNew Cohort-Student Entry")
-                console.log(dbCS)
-                res.json(dbStudent)
-            })
-        })
+        //     db.CohortStudent.create({
+        //         cohortID: req.body.cohortID,
+        //         studentID: dbStudent.dataValues.id
+        //     }).then(dbCS => {
+        //         console.log("\nNew Cohort-Student Entry")
+        //         console.log(dbCS)
+        //         res.json(dbStudent)
+        //     })
+        // })
 
     },
 

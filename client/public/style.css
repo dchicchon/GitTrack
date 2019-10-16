@@ -77,8 +77,10 @@ h1,h2,h3,h5,h6 {
     text-decoration: none;
     color: black;
 }
+/* ========================================= */
 
-/* SplashPage */
+/* SPLASH PAGE */
+/* =============================================== */
 .jumbotron {
     height: 25rem !important;
     background-color: inherit !important
@@ -112,8 +114,10 @@ h1,h2,h3,h5,h6 {
     text-align: center !important;
     margin:0 auto !important;
 }
+/* =========================================== */
 
-/* Nav */
+/* NAVBAR */
+/* ========================================= */
 .dropdown-menu {
     left: -6rem !important;
 }
@@ -150,12 +154,18 @@ h1,h2,h3,h5,h6 {
     background: var(--bodyTextColor) !important;
 }
 
-/* Admin */
+/* ================================================ */
+
+/* ADMIN */
+/* ===================================================== */
 table {
     width: 100%;
 }
 
-/* Instructor */
+/* ========================================================= */
+
+/* INSTRUCTOR */
+/* ======================================================= */
 .hover {
     /* width: 15%; */
     transition: background-color 1s color 1s
@@ -166,8 +176,10 @@ table {
     background-color:#007bff;
     color: white
 }
+/* =========================================== */
 
-/* Student Links */
+/* STUDENT LINKS */
+/* ======================================================= */
 .student-link {
     text-decoration: none;
     color: var(--bodyTextColor);
@@ -200,10 +212,49 @@ li:hover {
 .btn:hover {
     background: #51b4cf !important;
 }
+/* ====================================== */
 
-/* Format List */
+/* FORMAT LIST */
+/* ================================================= */
 .active {
     background: var(--navColor);
     color: var(--bodyTextColor);
     outline: none !important;
 }
+
+/* ================================== */
+
+/* MODAL */
+/* ===================== */
+.add-modal {
+    background: var(--navColor);
+    padding: 1rem;
+    position: absolute;
+    z-index: 1;
+    opacity: 0;
+    /* width: 15rem; */
+    /* height: 10rem; */
+    animation-name: fadeIn;
+    animation-fill-mode: forwards;
+    animation-duration: 0.01s;
+    animation-delay: 0.1s;
+    border: 1px solid #1b1e22;
+    border-radius: 2%;
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+.cohort-link {
+    padding: 0.7rem;
+    border: 1px solid var(--bodyTextColor);
+    /* border-radius:5%; */
+}
+
+
