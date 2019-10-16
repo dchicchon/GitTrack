@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 // Components
 import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine, VictoryLegend, VictoryVoronoiContainer, VictoryTooltip } from 'victory'
 import CohortStudentList from '../Components/CohortStudentList';
+import AddStudent from '../Components/AddStudent';
+import AddCohort from '../Components/AddCohort';
 
 // Utils
 import API from '../Utils/API';
+import FormatList from '../Components/FormatList';
 
 // TO DO: why does the function SumContributions from the component CohortStudentList execute when I click on the Invite Student Button? 
 // This is important to find out because it is causing severe lag to Invite student input
@@ -122,7 +126,8 @@ class InstructorHome extends Component {
     inspectCohort = event => {
         // event.preventDefault();
         this.setState({
-            loading: true
+            loading: true,
+            showList: false
         })
 
         let { id, value } = event.target
@@ -147,6 +152,7 @@ class InstructorHome extends Component {
                         for (let i = 0; i < students.length; i++) {
                             // console.log(students[i])
                             // console.log(students[i].week)
+                            console.log(students[i])
 
                             let legendEntry = {
                                 name: (students[i].author.firstName + ' ' + students[i].author.lastName),
@@ -216,85 +222,9 @@ class InstructorHome extends Component {
     }
     // ==================================================================
 
-
-
-    // GRAPH
-    // ==================================================================
-
-
-    // May be outdated now 
-    // cohortCommitGraph = () => {
-    //     // event.preventDefault();
-    //     console.log("Get commit graph for cohort")
-    //     let list = {
-    //         students: this.state.studentList
-    //     }
-    //     API.getGraph(list)
-    //         .then(res => {
-    //             let students = res.data.students
-    //             let weekSum = 0;
-    //             let monthSum = 0;
-    //             let yearSum = 0;
-    //             let studentLegend = []
-
-    //             // Iterate through student list
-
-    //             for (let i = 0; i < students.length; i++) {
-    //                 console.log(students[i])
-    //                 console.log(students[i].week)
-
-    //                 let legendEntry = {
-    //                     name: (students[i].author.firstName + ' ' + students[i].author.lastName),
-    //                     symbol: { fill: students[i].color }
-    //                 }
-
-    //                 studentLegend.push(legendEntry)
-    //                 for (let j = 0; j < students[i].week.length; j++) {
-    //                     weekSum += students[i].week[j].count
-    //                 }
-    //                 for (let k = 0; k < students[i].month.length; k++) {
-    //                     monthSum += students[i].month[k].count
-    //                 }
-    //                 for (let l = 0; l < students[i].year.length; l++) {
-    //                     yearSum += students[i].year[l].count
-    //                 }
-
-
-
-    //             }
-
-    //             let weekData = {
-    //                 total: weekSum,
-    //                 average: (weekSum / 7).toFixed(2)
-    //             }
-
-    //             let monthData = {
-    //                 total: monthSum,
-    //                 average: (monthSum / 30).toFixed(2)
-    //             }
-
-    //             let yearData = {
-    //                 total: yearSum,
-    //                 average: (yearSum / 12).toFixed(2)
-    //             }
-
-
-    //             this.setState({
-    //                 showGraph: true,
-    //                 studentLegend: studentLegend,
-    //                 weekData: weekData,
-    //                 monthData: monthData,
-    //                 yearData: yearData,
-    //                 studentData: students
-    //             })
-
-    //             console.log(this.state.studentLegend)
-    //         })
-    // }
-
-
     changeFormat = event => {
         let { value } = event.target
+        console.log(value)
         this.setState({
             dataFormat: value
         })
@@ -392,7 +322,7 @@ class InstructorHome extends Component {
     render() {
 
         return (
-            <div className='mt-3'>
+            <div>
 
                 {/* List of cohorts*/}
                 <div className='home-container mt-3'>
@@ -402,12 +332,18 @@ class InstructorHome extends Component {
                     <div className='row mb-2'>
 
                         <div className='col-3'>
-                            <h3>Cohorts</h3>
 
-                            <div className='row mt-2'>
-                                <button type='button' className='btn btn-primary' onClick={this.createCohort}>Create Cohort</button>
-                            </div>
+                            <h3>Cohorts <span className='add' onClick={this.createCohort}>+</span></h3>
 
+                            {this.state.createCohort ?
+                                <AddCohort
+                                    handleInputChange={this.handleInputChange}
+                                    cohortName={this.state.cohortName}
+                                    submitCohort={this.submitCohort}
+                                />
+                                : ""}
+
+                            {/* Show Cohort List */}
                             {this.state.cohortList ?
                                 <div className='mt-2'>
                                     <ul className="list-group">
@@ -426,63 +362,49 @@ class InstructorHome extends Component {
                                 </div>
                                 : ''}
 
-                            <div className='row mt-2'>
-                                <div className="col-12">
-                                    {this.state.createCohort ?
-                                        <div>
-                                            <div className='form-group'>
-                                                <label htmlFor="cohortName">Cohort Name</label>
-                                                <input className='form-control' name='cohortName' value={this.state.cohortName} onChange={this.handleInputChange} placeholder='Cohort Name' />
-                                            </div>
-                                            <button type='button' className='btn btn-primary' onClick={this.submitCohort}>Submit</button>
-                                        </div>
-                                        : ""}
-                                </div>
-                            </div>
-                            <div className='row'>
 
-                                {/* Render student List if cohort is inspected */}
-                                {this.state.showList ?
-                                    <div>
-                                        <CohortStudentList
-                                            format={this.state.dataFormat}
-                                            handleRemove={this.handleRemoveStudent}
-                                            // list={this.state.studentList}
-                                            data={this.state.studentData}
-                                        />
-                                        <div className='row'>
-                                            <button type='button' className='btn btn-primary mr-3' onClick={this.addStudent}>Invite Student</button>
-                                            {/* <button className='btn' type='button' onClick={this.cohortCommitGraph}>Get Cohort Graph</button> */}
-                                        </div>
+                            {/* Render student List if cohort is inspected */}
+                            {this.state.showList ?
+                                <div className='mt-2'>
+                                    <div className='row'>
+                                        <h3>Students <span className='add' onClick={this.addStudent}>+</span></h3>
+                                        {this.state.addStudent ?
+                                            <AddStudent
+                                                handleInputChange={this.handleInputChange}
+                                                studentEmail={this.state.studentEmail}
+                                                submitStudent={this.submitStudent}
+                                            />
+                                            : ''}
                                     </div>
-                                    : ''
-                                }
+                                    {/* <p>Name</p> */}
+                                    <ul className='list-group'>
+                                        {this.state.studentData.map((student, k) => (
+                                            <li
+                                                key={k}
+                                                className='list-group-item'
+                                            >
+                                                <Link className='student-link' to={{ pathname: '/student/' + student.author.id }}>
+                                                    <span style={{ color: `${student.color}`, fontSize: `1.8rem` }}>&#9679;</span><span> {student.author.firstName} {student.author.lastName}</span>
+                                                </Link>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                : ''
+                            }
 
-                            </div>
+                            {/* <CohortStudentList
+                                    format={this.state.dataFormat}
+                                    handleRemove={this.handleRemoveStudent}
+                                    addStudent={this.addStudent}
+                                    // handleInputChange={this.handleInputChange}
+                                    // list={this.state.studentList}
+                                    data={this.state.studentData}
+                                /> */}
+
 
                             {/* If I want to add student. Depends on addStudent State */}
-                            {this.state.addStudent ?
-                                <div className='form-horizontal col-12 mt-3'>
-                                    <div className='row'>
-                                        {/* <div className="form-group mr-2"> */}
-                                        {/* <label htmlFor="firstName">First Name</label> */}
-                                        {/* <input value={this.state.studentFirstName} name='studentFirstName' onChange={this.handleInputChange} type="text" className="form-control" id="firstName" placeholder="First Name" /> */}
-                                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                                        {/* </div> */}
-                                        {/* <div className="form-group mr-2"> */}
-                                        {/* <label htmlFor="lastName">Last Name</label> */}
-                                        {/* <input value={this.state.studentLastName} name='studentLastName' onChange={this.handleInputChange} type="text" className="form-control" id="lastName" placeholder="Last Name" /> */}
-                                        {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                                        {/* </div> */}
-                                        <div className="form-group">
-                                            <label htmlFor="email">Email address</label>
-                                            <input value={this.state.studentEmail} name='studentEmail' onChange={this.handleInputChange} type="email" className="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" />
-                                            {/* <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small> */}
-                                        </div>
-                                    </div>
-                                    <button type='button' className='btn btn-primary' onClick={this.submitStudent}>Submit</button>
-                                </div>
-                                : ''}
+
                         </div>
                         <div className='col-9'>
                             {this.state.loading ?
@@ -494,15 +416,19 @@ class InstructorHome extends Component {
                                     <h2>{this.state.currentCohortName}</h2>
                                     <div className='mt-3'>
                                         <div>
-                                            <h3>Class Progress</h3>
-                                            <h5>Commits this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''} {this.state.dataFormat === 'month' ? this.state.monthData.total : ''} {this.state.dataFormat === 'week' ? this.state.weekData.total : ''}</h5>
-                                            <h5>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''} {this.state.dataFormat === 'month' ? this.state.monthData.average : ''} {this.state.dataFormat === 'week' ? this.state.weekData.average : ''}</h5>
-
                                             <div className='row'>
-                                                <h5>Change Format</h5>
-                                                <button type='button' className='btn ml-2' value='week' onClick={this.changeFormat}>Weekly</button>
-                                                <button type='button' className='btn ml-2' value='month' onClick={this.changeFormat}>Monthly</button>
-                                                <button type='button' className='btn ml-2' value='year' onClick={this.changeFormat}>Yearly</button>
+                                                <div className='col-4'>
+
+                                                    <h3>Class Progress</h3>
+                                                    <h5>Commits this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''} {this.state.dataFormat === 'month' ? this.state.monthData.total : ''} {this.state.dataFormat === 'week' ? this.state.weekData.total : ''}</h5>
+                                                    <h5>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''} {this.state.dataFormat === 'month' ? this.state.monthData.average : ''} {this.state.dataFormat === 'week' ? this.state.weekData.average : ''}</h5>
+
+                                                    {/* On button click, add a class that changes it's style */}
+                                                    <FormatList
+                                                        format={this.state.dataFormat}
+                                                        changeFormat={this.changeFormat}
+                                                    />
+                                                </div>
 
                                             </div>
                                             <VictoryChart

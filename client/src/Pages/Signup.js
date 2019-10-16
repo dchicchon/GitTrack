@@ -34,8 +34,6 @@ class Signup extends Component {
             }
         }
 
-        console.log(this.state.email);
-        console.log(this.state.password);
         if (this.state.email && this.state.password && this.state.password === this.state.passwordConfirm) {
             let creds = {
                 firstName: this.state.firstName,
@@ -45,14 +43,13 @@ class Signup extends Component {
                 type: typeInput
             }
 
-            console.log(creds)
             API.handleSignup(creds)
                 .then(res => {
                     this.setState({
                         email: '',
                         password: ''
                     })
-                    window.location.href = '/'
+                    window.location.href = '/login'
                 })
                 .catch(err => console.log(err))
         } else {

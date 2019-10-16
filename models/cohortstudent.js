@@ -4,6 +4,7 @@ module.exports = (sequelize, DataTypes) => {
     cohortID: DataTypes.INTEGER,
     studentID: DataTypes.INTEGER
   }, {});
+  
   CohortStudent.associate = function(models) {
     // associations can be defined here
   };

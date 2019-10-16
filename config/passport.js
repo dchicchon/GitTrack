@@ -1,8 +1,12 @@
 const passport = require("passport");
+const mailgun = require("mailgun-js");
+const axios = require("axios");
+const DOMAIN = "gittrack.ml";
+const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: DOMAIN });
 
 // Strategies
 const LocalStrategy = require("passport-local");
-const GithubStrategy = require("passport-github").Strategy;
+// const GithubStrategy = require("passport-github").Strategy;
 
 // Database
 const db = require("../models");
@@ -106,15 +110,52 @@ module.exports = () => {
             console.log("\nSignup Begin")
 
             // Switch case to determine which Model will be used
+
             async function creatingUser() {
                 let user = await promiseToCheck(req.body)
-                if (user) return done(null, false)
+
+                // After creating user, lets send them an email to validate their account. If account is not validated, the account will be deleted
+                // in 24 hrs
+
+
+                console.log(`REQ BODY`)
+                console.log(req.body.email)
+                if (user) {
+                    console.log("\nUser")
+                    console.log(user)
+                    return done(null, false)
+                }
                 else {
 
+                    // If the email is not in our database and the email was validated, then we will send a confirmation email
+                    let capitalizeName = req.body.firstName.replace(/^./, req.body.firstName[0].toUpperCase())
+
+                    const data = {
+                        from: "Daniel <danielchicchon@gmail.com>",
+                        to: `${req.body.email}`,
+                        subject: "Hello from GitTrack",
+                        text:
+                            `
+                            Welcome to GitTrack ${capitalizeName},
+
+                            Click on the link below to verify your email    
+
+                            www.gittrack.ml
+
+                            Take care!
+                            Daniel
+                            `
+                    };
+                    mg.messages().send(data, function (error, body) {
+                        console.log(body);
+                    });
                     let newUser = createUser(req.body, passwordHash)
                     if (newUser) return done(null, newUser)
                     return done(null, false)
                 }
+
+                // })
+
 
             }
 

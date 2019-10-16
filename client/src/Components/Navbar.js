@@ -29,7 +29,7 @@ function Navbar(props) {
 
                 {/* having an issue with user prop  */}
 
-                <Link className="btn btn-secondary dropdown-toggle" to='#' id="dropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <Link className="btn btn-secondary dropdown-toggle nav-button" to='#' id="dropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     {props.user.firstName}
                 </Link>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuLink">
