@@ -6,12 +6,14 @@ const db = require("../../models");
 
 router.get('/user', (req, res) => {
     // Req has a method that checks for authentication
+    console.log("\nRequest Session")
+    console.log(req.session)
     if (req.isAuthenticated()) {
         var currentUser = req.session.passport.user;
-        console.log("\nREQ SESSION:")
-        console.log(req.session);
-        console.log("\nCurrent User");
-        console.log(currentUser)
+        // console.log("\nREQ SESSION:")
+        // console.log(req.session);
+        // console.log("\nCurrent User");
+        // console.log(currentUser)
 
         switch (currentUser.userType) {
             case "administrator":
@@ -124,6 +126,9 @@ router.post("/login", (req, res, next) => {
         // Successful Login
         req.login(user, (err) => {
             if (err) return next(err)
+
+            console.log("\nUser")
+            console.log(user)
 
             let returnData = {
                 color: 'green',
