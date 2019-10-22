@@ -81,10 +81,10 @@ class App extends Component {
             {this.state.userType === 'instructor' ? <Route path='/' exact component={() => <InstructorHome user={this.state.user} />} /> : ''}
 
             {/* Path for student profile based on it */}
-            <Route path='/student/:id' component={StudentProfile} />
+            <Route exact path='/student/:id' exact component={StudentProfile} />
 
             {this.state.userType === 'student' ? <Route path='/' exact component={() => <StudentHome user={this.state.user} />} /> : ''}
-            <Route path='/settings' exact component={() => <Settings user={this.state.user} />} />
+            <Route exact path='/settings' exact component={() => <Settings user={this.state.user} />} />
             <Route component={NoPage} />
           </Switch>
         </Router>
@@ -93,12 +93,12 @@ class App extends Component {
       return (
         <Router>
           <Switch>
-            <Route path='/' exact component={SplashPage} />
-            <Route path='/login' exact component={Login} />
-            <Route path='/signup' exact component={Signup} />
+            <Route exact path='/' exact component={SplashPage} />
+            <Route exact path='/login' exact component={Login} />
+            <Route exact path='/signup' exact component={Signup} />
 
             {/* Go to signup based on cohortID */}
-            <Route path='/signup/:id' component={CohortSignup} />
+            <Route exact path='/signup/:id' exact component={CohortSignup} />
 
             <Route component={NoPage} />
 
