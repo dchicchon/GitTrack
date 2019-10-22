@@ -78,7 +78,8 @@ class App extends Component {
   logout() {
     API.logout()
       .then(res => {
-        window.location = '/login'
+        // window.location = '/login'
+        window.location.reload();
       })
   }
 
