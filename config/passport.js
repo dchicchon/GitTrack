@@ -177,9 +177,9 @@ module.exports = () => {
                     };
 
                     // This function sends the message to the user
-                    // mg.messages().send(data, function (error, body) {
-                    //     console.log(body);
-                    // });
+                    mg.messages().send(data, function (error, body) {
+                        console.log(body);
+                    });
                     let newUser = createUser(req.body, passwordHash)
                     if (newUser) return done(null, newUser)
                     return done(null, false)

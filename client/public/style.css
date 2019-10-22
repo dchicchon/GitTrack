@@ -91,7 +91,7 @@ h1,h2,h3,h5,h6 {
 }
 
 .section-card {
-    height: 20rem;
+    /* height: 20rem; */
     color: black;
     background-color: white;
 }
@@ -117,6 +117,15 @@ h1,h2,h3,h5,h6 {
 .center-signup {
     text-align: center !important;
     margin:0 auto !important;
+}
+
+.responsive-img {
+    max-height: 75%;
+    max-width: 75%;
+}
+
+.logo {
+    max-width: 5%;
 }
 /* =========================================== */
 
