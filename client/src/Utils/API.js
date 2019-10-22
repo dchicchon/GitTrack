@@ -8,6 +8,10 @@ export default {
         return axios.put("/api/settings", creds)
     },
 
+    getCohortInfo: (id) => {
+        return axios.get("/api/cohort/" + id)
+    },
+
     // Auth functions
     // =================
     getUser: () => {
@@ -79,7 +83,7 @@ export default {
     studentCreate: creds => {
         return axios.post("/api/instructor/students", creds)
     },
-    
+
     inspectStudent: id => {
         return axios.get("/api/instructor/students/" + id)
     },

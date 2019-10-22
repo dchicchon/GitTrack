@@ -7,7 +7,8 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 // Not Logged In
 import SplashPage from './Pages/SplashPage';
 import Login from './Pages/Login';
-import Signup from './Pages/Signup'
+import Signup from './Pages/Signup';
+import CohortSignup from './Pages/CohortSignup';
 
 // Logged In 
 import AdminHome from './Pages/AdminHome';
@@ -25,22 +26,6 @@ import Navbar from './Components/Navbar';
 
 // Utils
 import API from './Utils/API';
-
-// function ID() {
-//   let { id } = useParams();
-//   return (
-//     <div>
-//       <h3>ID: {id}</h3>
-//     </div>
-//   )
-// }
-
-
-
-// let profileID =() => {
-//   let { id } = useParams();
-//   return <div>Please work {id}</div>
-// }
 
 class App extends Component {
   state = {
@@ -78,8 +63,8 @@ class App extends Component {
   logout() {
     API.logout()
       .then(res => {
-        // window.location = '/login'
-        window.location.reload();
+        window.location.href = '/login'
+        // window.location.reload();
       })
   }
 
@@ -111,7 +96,7 @@ class App extends Component {
             <Route path='/' exact component={SplashPage} />
             <Route path='/login' exact component={Login} />
             <Route path='/signup' exact component={Signup} />
-            {/* <Route path='/signup' exact component={Signup} /> */}
+            <Route path='/signup/:id' exact component={CohortSignup} />
             <Route component={NoPage} />
 
           </Switch>

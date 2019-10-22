@@ -66,12 +66,26 @@ function promiseToCheck(user) {
 // }
 
 let createUser = function (user, pass) {
-    let data = {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        password: pass,
-        userType: user.type
+
+    let data = {}
+    if (user.type == 'student') {
+
+        data = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            githubUsername: user.githubUsername,
+            password: pass,
+            userType: user.type
+        }
+    } else {
+        data = {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            password: pass,
+            userType: user.type
+        }
     }
     switch (user.type) {
         case "administrator":
@@ -138,9 +152,9 @@ module.exports = () => {
                             `
                             Welcome to GitTrack ${capitalizeName},
 
-                            Click on the link below to verify your email    
+                            Click on the link below to login   
 
-                            www.gittrack.ml
+                            www.gittrack.ml/login
 
                             Take care!
                             Daniel
