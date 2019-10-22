@@ -69,12 +69,11 @@ let createUser = function (user, pass) {
 
     let data = {}
     if (user.type == 'student') {
-
         data = {
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            githubUsername: user.githubUsername,
+            githubUsername: (user.githubUsername !== '' ? user.githubUsername : ''),
             password: pass,
             userType: user.type
         }
@@ -101,10 +100,22 @@ let createUser = function (user, pass) {
                 })
             break
         case "student":
-            db.Student.create(data)
-                .then(student => {
-                    return student
-                })
+            if (user.cohortID) {
+                db.Student.create(data)
+                    .then(student => {
+                        db.CohortStudent.create({
+                            cohortID: user.cohortID,
+                            studentID: student.dataValues.id
+                        }).then(dbCohortStudent => {
+                            return student
+                        })
+                    })
+            } else {
+                db.Student.create(data)
+                    .then(student => {
+                        return student
+                    })
+            }
             break
     }
 }
@@ -152,9 +163,9 @@ module.exports = () => {
                             `
                             Welcome to GitTrack ${capitalizeName},
 
-                            Click on the link below to login   
+                            Click on the link below to start tracking!  
 
-                            www.gittrack.ml/login
+                            www.gittrack.ml
 
                             Take care!
                             Daniel

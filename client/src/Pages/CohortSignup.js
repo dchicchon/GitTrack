@@ -48,6 +48,7 @@ class CohortSignup extends Component {
                 email: this.state.email,
                 githubUsername: this.state.githubUsername,
                 password: this.state.password,
+                cohortID: this.props.match.params,
                 type: 'student'
             }
 
