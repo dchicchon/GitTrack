@@ -3,6 +3,10 @@
     box-sizing: border-box;
 }
 
+html {
+    background: #282c34 !important;
+}
+
 
 body {
     background:#282c34;

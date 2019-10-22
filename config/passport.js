@@ -68,6 +68,8 @@ function promiseToCheck(user) {
 let createUser = function (user, pass) {
 
     let data = {}
+    console.log("\nUser")
+    console.log(user)
     if (user.type == 'student') {
         data = {
             firstName: user.firstName,
@@ -101,6 +103,7 @@ let createUser = function (user, pass) {
             break
         case "student":
             if (user.cohortID) {
+                console.log("\nStudent signup through cohort")
                 db.Student.create(data)
                     .then(student => {
                         db.CohortStudent.create({
@@ -111,6 +114,7 @@ let createUser = function (user, pass) {
                         })
                     })
             } else {
+                console.log("\nStudent no cohort")
                 db.Student.create(data)
                     .then(student => {
                         return student
@@ -144,7 +148,7 @@ module.exports = () => {
 
 
                 console.log(`REQ BODY`)
-                console.log(req.body.email)
+                console.log(req.body)
                 if (user) {
                     console.log("\nUser")
                     console.log(user)
@@ -171,9 +175,11 @@ module.exports = () => {
                             Daniel
                             `
                     };
-                    mg.messages().send(data, function (error, body) {
-                        console.log(body);
-                    });
+
+                    // This function sends the message to the user
+                    // mg.messages().send(data, function (error, body) {
+                    //     console.log(body);
+                    // });
                     let newUser = createUser(req.body, passwordHash)
                     if (newUser) return done(null, newUser)
                     return done(null, false)

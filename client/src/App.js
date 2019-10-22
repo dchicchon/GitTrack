@@ -63,7 +63,7 @@ class App extends Component {
   logout() {
     API.logout()
       .then(res => {
-        window.location.href = '/login'
+        window.location.href = '/'
         // window.location.reload();
       })
   }
@@ -96,7 +96,10 @@ class App extends Component {
             <Route path='/' exact component={SplashPage} />
             <Route path='/login' exact component={Login} />
             <Route path='/signup' exact component={Signup} />
-            <Route path='/signup/:id' exact component={CohortSignup} />
+
+            {/* Go to signup based on cohortID */}
+            <Route path='/signup/:id' component={CohortSignup} />
+
             <Route component={NoPage} />
 
           </Switch>

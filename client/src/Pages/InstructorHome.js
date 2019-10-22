@@ -406,7 +406,7 @@ class InstructorHome extends Component {
                                             />
                                             : ''}
                                     </div>
-                                    {this.state.studentData !== '' ?
+                                    {this.state.studentData.length !== 0 ?
                                         < ul className='list-group'>
                                             {this.state.studentData.map((student, k) => (
                                                 <li

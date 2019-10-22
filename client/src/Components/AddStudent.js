@@ -22,7 +22,7 @@ function AddStudent({ close, cohortID, handleInputChange, inviteMethod, inviteVi
                     <br />
                     <p>Cohort Signup Link</p>
                     <div className='cohort-link'>
-                        <span>http://www.gittrack/signup/{cohortID}</span>
+                        <Link to={{ pathname: '/signup/' + cohortID }}>http://www.gittrack.ml/signup/{cohortID}</Link>
                     </div>
                 </div>
                 :

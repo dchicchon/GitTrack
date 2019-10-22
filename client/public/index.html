@@ -26,7 +26,10 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-  <link rel="stylesheet" href="style.css">
+  <!-- When using params, make sure to use '/' instead of './' so it sends back a URL instead of its parent or child -->
+  <!-- https://stackoverflow.com/questions/40274234/react-router-css-styling-breaks-using-params-status-304-not-modified -->
+
+  <link rel="stylesheet" type='text/css' href="/style.css">
 </head>
 
 <body>

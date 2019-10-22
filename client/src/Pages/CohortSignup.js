@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 
-import { Link } from 'react-router-dom';
 
 // Utils
 import API from '../Utils/API';
@@ -48,7 +47,7 @@ class CohortSignup extends Component {
                 email: this.state.email,
                 githubUsername: this.state.githubUsername,
                 password: this.state.password,
-                cohortID: this.props.match.params,
+                cohortID: this.props.match.params.id,
                 type: 'student'
             }
 
@@ -59,11 +58,11 @@ class CohortSignup extends Component {
                         password: '',
                         githubUsername: ''
                     })
-                    window.location.href = '/login'
+                    window.location.href = '/'
                 })
                 .catch(err => console.log(err))
         } else {
-            console.log("You must enter proper login info")
+            console.log("You must enter proper signup info")
         }
     }
 
