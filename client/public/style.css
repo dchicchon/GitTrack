@@ -257,4 +257,16 @@ li:hover {
     /* border-radius:5%; */
 }
 
+.close {
+    margin-left: auto !important;
+    float: none !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+    color: inherit !important;
+    text-shadow: none;
+    opacity: 1;
+    cursor: pointer;
+
+}
 

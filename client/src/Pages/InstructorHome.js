@@ -362,6 +362,7 @@ class InstructorHome extends Component {
 
                             {this.state.createCohort ?
                                 <AddCohort
+                                    close={this.createCohort}
                                     handleInputChange={this.handleInputChange}
                                     cohortName={this.state.cohortName}
                                     submitCohort={this.submitCohort}
@@ -395,6 +396,8 @@ class InstructorHome extends Component {
                                         <h3>Students <span className='add' onClick={this.addStudent}>+</span></h3>
                                         {this.state.addStudent ?
                                             <AddStudent
+                                                close={this.addStudent}
+                                                cohortID={this.state.currentCohort}
                                                 inviteMethod={this.inviteMethod}
                                                 inviteVia={this.state.via}
                                                 handleInputChange={this.handleInputChange}
