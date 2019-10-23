@@ -35,6 +35,7 @@
     "express-session": "^1.16.2",
     "mailgun-js": "^0.22.0",
     "moment": "^2.24.0",
+    "morgan": "^1.9.1",
     "mysql": "^2.17.1",
     "mysql2": "^1.7.0",
     "passport": "^0.4.0",

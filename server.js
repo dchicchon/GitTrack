@@ -4,6 +4,7 @@ require("dotenv").config();
 // Require Packages
 const express = require("express");
 const app = express();
+const morgan = require("morgan")
 const db = require("./models");
 const routes = require("./routes");
 const passport = require("passport");
@@ -56,17 +57,15 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // app.use(express.static(__dirname));
-// app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.resolve(__dirname, 'client/build')));
 
 app.use(routes)
 
-app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+app.use(morgan('common'))
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
 });
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
 
 db.sequelize.sync({ force: false }).then(() => {
     let server = app.listen(process.env.PORT || 5000, function () {
