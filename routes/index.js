@@ -11,7 +11,7 @@ router.use('/auth', authRoutes);
 router.use('/api', apiRoutes);
 
 router.route("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"))
+    res.sendFile(path.join(__dirname, "index.html"))
 })
 
 
