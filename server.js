@@ -60,7 +60,8 @@ app.use(routes)
 
 
 app.get('/*', function (req, res) {
-    res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
+    // res.sendFile(path.resolve(__dirname + '/client/build/index.html'));
 });
 
 
