@@ -10,9 +10,14 @@ const apiRoutes = require("./api");
 router.use('/auth', authRoutes);
 router.use('/api', apiRoutes);
 
-router.route("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"))
-})
+// router.route("/login")
+//     .get((req, res) => {
+//         res.sendFile(path.join(__dirname, "client", "build", "index.html"))
+//     })
+
+// router.route("/*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "client", "build", "index.html"))
+// })
 
 
 

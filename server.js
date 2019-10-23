@@ -59,6 +59,11 @@ app.use(passport.session());
 app.use(morgan('common'))
 
 app.use(express.static(__dirname + '/client/build'))
+
+app.get("/*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
+
 app.use(routes)
 
 
