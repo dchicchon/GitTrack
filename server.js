@@ -56,6 +56,9 @@ app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'build')))
 
 app.use(routes)
+
+// Do this so that client-side routing works
+// https://create-react-app.dev/docs/deployment/
 app.get('/*', function (req, res) {
     res.sendFile(path.join(__dirname, 'build', 'index.html'))
 })
