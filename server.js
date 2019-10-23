@@ -59,13 +59,27 @@ app.use(routes)
 
 // Do this so that client-side routing works
 // https://create-react-app.dev/docs/deployment/
-app.get('/*', function (req, res) {
-    console.log("App Get Build")
-    let url = path.join(__dirname, './client/build', 'index.html');
-    if (!url.startsWith('/app/')) // we're on local windows
-        url = url.substring(1);
-    res.sendFile(url);
-})
+// app.get('/*', function (req, res) {
+//     console.log("App Get Build")
+//     let url = path.join(__dirname, '../client/build', 'index.html');
+//     if (!url.startsWith('/app/')) // we're on local windows
+//         url = url.substring(1);
+//     res.sendFile(url);
+// })
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+    app.get("/*", function (req, res) {
+        res.sendFile(path.join(__dirname, "./client/build/index.html"));
+    });
+}
+
+else {
+    app.use(express.static(path.join(__dirname, '/client/public')));
+    app.get("/*", function (req, res) {
+        res.sendFile(path.join(__dirname, "./client/public/index.html"));
+    });
+}
 
 db.sequelize.sync({ force: false }).then(() => {
     let server = app.listen(process.env.PORT || 5000, function () {

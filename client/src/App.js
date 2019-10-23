@@ -74,7 +74,7 @@ class App extends Component {
     // If the user state login is true, allow them to navigate these pages
     if (this.state.loggedIn === true) {
       return (
-        <Router>
+        <Router history={hashHistory}>
           <Navbar user={this.state.user} logout={this.logout} />
           <Switch>
             {this.state.userType === 'administrator' ? <Route path='/' exact component={() => <AdminHome user={this.state.user} />} /> : ''}
