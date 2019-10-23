@@ -8,11 +8,14 @@ const db = require("./models");
 const routes = require("./routes");
 const passport = require("passport");
 const session = require("express-session")
+const path = require("path");
+
 const MySQLStore = require("express-mysql-session")(session);
 
 require("./config/passport")(passport)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 let options = {};
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static("client/build"))
@@ -50,8 +53,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(express.static(path.join(__dirname, 'build')))
 
 app.use(routes)
+app.get('/*', function (req, res) {
+    res.sendFile(path.join(__dirname, 'build', 'index.html'))
+})
 
 db.sequelize.sync({ force: false }).then(() => {
     let server = app.listen(process.env.PORT || 5000, function () {
