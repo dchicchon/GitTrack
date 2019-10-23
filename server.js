@@ -60,7 +60,10 @@ app.use(routes)
 // Do this so that client-side routing works
 // https://create-react-app.dev/docs/deployment/
 app.get('/*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'build', 'index.html'))
+    let url = path.join(__dirname, '../client/build', 'index.html');
+    if (!url.startsWith('/app/')) // we're on local windows
+        url = url.substring(1);
+    res.sendFile(url);
 })
 
 db.sequelize.sync({ force: false }).then(() => {
