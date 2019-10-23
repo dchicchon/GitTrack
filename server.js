@@ -56,15 +56,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// app.use(express.static(__dirname));
-app.use(express.static(path.resolve(__dirname, 'client/build')));
-
-app.use(routes)
-
+app.use(express.static(path.resolve(__dirname, 'build')));
 app.use(morgan('common'))
 app.get('/*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+    res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
+app.use(routes)
 
 
 db.sequelize.sync({ force: false }).then(() => {
