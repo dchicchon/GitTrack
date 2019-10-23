@@ -60,7 +60,8 @@ app.use(routes)
 // Do this so that client-side routing works
 // https://create-react-app.dev/docs/deployment/
 app.get('/*', function (req, res) {
-    let url = path.join(__dirname, '../client/build', 'index.html');
+    console.log("App Get Build")
+    let url = path.join(__dirname, './client/build', 'index.html');
     if (!url.startsWith('/app/')) // we're on local windows
         url = url.substring(1);
     res.sendFile(url);
