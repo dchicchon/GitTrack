@@ -93,12 +93,12 @@ class App extends Component {
       return (
         <Router>
           <Switch>
-            <Route exact path='/' exact component={SplashPage} />
-            <Route exact path='/login' exact component={Login} />
-            <Route exact path='/signup' exact component={Signup} />
+            <Route path='/' exact component={SplashPage} />
+            <Route path='/login' exact component={Login} />
+            <Route path='/signup' exact component={Signup} />
 
             {/* Go to signup based on cohortID */}
-            <Route exact path='/signup/:id' exact component={CohortSignup} />
+            <Route path='/signup/:id' exact component={CohortSignup} />
 
             <Route component={NoPage} />
 
