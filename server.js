@@ -4,7 +4,7 @@ require("dotenv").config();
 // Require Packages
 const express = require("express");
 const app = express();
-const morgan = require("morgan")
+// const morgan = require("morgan")
 const db = require("./models");
 const routes = require("./routes");
 const passport = require("passport");
@@ -17,11 +17,8 @@ require("./config/passport")(passport)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// app.use(express.static(path.join(__dirname, 'build')));
-
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-    // app.use(express.static("client/build"))
     options = {
         host: process.env.HOST,
         port: 3306,
@@ -56,8 +53,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(morgan('common'))
-
+// app.use(morgan('common'))
 
 // THIS IS REALLY IMPORTANT FOR ROUTING CLIENT SIDE
 // We want to have our app to use the build directory 
