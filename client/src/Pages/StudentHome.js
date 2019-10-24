@@ -18,7 +18,7 @@ class StudentHome extends Component {
 
         // Graph
         studentData: '',
-        dataFormat: 'week',
+        dataFormat: 'month',
         showGraph: false,
         weekData: '',
         monthData: '',
@@ -50,17 +50,17 @@ class StudentHome extends Component {
 
                     let weekData = {
                         total: weekSum,
-                        average: weekSum / 7
+                        average: (weekSum / 7).toFixed(2)
                     }
 
                     let monthData = {
                         total: monthSum,
-                        average: monthSum / 30
+                        average: (monthSum / 30).toFixed(2)
                     }
 
                     let yearData = {
                         total: yearSum,
-                        average: yearSum / 12
+                        average: (yearSum / 12).toFixed(2)
                     }
 
                     this.setState({
@@ -128,102 +128,80 @@ class StudentHome extends Component {
     render() {
         return (
             <div className='mt-3'>
-                <div className='container'>
 
-                    {/* <h1>Welcome {this.props.user.firstName}</h1> */}
+                {/* Make columns */}
 
-                    {this.state.message ?
-                        <Message
-                            message={this.state.message}
-                            color={this.state.color}
-                        />
-                        : ''}
-
-                    {/* Edit Github Username is now in settings */}
-
-                    {/* {this.state.editUsername ?
-                        <div className='form-group'>
-                            <label htmlFor='githubName'>Github Username</label>
-                            {this.props.user.githubUsername ?
-                                <input placeholder={this.props.user.githubUsername} className='form-control' id='githubName' onChange={this.handleInputChange} value={this.state.githubUsername} name='githubUsername' />
-                                :
-                                <input placeholder='New Github Username' className='form-control' id='githubName' onChange={this.handleInputChange} value={this.state.githubUsername} name='githubUsername' />
-                            }
-                            <button type='button' className='btn mt-2 mr-2' onClick={this.submitGithub}>Submit Username</button>
-                            <button type='button' className='btn mt-2' onClick={this.editUsername}>Close</button>
-                        </div> :
-                        <button type='button' className='btn mr-2' onClick={this.editUsername}>Edit Github Username</button>
-                    } */}
-                </div>
                 {this.state.showGraph ?
 
                     <div>
-                        <div className='container'>
-
-                            <h3>Your Contributions</h3>
-                            <h2>Total this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''}{this.state.dataFormat === 'month' ? this.state.monthData.total : ''}{this.state.dataFormat === 'week' ? this.state.weekData.total : ''} </h2>
-                            <h2>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''}{this.state.dataFormat === 'month' ? this.state.monthData.average : ''}{this.state.dataFormat === 'week' ? this.state.weekData.average : ''} </h2>
-
+                        <div className='home-container'>
                             <div className='row'>
-                                <button type='button' className='btn ml-2' onClick={this.changeFormat} value='week'>Weekly</button>
-                                <button type='button' className='btn ml-2' onClick={this.changeFormat} value='month'> Monthly</button>
-                                <button type='button' className='btn ml-2' onClick={this.changeFormat} value='year'>Yearly</button>
 
+                                <div className='col-3'>
+                                    <h3>Your Contributions</h3>
+                                    <p>Total this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''}{this.state.dataFormat === 'month' ? this.state.monthData.total : ''}{this.state.dataFormat === 'week' ? this.state.weekData.total : ''} </p>
+                                    <p>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''}{this.state.dataFormat === 'month' ? this.state.monthData.average : ''}{this.state.dataFormat === 'week' ? this.state.weekData.average : ''} </p>
+                                    <div className='row'>
+                                        <button type='button' className='btn ml-2' onClick={this.changeFormat} value='week'>Weekly</button>
+                                        <button type='button' className='btn ml-2' onClick={this.changeFormat} value='month'> Monthly</button>
+                                        <button type='button' className='btn ml-2' onClick={this.changeFormat} value='year'>Yearly</button>
+
+                                    </div>
+                                </div>
+                                <div className='col-9'>
+                                    <VictoryChart
+                                        axisLabelComponent={<VictoryLabel />}
+                                        label={this.state.dataFormat}
+                                        scale={{ x: "time" }}
+                                        style={{
+                                            axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                            grid: { stroke: 'lightgrey' },
+                                            tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+                                        }}
+
+                                    >
+                                        <VictoryAxis
+                                            axisLabelComponent={<VictoryLabel />}
+                                            label={this.state.dataFormat}
+                                            style={{
+                                                axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                grid: { stroke: 'lightgrey' },
+                                                tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+                                            }}
+                                        />
+                                        <VictoryAxis
+                                            dependentAxis={true}
+                                            axisLabelComponent={<VictoryLabel />}
+                                            label={'Number of Commits'}
+                                            style={{
+                                                axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                grid: { stroke: 'lightgrey' },
+                                                tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+
+                                            }}
+                                        />
+
+                                        <VictoryLine
+                                            interpolation='natural'
+                                            data={this.state.studentData[`${this.state.dataFormat}`]}
+                                            x='date'
+                                            y='count'
+                                            style={{
+                                                data: { stroke: this.state.studentData.color }
+                                            }}
+                                        />
+
+                                    </VictoryChart>
+
+                                </div>
                             </div>
                         </div>
-                        <VictoryChart
-                            // domainPadding={{ y: 20 }}
-                            // padding={50}
-                            axisLabelComponent={<VictoryLabel />}
-                            label={this.state.dataFormat}
-                            scale={{ x: "time" }}
-                            style={{
-                                axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
-                                grid: { stroke: 'lightgrey' },
-                                tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
-                            }}
-
-                        >
-                            <VictoryAxis
-                                axisLabelComponent={<VictoryLabel />}
-                                label={this.state.dataFormat}
-                                style={{
-                                    axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
-                                    grid: { stroke: 'lightgrey' },
-                                    tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
-                                }}
-                            />
-                            <VictoryAxis
-                                dependentAxis={true}
-                                axisLabelComponent={<VictoryLabel />}
-                                label={'Number of Commits'}
-                                style={{
-                                    axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
-                                    grid: { stroke: 'lightgrey' },
-                                    tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
-
-                                }}
-                            />
-
-                            <VictoryLine
-                                interpolation='natural'
-                                data={this.state.studentData[`${this.state.dataFormat}`]}
-                                x='date'
-                                y='count'
-                                style={{
-                                    data: { stroke: this.state.studentData.color }
-                                }}
-                            />
-
-                        </VictoryChart>
                     </div>
                     :
                     <div className="spinner-border text-info" role="status">
                         <span className="sr-only">Loading...</span>
                     </div>
                 }
-
-
 
             </div >
         )
