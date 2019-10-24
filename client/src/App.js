@@ -63,7 +63,7 @@ class App extends Component {
   logout() {
     API.logout()
       .then(res => {
-        window.location.href = '/'
+        window.location.href = '/login'
         // window.location.reload();
       })
   }
@@ -106,49 +106,6 @@ class App extends Component {
         </Router>
       )
     }
-    // return (
-    //   <Router>
-    //     <div>
-
-
-    //       {/* Render Pages based on Login State */}
-    //       {this.state.loggedIn ?
-
-    //         <div>
-    //           <Navbar
-    //             user={this.state.user}
-    //             logout={this.logout}
-    //           />
-
-    //           <div className='container'>
-    //             {/* Render Pages based on userType */}
-    //             {this.state.userType === 'administrator' ?
-    //               <Route path='/' exact component={AdminHome} />
-    //               :
-    //               <div>
-    //                 {this.state.userType === 'instructor' ?
-    //                   < Route path='/' exact component={() => <InstructorHome user={this.state.user} />} />
-    //                   :
-    //                   <Route path='/' exact component={StudentHome} />}
-
-    //               </div>
-
-    //             }
-
-    //           </div>
-    //         </div>
-
-    //         :
-    //         <div className='container' style={{ marginTop: '3rem' }}>
-    //           <Route path='/' exact component={Login} />
-    //           <Route path='/signup' exact component={Signup} />
-
-    //         </div>}
-    //     </div>
-
-
-    //   </Router >
-    // );
   }
 }
 

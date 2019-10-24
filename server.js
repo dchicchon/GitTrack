@@ -60,7 +60,7 @@ app.use(morgan('common'))
 
 
 // THIS IS REALLY IMPORTANT FOR ROUTING CLIENT SIDE
-// We want to have our app use the build directory 
+// We want to have our app to use the build directory 
 app.use(express.static(__dirname + '/client/build'))
 
 // For every url request we send our index.html file to the route
