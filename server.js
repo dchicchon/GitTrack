@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static("client/build"))
+    // app.use(express.static("client/build"))
     options = {
         host: process.env.HOST,
         port: 3306,

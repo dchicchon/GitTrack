@@ -20,7 +20,7 @@ class Settings extends Component {
 
     submitEdit = event => {
         event.preventDefault();
-        if (this.state.editPassword === this.state.editPasswordConfirm || this.state.editPassword === '' && this.state.editPasswordConfirm === '') {
+        if (this.state.editPassword === this.state.editPasswordConfirm) {
             let creds = {
                 id: this.props.user.id,
                 userType: this.props.user.userType,
@@ -29,7 +29,6 @@ class Settings extends Component {
                     lastName: this.state.editLastName,
                     githubUsername: this.state.editGithubUsername,
                     password: this.state.editPassword,
-
                 }
                 // firstName: (this.state.editFirstName ? this.state.editFirstName : this.props.user.firstName),
                 // lastName: (this.state.editLastName ? this.state.editLastName : this.props.user.lastName),

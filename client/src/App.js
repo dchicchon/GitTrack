@@ -51,7 +51,6 @@ class App extends Component {
           this.setState({
             user: res.data.user,
             loggedIn: res.data.loggedIn,
-            // userType: res.data.user.userType
           })
         }
       })
@@ -64,7 +63,6 @@ class App extends Component {
     API.logout()
       .then(res => {
         window.location.href = '/login'
-        // window.location.reload();
       })
   }
 
