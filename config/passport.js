@@ -52,6 +52,7 @@ function promiseToCheck(user) {
                             email: email
                         }
                     }).then(student => {
+                        console.log("Got Response")
                         resolve(student)
                     })
                     break
