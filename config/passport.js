@@ -79,6 +79,8 @@ let createUser = function (user, pass) {
             password: pass,
             userType: user.type
         }
+        console.log("\nData")
+        console.log(data)
     } else {
         data = {
             firstName: user.firstName,

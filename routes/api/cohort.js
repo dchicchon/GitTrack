@@ -2,7 +2,7 @@ const router = require("express").Router();
 const cohortController = require("../../controller/cohortController");
 
 
-router.route("/")
+router.route("/:id")
     .get(cohortController.getInfo)
 
 

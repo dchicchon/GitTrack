@@ -19,12 +19,14 @@ class CohortSignup extends Component {
     // Gets the cohort signup
     componentDidMount() {
         const { id } = this.props.match.params
+        console.log(id)
         API.getCohortInfo(id)
             .then(res => {
+                console.log("Response")
+                console.log(res.data.name)
                 this.setState({
                     cohortName: res.data.name
                 })
-                console.log(this.state.cohortName)
             })
     }
 
@@ -71,7 +73,8 @@ class CohortSignup extends Component {
             <div className='container mt-4 mb-5'>
                 <h1 className='center'>GitTrack</h1>
                 <div className='container col-6 mx-auto'>
-                    <h2 className='col-6'>Sign Up</h2>
+                    {this.state.cohortName ? <h2 className='col-12'>{this.state.cohortName} Sign up</h2> : ''}
+                    {/* <h2 className='col-12'>{this.state.cohortName} Sign Up</h2> */}
                     <form>
                         <div className='row'>
                             <div className="form-group col-6">

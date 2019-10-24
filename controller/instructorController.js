@@ -244,7 +244,8 @@ module.exports = {
         console.log("\nGet Graph")
         let studentList = req.body.students
         let studentData = [];
-        let colors = ['#61dafb', '#f04747', '#ece913', '#ff1493', '#ADFF2F', '#00FA9A', '#F5FFFA']
+        // Colors so far: LightBlue, LightRed, LightYellow, LightPink, LightGreen, Turquoise, NearWhiteGreen,LightOrange, Blue  
+        let colors = ['#61dafb', '#f04747', '#ece913', '#ff1493', '#ADFF2F', '#00FA9A', '#F5FFFA', "#fa8a11", "#3083f0"]
 
 
         for (let i = 0; i < studentList.length; i++) {
