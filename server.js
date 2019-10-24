@@ -60,11 +60,22 @@ app.use(passport.session());
 app.use(express.static(__dirname + '/client/build'))
 
 // For every url request we send our index.html file to the route
-app.get("/*", (req, res) => {
-    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
-
 app.use(routes)
+
+if (process.env.NODE_ENV === 'production') {
+    // app.use([someProductionMiddleware()])
+    app.use(express.static('client/build'));
+    const path = require('path');
+    app.get('/*', (req, res) => {
+        res.sendFile(
+            path.resolve(__dirname, 'client', 'build', 'index.html')
+        );
+    });
+}
+// app.get("/*", (req, res) => {
+//     res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+// });
+
 
 
 db.sequelize.sync({ force: false }).then(() => {
