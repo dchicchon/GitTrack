@@ -58,7 +58,6 @@ class Settings extends Component {
             <div className='container'>
                 <h1>Settings</h1>
                 {this.state.message ? this.state.message : ''}
-                <h5></h5>
                 <div className='form-group'>
                     <label htmlFor='editFirstName'>First Name</label>
                     <input className='form-control' onChange={this.handleInputChange} id='editFirstName' name='editFirstName' value={this.state.editFirstName} placeholder={this.props.user.firstName} />

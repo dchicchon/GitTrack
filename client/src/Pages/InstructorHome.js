@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 // Components
-import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine, VictoryLegend, VictoryVoronoiContainer, VictoryTooltip } from 'victory'
+import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine, VictoryTooltip } from 'victory'
 // import CohortStudentList from '../Components/CohortStudentList';
 import AddStudent from '../Components/AddStudent';
 import AddCohort from '../Components/AddCohort';

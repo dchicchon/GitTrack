@@ -17,7 +17,7 @@ require("./config/passport")(passport)
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, 'build')));
+// app.use(express.static(path.join(__dirname, 'build')));
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
