@@ -22,7 +22,8 @@ class StudentHome extends Component {
         showGraph: false,
         weekData: '',
         monthData: '',
-        yearData: ''
+        yearData: '',
+        loading: true
     }
 
     componentDidMount() {
@@ -155,6 +156,7 @@ class StudentHome extends Component {
                     } */}
                 </div>
                 {this.state.showGraph ?
+
                     <div>
                         <div className='container'>
 
@@ -170,8 +172,17 @@ class StudentHome extends Component {
                             </div>
                         </div>
                         <VictoryChart
-                            domainPadding={{ y: 20 }}
-                            padding={50}
+                            // domainPadding={{ y: 20 }}
+                            // padding={50}
+                            axisLabelComponent={<VictoryLabel />}
+                            label={this.state.dataFormat}
+                            scale={{ x: "time" }}
+                            style={{
+                                axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                grid: { stroke: 'lightgrey' },
+                                tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+                            }}
+
                         >
                             <VictoryAxis
                                 axisLabelComponent={<VictoryLabel />}
@@ -207,8 +218,8 @@ class StudentHome extends Component {
                         </VictoryChart>
                     </div>
                     :
-                    <div className='container'>
-                        <h2>Loading...</h2>
+                    <div className="spinner-border text-info" role="status">
+                        <span className="sr-only">Loading...</span>
                     </div>
                 }
 

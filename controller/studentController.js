@@ -33,116 +33,123 @@ module.exports = {
 
     // This will retrieve the users data through an api call and format it appropriately before sending back the data
     getData: (req, res) => {
-        console.log("\nGet Data")
-        console.log(req.params.username)
         axios.get(`https://github-contributions-api.now.sh/v1/${req.params.username}`)
             .then(student => {
 
-
                 let currentDate = moment().format('YYYY-MM-DD');
                 let currentYear = moment(currentDate).year();
-                // let currentMonth = moment(currentDate).month();
-                let currentWeek = moment(currentDate).week();
-                // let currentDay = moment(currentDate).date();
+                let currentMonth = moment(currentDate).month();
+                // let currentWeek = moment(currentDate).week();
 
-                let thisMonth = currentDate.slice(0, 7);
+                // let thisMonth = currentDate.slice(0, 7);
 
                 let weeklyContributions = [];
                 let monthlyContributions = [];
                 let yearlyContributions = [];
 
                 // Sum for the current month
+                // let monthSum = 0;
+                // let studentMonth = 11;
+
+                let pastWeek = [];
+
+                // Current Day
+                let dayOfMonth = moment(currentDate).date()
+                for (let x = 0; x < 7; x++) {
+                    let dayEntry = dayOfMonth - x
+                    pastWeek.push(dayEntry)
+                }
+
                 let monthSum = 0;
-                let studentMonth = 11;
+                let weekSum = 0;
+                let studentMonth = 12;
 
-                // let weekSum = 0;
-                // let studentWeek = 52;
+                let contributions = student.data.contributions
 
-                // console.log(student)
 
                 // Iterate through list of contributions
                 // console.log(moment(student.data.contributions[0].date).week())
 
-                for (let i = 0; i < student.data.contributions.length; i++) {
+                for (let i = 0; i < contributions.length; i++) {
+
                     // Date for individual contributions
+                    let studentDate = contributions[i].date
+                    let contributionMonth = moment(studentDate).month();
+                    let contributionYear = moment(studentDate).year();
+                    let contribution = contributions[i]
 
+                    if (moment(contribution.date).year() == currentYear) {
 
-                    let studentDate = student.data.contributions[i].date;
+                        // WEEKLY FILTER
+                        // This will get information from the past 7 days
+                        // Leverage the current day of the month and gather the previous 7 days
+                        // There should be an array of dates of the past 7 days
 
-
-                    // Only get the month e.g. '2019/09' is 7 characters
-                    let monthDate = studentDate.slice(0, 7);
-
-                    // WEEKLY FILTER
-                    // Condition is specifying this week in terms of this Year, and the current week for the year i.e. the current week === 32 which is the 32nd week of the year
-
-                    if (moment(studentDate).week() === currentWeek && moment(studentDate).weekYear() === currentYear) {
-                        let contribution = student.data.contributions[i]
-                        console.log(contribution)
-                        let thisDate = {
-                            date: parseInt(moment(student.data.contributions[i].date).date()),
-                            count: parseInt(contribution.count)
+                        if (pastWeek.includes(moment(studentDate).date()) && contributionMonth === currentMonth && contributionYear === currentYear) {
+                            let thisDate = {
+                                date: moment(contribution.date).format("MM/DD"),
+                                count: parseInt(contribution.count)
+                            }
+                            // console.log(thisDate)
+                            weeklyContributions.push(thisDate)
                         }
-                        weeklyContributions.push(thisDate)
-                    }
 
-                    // Monthly Filter
-                    // If our month is equal to the contributions date
-                    if (monthDate === thisMonth) {
-                        let contribution = student.data.contributions[i]
-                        let thisDate = {
-                            date: parseInt(moment(student.data.contributions[i].date).date()),
-                            count: parseInt(contribution.count)
+                        // MONTHLY FILTER
+                        // This will include the last 30 days
+
+                        let a = moment(currentDate)
+                        let b = moment(studentDate)
+
+                        // Get differences to be less than 31 and greater than 0
+                        if (a.diff(b, 'days') <= 30 && a.diff(b, 'days') > 0) {
+
+                            if (a.diff(b, 'days') % 5 == 0) {
+                                let thisWeek = {
+                                    date: moment(contribution.date).format("MM/DD"),
+                                    count: weekSum
+                                }
+                                monthlyContributions.push(thisWeek)
+
+                                weekSum = 0
+                            } else {
+                                weekSum += contribution.count
+                            }
                         }
-                        monthlyContributions.push(thisDate)
-                    }
+                        // YEARLY FILTER
+                        // Lets have a for loop to count the number of commits per month
 
-                    // Yearly Filter
-                    // We can choose between putting the sum counts on weeks or months
-                    // E.g. January had 43 commits, February had 83 
-                    // OR Week 1: 10 commits, Week 2: 23 commits, Week 3: 13 commits
-                    // Currently this grabs every individual date this year.
-                    if (moment(studentDate).year() === currentYear && moment(studentDate).week() > 1) {
-                        let contribution = student.data.contributions[i]
-                        monthSum += contribution.count
-                        // weekSum += contribution.count
+                        // If the contribution month no longer equals the student month
+                        if ((moment(contribution.date).month() + 1) != studentMonth || i === 364) {
 
-                        // If the contribution month is no longer equal to the student month, we will change its value
-                        // Current Bug: Does not include the month of January
+                            let monthName = moment(contributions[i - 1].date).format("MMM")
 
-                        // if (moment(contribution.date).week() !== studentWeek) {
-                        //     let thisWeek = {
-                        //         date: studentWeek,
-                        //         count: weekSum
-                        //     }
-                        //     console.log(thisWeek)
-                        //     weekSum = 0;
-
-                        //     yearlyContributions.push(thisWeek)
-                        //     studentWeek--
-                        // }
-
-                        if (moment(contribution.date).month() !== studentMonth || i === 364) {
                             let thisMonth = {
-                                date: studentMonth,
+                                date: monthName,
                                 count: monthSum
                             }
+
                             monthSum = 0
                             yearlyContributions.push(thisMonth)
                             studentMonth--
+
+                        }
+                        // if contribution is equal to this month
+                        else {
+                            monthSum += contribution.count
                         }
                     }
 
                 }
 
+
+
                 let newStudent = {
                     color: '#61dafb',
-                    week: weeklyContributions,
-                    month: monthlyContributions,
-                    year: yearlyContributions
+                    week: weeklyContributions.reverse(),
+                    month: monthlyContributions.reverse(),
+                    year: yearlyContributions.reverse()
                 }
                 res.json(newStudent)
-                // }
 
             })
 

@@ -461,15 +461,7 @@ class InstructorHome extends Component {
                                                 </div>
 
                                             </div>
-                                            <VictoryChart
-                                            // containerComponent={
-                                            // <VictoryVoronoiContainer
-                                            // labels={({ datum }) => `${datum.count}, ${datum.date} `}
-                                            // />}
-
-                                            // domainPadding={{ y: 20 }}
-                                            // padding={50}
-                                            >
+                                            <VictoryChart>
                                                 <VictoryAxis
                                                     axisLabelComponent={<VictoryLabel />}
                                                     label={this.state.dataFormat}
@@ -492,19 +484,6 @@ class InstructorHome extends Component {
                                                     }}
 
                                                 />
-                                                {/* <VictoryLegend
-                                                x={150}
-                                                y={50}
-                                                title='Legend'
-                                                centerTitle
-                                                orientation='horizontal'
-                                                gutter={20}
-                                                itemsPerRow={4}
-                                                // borderPadding={0}
-                                                style={{ border: { stroke: '#61dafb' }, title: { fontSize: 12, stroke: 'white', letterSpacing: '1px' }, labels: { fontSize: 9, stroke: '#61dafb', letterSpacing: '1px' }, names: { fontSize: 9, strokeWidth: 2, stroke: 'white', letterSpacing: '1px' } }}
-                                                data={this.state.studentLegend}
-                                                height={10}
-                                            /> */}
 
                                                 {/* Add a feature that will allow instructors to hide lines on student click */}
                                                 {this.state.studentData ?

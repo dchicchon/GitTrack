@@ -124,29 +124,6 @@ module.exports = {
                         }
                     }
 
-                    // for (let i = 0; i < thisYear.length; i++) {
-
-                    //     console.log(thisYear[i])
-                    //     let thisDate = {
-                    //         date: thisYear[i].date,
-                    //         count: thisYear[i].count
-                    //     }
-                    //     console.log(thisDate)
-
-                    //     if (moment(thisDate.date)) {
-                    //         weeklyContributions.push(thisDate)
-                    //     }
-
-                    //     if (thisDate.date) {
-                    //         monthlyContributions.push(thisDate)
-                    //     }
-
-                    //     if (moment(thisDate.date)) {
-                    //         yearlyContributions.push(thisDate)
-                    //     }
-
-                    // }
-
                     let studentData = {
                         student: dbStudent[0].dataValues,
                         contributions: {
@@ -165,21 +142,15 @@ module.exports = {
 
     // Get the students from the cohort
     getStudents: (req, res) => {
-        console.log("\nGet Students")
-        // console.log(req.params.id)
         db.CohortStudent.findAll({
             where: {
                 cohortID: req.params.id
             }
         }).then(dbCohortStudent => {
-            // console.log(dbCohortStudent)
-            console.log("\nRow Datavalues")
             let studentID = []
             for (let i = 0; i < dbCohortStudent.length; i++) {
-                // console.log(dbCohortStudent[i].dataValues)
                 studentID.push(dbCohortStudent[i].dataValues.studentID)
             }
-            // console.log(studentID)
             if (studentID.length === 0) {
                 res.json(studentID)
             } else {
@@ -241,7 +212,6 @@ module.exports = {
     },
 
     getGraph: (req, res) => {
-        console.log("\nGet Graph")
         let studentList = req.body.students
         let studentData = [];
         // Colors so far: LightBlue, LightRed, LightYellow, LightPink, LightGreen, Turquoise, NearWhiteGreen,LightOrange, Blue, HotPink, Purple  
@@ -269,12 +239,6 @@ module.exports = {
                         let currentYear = moment(currentDate).year();
                         let currentMonth = moment(currentDate).month();
                         let currentWeek = moment(currentDate).week();
-                        // let currentDay = moment(currentDate).date();
-
-                        // let str = 'in days'
-                        // let regex = new RegExp(`in`);
-
-
 
                         // Format Data to day count
                         let thisMonth = currentDate.slice(0, 7);
@@ -285,7 +249,7 @@ module.exports = {
 
                         // The past 7 days
                         let pastWeek = [];
-                        let pastMonth = [];
+                        // let pastMonth = [];
 
                         // Current Day
                         let dayOfMonth = moment(currentDate).date()
@@ -317,7 +281,7 @@ module.exports = {
                             let studentDate = contributions[j].date
                             let contributionMonth = moment(studentDate).month();
                             let contributionYear = moment(studentDate).year();
-                            let monthDate = studentDate.slice(0, 7);
+                            // let monthDate = studentDate.slice(0, 7);
                             let contribution = contributions[j]
 
                             if (moment(contribution.date).year() == currentYear) {
