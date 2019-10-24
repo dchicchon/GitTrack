@@ -22,9 +22,10 @@ function AddStudent({ close, cohortID, handleInputChange, inviteMethod, inviteVi
         selection.removeAllRanges();
         range.selectNode(span)
         selection.addRange(range)
-
+        
         // Finally copy selected
         window.document.execCommand('copy')
+        span.parentNode.removeChild(span)
     }
 
     return (
