@@ -1,11 +1,31 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 function AddStudent({ close, cohortID, handleInputChange, inviteMethod, inviteVia, studentEmail, submitStudent }) {
 
 
     let btnStyle1 = inviteVia === 'link' ? 'active btn' : 'btn'
     let btnStyle2 = inviteVia === 'email' ? 'active btn' : 'btn'
+    let cohortLink = `http://www.gittrack.ml/signup/${cohortID}`
+
+    // Used source code https://github.com/feross/clipboard-copy/blob/master/index.js
+    let copy = () => {
+
+        // Create element
+        var span = document.createElement('span')
+        span.textContent = cohortLink
+        document.body.appendChild(span)
+
+        // Grab Span
+        let selection = window.getSelection();
+        let range = window.document.createRange();
+        selection.removeAllRanges();
+        range.selectNode(span)
+        selection.addRange(range)
+
+        // Finally copy selected
+        window.document.execCommand('copy')
+    }
 
     return (
         <div className='add-modal col-11 mt-5'>
@@ -22,7 +42,8 @@ function AddStudent({ close, cohortID, handleInputChange, inviteMethod, inviteVi
                     <br />
                     <p>Cohort Signup Link</p>
                     <div className='cohort-link'>
-                        <Link to={{ pathname: '/signup/' + cohortID }}>http://www.gittrack.ml/signup/{cohortID}</Link>
+                        <p value={cohortLink}>{cohortLink}</p>
+                        <button className='btn' onClick={copy}>Copy to Clipboard</button>
                         {/* <Link to={{ pathname: '/signup/' + cohortID }}>http://localhost:3000/signup/{cohortID}</Link> */}
 
                     </div>
