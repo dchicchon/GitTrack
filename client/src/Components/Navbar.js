@@ -23,8 +23,14 @@ function Navbar(props) {
 
                 </ul>
             </div>
+            <div>
+                <a className='nav-item mr-2' rel='noopener noreferrer' target="_blank" href='https://github.com/dchicchon/GitTrack'>GitHub</a>
+            </div>
 
-            {/* <li className="nav-item"> */}
+            <div>
+                <Link className='nav-item mr-2' to='/'>Home</Link>
+            </div>
+
             <div className='dropdown show mr-2'>
 
                 {/* having an issue with user prop  */}

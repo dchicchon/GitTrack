@@ -105,8 +105,9 @@ export default {
         return axios.put("/api/student/ghUsername", creds)
     },
 
-    getMyData: (username) => {
-        return axios.get("/api/student/" + username)
+    // Switch with ID
+    getMyData: id => {
+        return axios.get("/api/student/" + id)
     }
 
 }

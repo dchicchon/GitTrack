@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 // Components
-import Message from '../Components/Message';
+// import Message from '../Components/Message';
 import { VictoryChart, VictoryAxis, VictoryLine, VictoryLabel } from 'victory';
 
 // Utils
@@ -27,8 +27,11 @@ class StudentHome extends Component {
     }
 
     componentDidMount() {
+        // Student Home should be checking the params to return back an id for data
         // Get Student commits for this week
-        API.getMyData(this.props.user.githubUsername)
+
+        let { id } = this.props.user || this.props.match.params
+        API.getMyData(id)
             .then(res => {
                 if (res.data) {
                     console.log(res.data)
@@ -75,7 +78,11 @@ class StudentHome extends Component {
                 }
 
             })
+
     }
+
+
+
 
     // State Change Functions
     handleInputChange = event => {
@@ -138,14 +145,17 @@ class StudentHome extends Component {
                             <div className='row'>
 
                                 <div className='col-3'>
-                                    <h3>Your Contributions</h3>
+                                    <h3>{this.state.studentData.name}</h3>
+                                    <h4>Contributions</h4>
                                     <p>Total this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''}{this.state.dataFormat === 'month' ? this.state.monthData.total : ''}{this.state.dataFormat === 'week' ? this.state.weekData.total : ''} </p>
                                     <p>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''}{this.state.dataFormat === 'month' ? this.state.monthData.average : ''}{this.state.dataFormat === 'week' ? this.state.weekData.average : ''} </p>
+
+                                    {/* Get data from all of cohort and sort what is the ranking of this individual in the cohort in terms of commits */}
+                                    <p>Cohort Ranking: #5</p>
                                     <div className='row'>
                                         <button type='button' className='btn ml-2' onClick={this.changeFormat} value='week'>Weekly</button>
                                         <button type='button' className='btn ml-2' onClick={this.changeFormat} value='month'> Monthly</button>
                                         <button type='button' className='btn ml-2' onClick={this.changeFormat} value='year'>Yearly</button>
-
                                     </div>
                                 </div>
                                 <div className='col-9'>

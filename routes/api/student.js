@@ -4,7 +4,8 @@ const studentController = require("../../controller/studentController");
 router.route("/ghUsername")
     .put(studentController.editGithubUsername)
 
-router.route("/:username")
+// Switch with id
+router.route("/:id")
     .get(studentController.getData)
-    
+
 module.exports = router

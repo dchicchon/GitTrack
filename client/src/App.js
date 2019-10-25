@@ -16,7 +16,8 @@ import InstructorHome from './Pages/InstructorHome';
 import StudentHome from './Pages/StudentHome';
 import Settings from './Pages/Settings';
 
-import StudentProfile from './Components/StudentProfile';
+// Student Profile now moved to StudentHome
+// import StudentProfile from './Components/StudentProfile';
 
 // No Page
 import NoPage from './Pages/NoPage';
@@ -76,12 +77,22 @@ class App extends Component {
           <Navbar user={this.state.user} logout={this.logout} />
           <Switch>
             {this.state.userType === 'administrator' ? <Route path='/' exact component={() => <AdminHome user={this.state.user} />} /> : ''}
-            {this.state.userType === 'instructor' ? <Route path='/' exact component={() => <InstructorHome user={this.state.user} />} /> : ''}
+
+            {/* Instructor Routes */}
+            {this.state.userType === 'instructor' ?
+              <Route path='/' exact component={() => <InstructorHome user={this.state.user} />} />
+              // <Route path=''
+              : ''
+            }
+
+            {this.state.userType === 'student' ? <Route path='/' exact component={() =>
+              <StudentHome user={this.state.user} />} />
+              : ''
+            }
 
             {/* Path for student profile based on it */}
-            <Route exact path='/student/:id' exact component={StudentProfile} />
+            <Route exact path='/student/:id' exact component={StudentHome} />
 
-            {this.state.userType === 'student' ? <Route path='/' exact component={() => <StudentHome user={this.state.user} />} /> : ''}
             <Route exact path='/settings' exact component={() => <Settings user={this.state.user} />} />
             <Route component={NoPage} />
           </Switch>
