@@ -307,7 +307,7 @@ class AdminHome extends Component {
     render() {
         return (
             <div className='mt-5'>
-                
+
 
                 <div className='container'>
                     {/* <h1>Welcome {this.props.user.firstName}</h1> */}
@@ -329,6 +329,7 @@ class AdminHome extends Component {
                             accountCreate={this.accountCreate}
                             message={this.state.message}
                             color={this.state.color}
+                            close={this.accountControl}
                         /> : ''}
 
                     {/* Rendered if true */}

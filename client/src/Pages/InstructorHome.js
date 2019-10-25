@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 // Components
-import { VictoryChart, VictoryAxis, VictoryLabel, VictoryLine, VictoryTooltip } from 'victory'
+import { VictoryChart, VictoryContainer, VictoryAxis, VictoryLabel, VictoryLine, VictoryTooltip } from 'victory'
 // import CohortStudentList from '../Components/CohortStudentList';
 import AddStudent from '../Components/AddStudent';
 import AddCohort from '../Components/AddCohort';
@@ -356,7 +356,7 @@ class InstructorHome extends Component {
                     {/* This row should contain cohort list and respective students */}
                     <div className='row mb-2'>
 
-                        <div className='col-3'>
+                        <div className='col-2'>
 
                             <h3>Cohorts <span className='add' onClick={this.createCohort}>+</span></h3>
 
@@ -436,7 +436,7 @@ class InstructorHome extends Component {
                             {/* If I want to add student. Depends on addStudent State */}
 
                         </div>
-                        <div className='col-9'>
+                        <div className='col-10'>
                             {this.state.loading ?
                                 <div className="spinner-border text-info" role="status">
                                     <span className="sr-only">Loading...</span>
@@ -444,32 +444,28 @@ class InstructorHome extends Component {
                             {this.state.showList ?
                                 <div>
                                     <h2>{this.state.currentCohortName}</h2>
-                                    <div className='mt-3'>
+                                    {/* On button click, add a class that changes it's style */}
+                                    <FormatList
+                                        format={this.state.dataFormat}
+                                        changeFormat={this.changeFormat}
+                                    />
+                                    <div>
                                         <div>
-                                            <div className='row'>
-                                                <div className='col-4'>
-
-                                                    <h3>Class Progress</h3>
-                                                    <p>Commits this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''} {this.state.dataFormat === 'month' ? this.state.monthData.total : ''} {this.state.dataFormat === 'week' ? this.state.weekData.total : ''}</p>
-                                                    <p>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''} {this.state.dataFormat === 'month' ? this.state.monthData.average : ''} {this.state.dataFormat === 'week' ? this.state.weekData.average : ''}</p>
-
-                                                    {/* On button click, add a class that changes it's style */}
-                                                    <FormatList
-                                                        format={this.state.dataFormat}
-                                                        changeFormat={this.changeFormat}
-                                                    />
-                                                </div>
-
-                                            </div>
-                                            <VictoryChart>
+                                            <VictoryChart
+                                                domainPadding={20}
+                                                height={600}
+                                                width={1050}
+                                                containerComponent={<VictoryContainer responsive={false} />}
+                                                style={{ parent: { maxWidth: "100%" } }}
+                                            >
                                                 <VictoryAxis
                                                     axisLabelComponent={<VictoryLabel />}
                                                     label={this.state.dataFormat}
                                                     scale={{ x: "time" }}
                                                     style={{
-                                                        axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                        axisLabel: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: 'white', fontSize: 30 },
                                                         grid: { stroke: 'lightgrey' },
-                                                        tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+                                                        tickLabels: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: '#61dafb ', fontSize: 25 }
                                                     }}
                                                 />
                                                 <VictoryAxis
@@ -477,9 +473,9 @@ class InstructorHome extends Component {
                                                     axisLabelComponent={<VictoryLabel />}
                                                     label={'Number of Commits'}
                                                     style={{
-                                                        axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                        axisLabel: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: 'white', fontSize: 30 },
                                                         grid: { stroke: 'lightgrey' },
-                                                        tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+                                                        tickLabels: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: '#61dafb ', fontSize: 25 }
 
                                                     }}
 
@@ -495,11 +491,9 @@ class InstructorHome extends Component {
                                                                 key={i}
                                                                 labelComponent={<VictoryTooltip />}
                                                                 labels={() => `${student.author.firstName}`}
-                                                                // labels={({ datum }) => `${datum.count}, ${datum.date}`}
                                                                 data={student[`${this.state.dataFormat}`]}
-                                                                // data={this.state.dataFormat === 'monthly' ? user.monthly : '' || this.state.dataFormat === 'weekly' ? user.weekly : '' || this.state.dataFormat === 'yearly' ? user.yearly : ''}
                                                                 style={{
-                                                                    data: { stroke: student.color, strokeWidth: 0.8 }
+                                                                    data: { stroke: student.color, strokeWidth: 1.5 }
                                                                 }}
                                                                 x='date'
                                                                 y='count'
@@ -509,6 +503,17 @@ class InstructorHome extends Component {
                                                     : ''}
 
                                             </VictoryChart>
+                                            <div className='row'>
+                                                <div className='col-4'>
+
+                                                    <h3>Class Progress</h3>
+                                                    <p>Commits this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''} {this.state.dataFormat === 'month' ? this.state.monthData.total : ''} {this.state.dataFormat === 'week' ? this.state.weekData.total : ''}</p>
+                                                    <p>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''} {this.state.dataFormat === 'month' ? this.state.monthData.average : ''} {this.state.dataFormat === 'week' ? this.state.weekData.average : ''}</p>
+
+
+                                                </div>
+
+                                            </div>
                                         </div>
 
                                     </div>

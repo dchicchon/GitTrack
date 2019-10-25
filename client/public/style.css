@@ -138,6 +138,7 @@ h1,h2,h3,h5,h6 {
 .navbar {
     background:var(--navColor) !important;
     color: var(--bodyTextColor)  !important;
+    padding: 0.2rem 1rem !important;
 }
 
 .nav-item {
