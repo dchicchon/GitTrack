@@ -452,7 +452,7 @@ class InstructorHome extends Component {
                                     <div>
                                         <div>
                                             <VictoryChart
-                                                domainPadding={20}
+                                                domainPadding={30}
                                                 height={600}
                                                 width={1050}
                                                 containerComponent={<VictoryContainer responsive={false} />}
@@ -463,19 +463,26 @@ class InstructorHome extends Component {
                                                     label={this.state.dataFormat}
                                                     scale={{ x: "time" }}
                                                     style={{
-                                                        axisLabel: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: 'white', fontSize: 30 },
+                                                        axisLabel: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: 'white', fontSize: 20 },
                                                         grid: { stroke: 'lightgrey' },
-                                                        tickLabels: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: '#61dafb ', fontSize: 25 }
+                                                        tickLabels: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: '#61dafb ', fontSize: 20 }
                                                     }}
                                                 />
                                                 <VictoryAxis
                                                     dependentAxis={true}
                                                     axisLabelComponent={<VictoryLabel />}
                                                     label={'Number of Commits'}
+                                                    // padding={1000}
+                                                    // This moves the y-axis label and ticks
+                                                    // offsetX={25}
+                                                    fixLabelOverlap={true}
+                                                    // Does nothing
+                                                    // singleQuandrantDomainPadding={true}
+                                                    // width={100}
                                                     style={{
-                                                        axisLabel: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: 'white', fontSize: 30 },
+                                                        axisLabel: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: 'white', fontSize: 20, margin: '30px' },
                                                         grid: { stroke: 'lightgrey' },
-                                                        tickLabels: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: '#61dafb ', fontSize: 25 }
+                                                        tickLabels: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: '#61dafb ', fontSize: 20, marginBlock: '20px' }
 
                                                     }}
 

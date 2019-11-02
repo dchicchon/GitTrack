@@ -5,40 +5,40 @@ import Message from './Message';
 
 // This will have many tabs that will display depending on what I click
 
-function openCity(event, accountType) {
+function newTab(event, accountType) {
     console.log(event.target)
     console.log(accountType)
 }
 
 function AccountModal(props) {
-   
+
     return (
 
         <div className='container' style={{ width: '50%', border: '1px solid #1b1e22', background: '#202329', padding: '1rem' }}>
-         <div className='row'>
-    <h1>Create Account</h1>
+            <div className='row'>
+                <h1>Create Account</h1>
 
-    <Message
-        message={props.message}
-        color={props.color}
-    />
-        <div className='close' onClick={props.close}>x</div>
+                <Message
+                    message={props.message}
+                    color={props.color}
+                />
+                <div className='close' onClick={props.close}>x</div>
 
             </div >
 
 
-    {/* Tab Links */ }
-    <div className='tab'>
-        <button className='tablink' onClick={openCity(event, 'administrator')}>Administrator</button>
-        <button className='tablink' onClick={openCity(event, 'instructor')}>Instructor</button>
-        <button className='tablink' onClick={openCity(event, 'admin')}>Student</button>
+            {/* Tab Links */}
+            <div className='tab'>
+                <button className='tablink' onClick={() => newTab()}>Administrator</button>
+                <button className='tablink' onClick={() => newTab()}>Instructor</button>
+                <button className='tablink' onClick={() => newTab()}>Student</button>
 
-    </div>
+            </div>
 
-    {/* Tab Content */ }
+            {/* Tab Content */}
 
-    {/* Form should mostly stay the same? Except for students */ }
-    {/* <form>
+            {/* Form should mostly stay the same? Except for students */}
+            <form>
                 <div className='row'>
                     <div className="form-group col-6">
                         <label htmlFor="firstName">First Name</label>
@@ -70,7 +70,7 @@ function AccountModal(props) {
                 <div className='row'>
                     <button onClick={props.accountCreate} type="submit" className="btn btn-primary col-4 center-signup">Submit</button>
                 </div>
-            </form> */}
+            </form>
 
         </div >
     )
