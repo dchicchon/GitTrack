@@ -160,29 +160,29 @@ module.exports = () => {
                 else {
 
                     // If the email is not in our database and the email was validated, then we will send a confirmation email
-                    let capitalizeName = req.body.firstName.replace(/^./, req.body.firstName[0].toUpperCase())
+                    // let capitalizeName = req.body.firstName.replace(/^./, req.body.firstName[0].toUpperCase())
 
-                    const data = {
-                        from: "Daniel <danielchicchon@gmail.com>",
-                        to: `${req.body.email}`,
-                        subject: "Hello from GitTrack",
-                        text:
-                            `
-                            Welcome to GitTrack ${capitalizeName},
+                    // const data = {
+                    //     from: "Daniel <danielchicchon@gmail.com>",
+                    //     to: `${req.body.email}`,
+                    //     subject: "Hello from GitTrack",
+                    //     text:
+                    //         `
+                    //         Welcome to GitTrack ${capitalizeName},
 
-                            Click on the link below to start tracking!  
+                    //         Click on the link below to start tracking!  
 
-                            www.gittrack.ml
+                    //         www.gittrack.ml
 
-                            Take care!
-                            Daniel
-                            `
-                    };
+                    //         Take care!
+                    //         Daniel
+                    //         `
+                    // };
 
                     // This function sends the message to the user
-                    mg.messages().send(data, function (error, body) {
-                        console.log(body);
-                    });
+                    // mg.messages().send(data, function (error, body) {
+                    //     console.log(body);
+                    // });
                     let newUser = createUser(req.body, passwordHash)
                     if (newUser) return done(null, newUser)
                     return done(null, false)

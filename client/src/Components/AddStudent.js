@@ -29,7 +29,7 @@ function AddStudent({ close, cohortID, handleInputChange, inviteMethod, inviteVi
     }
 
     return (
-        <div className='add-modal col-11 mt-5'>
+        <div className='add-modal mt-5'>
             <div className='row'>
                 <div className='btn-group' role='group' aria-label='Format'>
                     <button type='button' className={btnStyle1} onClick={inviteMethod} value='link' >Link</button>

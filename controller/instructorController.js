@@ -197,6 +197,7 @@ module.exports = {
 
     },
 
+    // Remove student from the cohort but should then return data like in the graph
     removeStudent: (req, res) => {
         console.log("\nParams ID")
         console.log(req.params.id)
@@ -207,7 +208,7 @@ module.exports = {
         }).then(dbCohortStudent => {
             console.log("\nStudent Removed")
             console.log(dbCohortStudent)
-            res.json(dbCohortStudent)
+            res.json(dbCohortStudent)   
         })
     },
 

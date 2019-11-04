@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 // Components
-import { VictoryChart, VictoryContainer, VictoryAxis, VictoryLabel, VictoryLine, VictoryTooltip } from 'victory'
 // import CohortStudentList from '../Components/CohortStudentList';
+import { VictoryChart, VictoryContainer, VictoryAxis, VictoryLabel, VictoryLine, VictoryTooltip } from 'victory';
+import ContextMenu from '../Components/ContextMenu';
 import AddStudent from '../Components/AddStudent';
 import AddCohort from '../Components/AddCohort';
 
@@ -39,7 +40,8 @@ class InstructorHome extends Component {
         cohortList: '',
 
         // Getting Student List
-        studentList: '',
+        // studentList: '',
+        // loadingStudents: true,
 
         // Graph
         showGraph: false,
@@ -74,6 +76,14 @@ class InstructorHome extends Component {
             [name]: value
         });
     }
+
+    // openMenu = event => {
+    //     console.log("Handle Menu")
+    //     let { id } = event.target
+    //     console.log(id)
+    //     let item = document.getElementById(id)
+    //     console.log(item)
+    // }
 
     // Cohort Functions
     // ==================================================================
@@ -131,6 +141,7 @@ class InstructorHome extends Component {
             .then(res => {
 
 
+                // If there are no students in the cohort
                 if (res.data.length === 0) {
                     this.setState({
                         showList: true,
@@ -152,7 +163,7 @@ class InstructorHome extends Component {
 
                 else {
 
-
+                    // Get a list of students that have github username submitted
                     let list = {
                         students: res.data.filter(student => student.githubUsername !== '')
                     }
@@ -268,6 +279,7 @@ class InstructorHome extends Component {
         })
     }
 
+    // Invite student via email or via link
     inviteMethod = event => {
         let { value } = event.target
         this.setState({
@@ -275,69 +287,128 @@ class InstructorHome extends Component {
         })
     }
 
-    // Will will an invite to the student with a particular email
-    // The invite should contain a link that will send the student to a form
-    // That they can fill out for a particular cohort
-
-    // SHOULD NOT CREATE STUDENT IN DATABASE
-    // ONLY STUDENT SIGNING UP FOR COHORT WILL CREATE STUDENT
-
-    submitStudent = event => {
-        event.preventDefault();
-        // console.log(this.state.studentFirstName)
-        // console.log(this.state.studentLastName)
-
-        let creds = {
-            // firstName: this.state.studentFirstName,
-            // lastName: this.state.studentLastName,
-            email: this.state.studentEmail,
-            cohortID: this.state.currentCohort
-        }
-
-        console.log(creds)
-        // API.studentCreate(creds)
-        // .then(res => {
-        // console.log("Invited Student")
-        // console.log(res.data)
-
-        // API.cohortStudentList(this.state.currentCohort)
-        // .then(res => {
-        // console.log("Updated Cohort Student List")
-        // console.log(res.data)
-        // this.setState({
-        // studentFirstName: '',
-        // studentLastName: '',
-        // studentEmail: '',
-        // studentList: res.data,
-        // showList: true,
-        // currentCohort: this.state.currentCohort,
-        // addStudent: false
-        // })
-        // })
-        // }
-
-        // )
-
-    }
-
-    handleRemoveStudent = id => {
+    // This should remove the student from the cohort and not delete the student entirely and also should
+    // Re-render the graph without the student
+    handleRemoveStudent = (event) => {
         console.log("Remove Student")
-        console.log(id)
-        API.studentRemove(id)
+        let { id } = event.target;
+        let numID = parseInt(id)
+        console.log(numID)
+        this.setState({
+            loading: true,
+            showList: false
+        })
+
+        // Remove student from cohort
+        API.studentRemove(numID)
             .then(res => {
                 console.log("Student Removed")
                 console.log(res.data)
-                API.cohortStudentList(this.state.currentCohort)
-                    .then(res => {
-                        console.log(res.data)
-                        this.setState({
-                            studentList: res.data,
-                            // showList: true,  
-                            // showGraph: false,
-                            // currentCohort: value,
-                            // currentCohortName: id
 
-                        })
+                // I would expect that this function would re-render the student list
+                API.cohortStudentList(this.state.currentCohort)
+                    .then(res2 => {
+                        // If there are no students in the cohort
+                        if (res2.data.length === 0) {
+                            this.setState({
+                                showList: true,
+                                loading: false,
+                                studentEmail: '',
+
+                                studentLegend: '',
+
+                                studentData: [],
+                                weekData: '',
+                                monthData: '',
+                                yearData: '',
+
+                                cohortName: '',
+                            })
+                        }
+
+                        else {
+
+                            // Get a list of students that have github username submitted
+                            let list = {
+                                students: res2.data.filter(student => student.githubUsername !== '')
+                            }
+
+                            API.getGraph(list)
+                                .then(res3 => {
+
+                                    // Here we modify data to get specific numbers
+                                    let students = res3.data.students
+                                    let weekSum = 0;
+                                    let monthSum = 0;
+                                    let yearSum = 0;
+                                    let studentLegend = []
+                                    for (let i = 0; i < students.length; i++) {
+                                        // console.log(students[i])
+                                        // console.log(students[i].week)
+
+                                        let legendEntry = {
+                                            name: (students[i].author.firstName + ' ' + students[i].author.lastName),
+                                            symbol: { fill: students[i].color }
+                                        }
+
+                                        studentLegend.push(legendEntry)
+                                        for (let j = 0; j < students[i].week.length; j++) {
+                                            weekSum += students[i].week[j].count
+                                        }
+                                        for (let k = 0; k < students[i].month.length; k++) {
+                                            monthSum += students[i].month[k].count
+                                        }
+                                        for (let l = 0; l < students[i].year.length; l++) {
+                                            yearSum += students[i].year[l].count
+                                        }
+
+                                    }
+
+                                    let weekData = {
+                                        total: weekSum,
+                                        average: (weekSum / 7).toFixed(2)
+                                    }
+
+                                    let monthData = {
+                                        total: monthSum,
+                                        average: (monthSum / 30).toFixed(2)
+                                    }
+
+                                    let yearData = {
+                                        total: yearSum,
+                                        average: (yearSum / 12).toFixed(2)
+                                    }
+
+
+                                    this.setState({
+
+                                        // Show the list of students
+                                        showList: true,
+                                        loading: false,
+
+                                        // List of students
+                                        studentEmail: '',
+
+                                        // Legend for the VictoryLegend Component
+                                        studentLegend: studentLegend,
+
+                                        // Data for the week,month,year
+                                        weekData: weekData,
+                                        monthData: monthData,
+                                        yearData: yearData,
+
+                                        // List of students Contributions
+                                        studentData: students,
+
+                                        cohortName: '',
+
+
+
+                                    })
+
+                                })
+                        }
+
                     })
             })
     }
@@ -406,16 +477,33 @@ class InstructorHome extends Component {
                                             />
                                             : ''}
                                     </div>
-                                    {this.state.studentData.length !== 0 ?
+
+                                    {/* Add a remove student function that will come in the form of a sidemenu */}
+                                    {/* How about instead of clicking on the student to their link, what if it opened a menu? */}
+                                    {/* This is based off of studentData, not studentList */}
+                                    {this.state.studentData.length ?
                                         < ul className='list-group'>
                                             {this.state.studentData.map((student, k) => (
                                                 <li
                                                     key={k}
                                                     className='list-group-item'
                                                 >
+
+                                                    {/* <span style={{ color: `${student.color}`, fontSize: `1.8rem` }}>&#9679;</span> */}
+                                                    {/* <span className='student-link' id={k} onClick={this.openMenu}>{student.author.firstName} {student.author.lastName}</span> */}
+
+                                                    {/* Does not work at the moment, will continue to use link */}
+                                                    {/* 
+                                                    <ContextMenu
+                                                        id={k}
+                                                        trigger={0}
+                                                        items={["Inspect Student", ["Remove student"]]}
+                                                    /> */}
+
                                                     <Link className='student-link' to={{ pathname: '/student/' + student.author.id }}>
                                                         <span style={{ color: `${student.color}`, fontSize: `1.8rem` }}>&#9679;</span><span> {student.author.firstName} {student.author.lastName}</span>
                                                     </Link>
+                                                    <span id={student.author.id} style={{ position: 'absolute', right: '10px', cursor: 'pointer' }} onClick={this.handleRemoveStudent}>x</span>
                                                 </li>
                                             ))}
                                         </ul> : 'No Students yet! Click on the plus button to add students'}
