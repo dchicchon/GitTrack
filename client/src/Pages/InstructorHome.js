@@ -99,6 +99,28 @@ class InstructorHome extends Component {
         })
     }
 
+    removeCohort = event => {
+        console.log("remove cohort")
+        let { id } = event.target
+        console.log(id)
+        API.cohortDelete(id)
+            .then(res => {
+                console.log("Deleted Cohort")
+                API.getCohorts(this.props.user.id)
+                    .then(res2 => {
+                        if (res2.data) {
+                            console.log("Cohorts Received")
+                            this.setState({
+                                cohortList: res2.data
+                            })
+                        } else {
+                            console.log("No Cohorts!")
+                        }
+
+                    })
+            })
+    }
+
     submitCohort = (event) => {
         event.preventDefault()
         if (this.state.cohortName) {
@@ -136,8 +158,8 @@ class InstructorHome extends Component {
             showList: false
         })
 
-        let { id, value } = event.target
-        API.cohortStudentList(value)
+        let { id, datavalue } = event.target
+        API.cohortStudentList(datavalue)
             .then(res => {
 
 
@@ -156,7 +178,7 @@ class InstructorHome extends Component {
                         yearData: '',
 
                         cohortName: '',
-                        currentCohort: value,
+                        currentCohort: datavalue,
                         currentCohortName: id
                     })
                 }
@@ -238,7 +260,7 @@ class InstructorHome extends Component {
                                 cohortName: '',
 
                                 // Cohort ID
-                                currentCohort: value,
+                                currentCohort: datavalue,
 
                                 // Cohort Name
                                 currentCohortName: id
@@ -447,13 +469,16 @@ class InstructorHome extends Component {
                                         {this.state.cohortList.map((cohort, i) => (
                                             <li
                                                 key={i}
-                                                value={cohort.id}
-                                                id={cohort.name}
-                                                className='list-group-item hover'
-                                                onClick={this.inspectCohort}
+                                                // value={cohort.id}
+                                                // id={cohort.name}
+                                                className='list-group-item'
+                                            // onClick={this.inspectCohort}
                                             >
-                                                {cohort.name}
+                                                <span style={{ cursor: 'pointer' }} datavalue={cohort.id} id={cohort.name} onClick={this.inspectCohort}>{cohort.name}</span>
+                                                <span id={cohort.id} style={{ position: 'absolute', right: '10px', cursor: 'pointer' }} onClick={this.removeCohort}>x</span>
+
                                             </li>
+
                                         ))}
                                     </ul>
                                 </div>

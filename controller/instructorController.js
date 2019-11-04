@@ -36,6 +36,17 @@ module.exports = {
             })
     },
 
+    deleteCohort: (req, res) => {
+        db.Cohort.destroy({
+            where: {
+                id: req.params.id
+            }
+        }).then(dbCohort => {
+            console.log("Deleted Cohort")
+            res.json(dbCohort)
+        })
+    },
+
     // Get individual student for inspection
     // TO DO: Add filter for yearly
     getStudent: (req, res) => {
@@ -208,7 +219,7 @@ module.exports = {
         }).then(dbCohortStudent => {
             console.log("\nStudent Removed")
             console.log(dbCohortStudent)
-            res.json(dbCohortStudent)   
+            res.json(dbCohortStudent)
         })
     },
 

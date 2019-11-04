@@ -80,6 +80,10 @@ export default {
         return axios.post("/api/instructor/cohorts", creds)
     },
 
+    cohortDelete: id => {
+        return axios.delete('/api/instructor/cohorts/' + id)
+    },
+
     studentCreate: creds => {
         return axios.post("/api/instructor/students", creds)
     },

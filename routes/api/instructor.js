@@ -22,5 +22,6 @@ router.route("/cohorts/graph")
 
 router.route('/cohorts/:id')
     .get(instructorController.getStudents)
+    .delete(instructorController.deleteCohort)
 
 module.exports = router
