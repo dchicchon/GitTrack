@@ -77,6 +77,7 @@ class InstructorHome extends Component {
         });
     }
 
+    // Currently not working, but I would love to add this function. It would open up alot of functionality for the app
     // openMenu = event => {
     //     console.log("Handle Menu")
     //     let { id } = event.target
@@ -151,15 +152,14 @@ class InstructorHome extends Component {
 
 
     // Get list of cohort students and their data to put on graph
-    inspectCohort = event => {
+    inspectCohort = (id, name) => {
         // event.preventDefault();
         this.setState({
             loading: true,
             showList: false
         })
 
-        let { id, datavalue } = event.target
-        API.cohortStudentList(datavalue)
+        API.cohortStudentList(id)
             .then(res => {
 
 
@@ -178,8 +178,8 @@ class InstructorHome extends Component {
                         yearData: '',
 
                         cohortName: '',
-                        currentCohort: datavalue,
-                        currentCohortName: id
+                        currentCohort: id,
+                        currentCohortName: name
                     })
                 }
 
@@ -260,10 +260,10 @@ class InstructorHome extends Component {
                                 cohortName: '',
 
                                 // Cohort ID
-                                currentCohort: datavalue,
+                                currentCohort: id,
 
                                 // Cohort Name
-                                currentCohortName: id
+                                currentCohortName: name
 
 
                             })
@@ -474,7 +474,7 @@ class InstructorHome extends Component {
                                                 className='list-group-item'
                                             // onClick={this.inspectCohort}
                                             >
-                                                <span style={{ cursor: 'pointer' }} datavalue={cohort.id} id={cohort.name} onClick={this.inspectCohort}>{cohort.name}</span>
+                                                <span style={{ cursor: 'pointer' }} id={cohort.name} onClick={() => this.inspectCohort(cohort.id, cohort.name)}>{cohort.name}</span>
                                                 <span id={cohort.id} style={{ position: 'absolute', right: '10px', cursor: 'pointer' }} onClick={this.removeCohort}>x</span>
 
                                             </li>
