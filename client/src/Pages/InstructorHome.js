@@ -487,66 +487,68 @@ class InstructorHome extends Component {
 
                             {/* Render student List if cohort is inspected */}
                             {this.state.showList ?
-                                <div className='mt-2'>
-                                    <div className='row'>
-                                        <h3>Students <span className='add' onClick={this.addStudent}>+</span></h3>
-                                        {this.state.addStudent ?
-                                            <AddStudent
-                                                close={this.addStudent}
-                                                cohortID={this.state.currentCohort}
-                                                inviteMethod={this.inviteMethod}
-                                                inviteVia={this.state.via}
-                                                handleInputChange={this.handleInputChange}
-                                                studentEmail={this.state.studentEmail}
-                                                submitStudent={this.submitStudent}
-                                            />
-                                            : ''}
-                                    </div>
+                                <div>
+                                    <div className='mt-2'>
+                                        <div className='row'>
+                                            <h3>Students <span className='add' onClick={this.addStudent}>+</span></h3>
+                                            {this.state.addStudent ?
+                                                <AddStudent
+                                                    close={this.addStudent}
+                                                    cohortID={this.state.currentCohort}
+                                                    inviteMethod={this.inviteMethod}
+                                                    inviteVia={this.state.via}
+                                                    handleInputChange={this.handleInputChange}
+                                                    studentEmail={this.state.studentEmail}
+                                                    submitStudent={this.submitStudent}
+                                                />
+                                                : ''}
+                                        </div>
 
-                                    {/* Add a remove student function that will come in the form of a sidemenu */}
-                                    {/* How about instead of clicking on the student to their link, what if it opened a menu? */}
-                                    {/* This is based off of studentData, not studentList */}
-                                    {this.state.studentData.length ?
-                                        < ul className='list-group'>
-                                            {this.state.studentData.map((student, k) => (
-                                                <li
-                                                    key={k}
-                                                    className='list-group-item'
-                                                >
+                                        {/* Add a remove student function that will come in the form of a sidemenu */}
+                                        {/* How about instead of clicking on the student to their link, what if it opened a menu? */}
+                                        {/* This is based off of studentData, not studentList */}
+                                        {this.state.studentData.length ?
+                                            < ul className='list-group'>
+                                                {this.state.studentData.map((student, k) => (
+                                                    <li
+                                                        key={k}
+                                                        className='list-group-item'
+                                                    >
 
-                                                    {/* <span style={{ color: `${student.color}`, fontSize: `1.8rem` }}>&#9679;</span> */}
-                                                    {/* <span className='student-link' id={k} onClick={this.openMenu}>{student.author.firstName} {student.author.lastName}</span> */}
+                                                        {/* <span style={{ color: `${student.color}`, fontSize: `1.8rem` }}>&#9679;</span> */}
+                                                        {/* <span className='student-link' id={k} onClick={this.openMenu}>{student.author.firstName} {student.author.lastName}</span> */}
 
-                                                    {/* Does not work at the moment, will continue to use link */}
-                                                    {/* 
+                                                        {/* Does not work at the moment, will continue to use link */}
+                                                        {/* 
                                                     <ContextMenu
                                                         id={k}
                                                         trigger={0}
                                                         items={["Inspect Student", ["Remove student"]]}
                                                     /> */}
 
-                                                    <Link className='student-link' to={{ pathname: '/student/' + student.author.id }}>
-                                                        <span style={{ color: `${student.color}`, fontSize: `1.8rem` }}>&#9679;</span><span> {student.author.firstName} {student.author.lastName}</span>
-                                                    </Link>
-                                                    <span id={student.author.id} style={{ position: 'absolute', right: '10px', cursor: 'pointer' }} onClick={this.handleRemoveStudent}>x</span>
-                                                </li>
-                                            ))}
-                                        </ul> : 'No Students yet! Click on the plus button to add students'}
+                                                        <Link className='student-link' to={{ pathname: '/student/' + student.author.id }}>
+                                                            <span style={{ color: `${student.color}`, fontSize: `1.8rem` }}>&#9679;</span><span> {student.author.firstName} {student.author.lastName}</span>
+                                                        </Link>
+                                                        <span id={student.author.id} style={{ position: 'absolute', right: '10px', cursor: 'pointer' }} onClick={this.handleRemoveStudent}>x</span>
+                                                    </li>
+                                                ))}
+                                            </ul> : 'No Students yet! Click on the plus button to add students'}
+                                    </div>
+                                    <div className='mt-2'>
+                                        <h3>Stats</h3>
+                                        < ul className='list-group'>
+                                            <li className='list-group-item'>
+                                                <p>Commits this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''} {this.state.dataFormat === 'month' ? this.state.monthData.total : ''} {this.state.dataFormat === 'week' ? this.state.weekData.total : ''}</p>
+                                            </li>
+                                            <li className='list-group-item'>
+                                                <p>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''} {this.state.dataFormat === 'month' ? this.state.monthData.average : ''} {this.state.dataFormat === 'week' ? this.state.weekData.average : ''}</p>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                                 : ''
                             }
 
-                            {/* <CohortStudentList
-                                    format={this.state.dataFormat}
-                                    handleRemove={this.handleRemoveStudent}
-                                    addStudent={this.addStudent}
-                                    // handleInputChange={this.handleInputChange}
-                                    // list={this.state.studentList}
-                                    data={this.state.studentData}
-                                /> */}
-
-
-                            {/* If I want to add student. Depends on addStudent State */}
 
                         </div>
                         <div className='col-10'>
@@ -556,29 +558,49 @@ class InstructorHome extends Component {
                                 </div> : ''}
                             {this.state.showList ?
                                 <div>
-                                    <h2>{this.state.currentCohortName}</h2>
-                                    {/* On button click, add a class that changes it's style */}
-                                    <FormatList
-                                        format={this.state.dataFormat}
-                                        changeFormat={this.changeFormat}
-                                    />
+                                    <div className='row'>
+                                        <div className='col-3'>
+                                            <h2>{this.state.currentCohortName}</h2>
+                                            {/* On button click, add a class that changes it's style */}
+                                            <FormatList
+                                                format={this.state.dataFormat}
+                                                changeFormat={this.changeFormat}
+                                            />
+                                        </div>
+                                        {/* <div className='col-4'>
+                                            
+
+                                        </div> */}
+                                    </div>
                                     <div>
-                                        <div>
+                                        <div className='col-12'>
                                             <VictoryChart
                                                 domainPadding={30}
-                                                height={600}
-                                                width={1050}
-                                                containerComponent={<VictoryContainer responsive={false} />}
-                                                style={{ parent: { maxWidth: "100%" } }}
+                                                // height={600}
+                                                // width={1050}
+                                                axisLabelComponent={<VictoryLabel />}
+                                                label={this.state.dataFormat}
+                                                // containerComponent={<VictoryContainer responsive={false} />}
+                                                // style={{ parent: { maxWidth: "100%" } }}
+                                                style={{
+                                                    axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
+                                                    grid: { stroke: 'lightgrey' },
+                                                    tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontSize: 8 }
+                                                }}
                                             >
                                                 <VictoryAxis
                                                     axisLabelComponent={<VictoryLabel />}
                                                     label={this.state.dataFormat}
                                                     scale={{ x: "time" }}
+                                                    // style={{
+                                                    //     axisLabel: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: 'white', fontSize: 20 },
+                                                    //     grid: { stroke: 'lightgrey' },
+                                                    //     tickLabels: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: '#61dafb ', fontSize: 20 }
+                                                    // }}
                                                     style={{
-                                                        axisLabel: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: 'white', fontSize: 20 },
+                                                        axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', fontWeight: 100, stroke: 'white', fontSize: 12 },
                                                         grid: { stroke: 'lightgrey' },
-                                                        tickLabels: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: '#61dafb ', fontSize: 20 }
+                                                        tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', fontWeight: 100, stroke: '#61dafb ', fontSize: 8 }
                                                     }}
                                                 />
                                                 <VictoryAxis
@@ -592,10 +614,16 @@ class InstructorHome extends Component {
                                                     // Does nothing
                                                     // singleQuandrantDomainPadding={true}
                                                     // width={100}
+                                                    // style={{
+                                                    //     axisLabel: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: 'white', fontSize: 20, margin: '30px' },
+                                                    //     grid: { stroke: 'lightgrey' },
+                                                    //     tickLabels: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: '#61dafb ', fontSize: 20, marginBlock: '20px' }
+
+                                                    // }}
                                                     style={{
-                                                        axisLabel: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: 'white', fontSize: 20, margin: '30px' },
+                                                        axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontWeight: 100, fontSize: 12 },
                                                         grid: { stroke: 'lightgrey' },
-                                                        tickLabels: { fontFamily: 'inherit', fontWeight: 100, letterSpacing: '1px', stroke: '#61dafb ', fontSize: 20, marginBlock: '20px' }
+                                                        tickLabels: { fontFamily: 'inherit', letterSpacing: '1px', stroke: '#61dafb ', fontWeight: 100, fontSize: 8 }
 
                                                     }}
 
@@ -623,17 +651,20 @@ class InstructorHome extends Component {
                                                     : ''}
 
                                             </VictoryChart>
-                                            <div className='row'>
-                                                <div className='col-4'>
 
+                                            {/* Class Progress */}
+                                            {/* <div className='row'>
+                                                <div className='col-4'>
                                                     <h3>Class Progress</h3>
-                                                    <p>Commits this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''} {this.state.dataFormat === 'month' ? this.state.monthData.total : ''} {this.state.dataFormat === 'week' ? this.state.weekData.total : ''}</p>
-                                                    <p>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''} {this.state.dataFormat === 'month' ? this.state.monthData.average : ''} {this.state.dataFormat === 'week' ? this.state.weekData.average : ''}</p>
+                                                    <section className='info'>
+                                                        <p>Commits this {this.state.dataFormat}: {this.state.dataFormat === 'year' ? this.state.yearData.total : ''} {this.state.dataFormat === 'month' ? this.state.monthData.total : ''} {this.state.dataFormat === 'week' ? this.state.weekData.total : ''}</p>
+                                                        <p>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''} {this.state.dataFormat === 'month' ? this.state.monthData.average : ''} {this.state.dataFormat === 'week' ? this.state.weekData.average : ''}</p>
+                                                    </section>
 
 
                                                 </div>
 
-                                            </div>
+                                            </div> */}
                                         </div>
 
                                     </div>

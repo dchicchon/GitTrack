@@ -151,7 +151,7 @@ class StudentHome extends Component {
                                     <p>Average Commits: {this.state.dataFormat === 'year' ? this.state.yearData.average : ''}{this.state.dataFormat === 'month' ? this.state.monthData.average : ''}{this.state.dataFormat === 'week' ? this.state.weekData.average : ''} </p>
 
                                     {/* Get data from all of cohort and sort what is the ranking of this individual in the cohort in terms of commits */}
-                                    <p>Cohort Ranking: #5</p>
+                                    {/* <p>Cohort Ranking: #5</p> */}
                                     <div className='row'>
                                         <button type='button' className='btn ml-2' onClick={this.changeFormat} value='week'>Weekly</button>
                                         <button type='button' className='btn ml-2' onClick={this.changeFormat} value='month'> Monthly</button>
@@ -160,9 +160,9 @@ class StudentHome extends Component {
                                 </div>
                                 <div className='col-9'>
                                     <VictoryChart
+                                        domainPadding={30}
                                         axisLabelComponent={<VictoryLabel />}
                                         label={this.state.dataFormat}
-                                        scale={{ x: "time" }}
                                         style={{
                                             axisLabel: { fontFamily: 'inherit', letterSpacing: '1px', stroke: 'white', fontSize: 12 },
                                             grid: { stroke: 'lightgrey' },

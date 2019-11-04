@@ -26,6 +26,13 @@ body {
     width: 80%
     /* border-radius: 4%; */
 }
+
+/* .info {
+    background: var(--navColor);
+    border: 1px solid var(--borderColor);
+    padding: 1rem;
+} */
+
 ::-webkit-scrollbar {
     width: 10px;
 }
