@@ -12,9 +12,19 @@ body {
     background:#282c34;
     --bodyTextColor: #61dafb;
     --navColor: #202329;
+    --borderColor: #1b1e22;
     color: var(--bodyTextColor)
     /* color: #61dafb; */
     /* color: white; */
+}
+
+.paragraph{
+    background: var(--navColor);
+    padding: 1.5rem;
+    border: 1px solid var(--borderColor);
+    margin: 0 auto;
+    width: 80%
+    /* border-radius: 4%; */
 }
 ::-webkit-scrollbar {
     width: 10px;

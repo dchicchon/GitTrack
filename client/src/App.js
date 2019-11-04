@@ -9,6 +9,7 @@ import SplashPage from './Pages/SplashPage';
 import Login from './Pages/Login';
 import Signup from './Pages/Signup';
 import CohortSignup from './Pages/CohortSignup';
+import Docs from './Pages/Docs';
 
 // Logged In 
 import AdminHome from './Pages/AdminHome';
@@ -105,7 +106,7 @@ class App extends Component {
             <Route path='/' exact component={SplashPage} />
             <Route path='/login' exact component={Login} />
             <Route path='/signup' exact component={Signup} />
-
+            <Route path='/docs' exact component={Docs} />
             {/* Go to signup based on cohortID */}
             <Route path='/signup/:id' exact component={CohortSignup} />
 

@@ -14,19 +14,17 @@ const SplashNav = function () {
             </button>
 
             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul className="navbar-nav mr-auto">
+                {/* <ul className="navbar-nav mr-auto">
                     <li className="nav-item">
 
-                        {/* <a className="nav-link" href="#">Home <span className="sr-only">(current)</span></a> */}
                     </li>
                     <li className="nav-item">
-                        {/* <a className="nav-link" href="#">Link</a> */}
                     </li>
                     <li className='nav-item'>
                     </li>
 
 
-                </ul>
+                </ul> */}
             </div>
             <div>
                 <a className='nav-item' rel='noopener noreferrer' target="_blank" href='https://github.com/dchicchon/GitTrack'>GitHub</a>
@@ -54,6 +52,8 @@ class SplashPage extends Component {
                         <p className="lead center-small">Keeping you coding</p>
                         {/* <div className='row mx-auto'> */}
                         <Link className='btn new-Link' to='/signup'>Signup</Link>
+
+                        {/* Make a docs page for this */}
                         <Link className='btn new-Link' to='/docs'>Docs</Link>
                         {/* </div> */}
                     </div>
