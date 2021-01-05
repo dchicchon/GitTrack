@@ -27,7 +27,7 @@
   "homepage": "https://github.com/dchicchon/trilogy-app-2#readme",
   "dependencies": {
     "@octokit/rest": "^16.28.9",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.1.0",
     "express": "^4.17.1",
